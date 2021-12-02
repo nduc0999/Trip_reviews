@@ -62,7 +62,7 @@
                         <input type="checkbox" checked="checked"/>
                         <div class="control__indicator"></div>
                         </label> --}}
-                        <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span> 
+                        <span class="ml-auto"><a href="{{ route('password.request') }}" class="forgot-pass" style="text-decoration: underline !important">Forgot Password</a></span> 
                     </div>
 
                     <input type="submit" value="Log In" class="btn text-white btn-block btn-primary">
@@ -92,20 +92,6 @@
 @endsection
 
 @section('script')
-<script>
-    $(function() {
-	'use strict';
 
-  $('.form-control').on('input', function() {
-	  var $field = $(this).closest('.form-group');
-	  if (this.value) {
-	    $field.addClass('field--not-empty');
-	  } else {
-	    $field.removeClass('field--not-empty');
-	  }
-	});
-
-});
-</script>
     
 @endsection

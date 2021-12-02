@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -23,9 +25,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //Auth
-Route::get('/login/page', [LoginController::class, 'index'])->name('login.page');
+Route::get('/login/page', [LoginController::class, 'showLoginForm'])->name('login.page');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
-
+Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register/page', [RegisterController::class, 'index'])->name('register.page');
 Route::post('/register/store', [RegisterController::class, 'store'])->name('register.store');
@@ -33,5 +35,21 @@ Route::get('/v/{hash}', [VerificationController::class, 'verifyEmail'])->name('e
 
 Route::get('/resend/page', [VerificationController::class, 'viewResend'])->name('resend.page')->middleware(['auth', 'verify_email']);
 Route::post('/resend', [VerificationController::class, 'resendEmail'])->name('resend')->middleware(['auth', 'verify_email']);
+Route::get('/resend', [VerificationController::class, 'resendEmail'])->name('resend')->middleware(['auth', 'verify_email']);
+
 
 Route::get('/verify/success', [VerificationController::class, 'viewVerifySuccess'])->name('verify.success');
+
+Route::get('/password/reset',[ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/password/emai',[ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/password/reset/{token}',[ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/password/reset',[ResetPasswordController::class,'reset'])->name('password.update');
+
+
+//admin
+
+// Route::prefix('admin')->name('admin.')->group(function () {
+//     Route::get('/', [HomeController::class,'admin'])->name('index');
+
+// });
+Route::get('/admin', [HomeController::class, 'admin'])->name('index');
