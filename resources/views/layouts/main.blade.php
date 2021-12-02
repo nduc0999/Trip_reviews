@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{ asset('main/css/fontawesome.css') }}">
     <link rel="stylesheet" href="{{ asset('main/css/templatemo-stand-blog.css') }}">
     <link rel="stylesheet" href="{{ asset('main/css/owl.css') }}">
+    <link rel="stylesheet" href="{{ asset('main/css/custom.css') }}">
 
     @yield('head')
 
@@ -40,7 +41,8 @@
     <header class="">
       <nav class="navbar navbar-expand-lg">
         <div class="container">
-          <a class="navbar-brand" href="index.html"><h2>Trip Review<em>.</em></h2></a>
+          {{-- <a class="navbar-brand" href="{{ route('home') }}"><h2>Trip Review<em>.</em></h2></a> --}}
+          <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('main/images/logo3.png') }}" id='logo-brand' alt=""></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" 
             aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" style="border-radius: 10px">
             <span class="navbar-toggler-icon"></span>

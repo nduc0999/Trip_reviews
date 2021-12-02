@@ -28,6 +28,6 @@ class RegisterEmail extends Mailable
      */
     public function build()
     {
-        return $this->from(env('MAIL_USERNAME'), 'Đức moi')->subject("Wellcome to Trip Review")->view('mail.register-email', ['email_data' => $this->email_data]);
+        return $this->from(env('MAIL_USERNAME'), 'Trip Review')->subject("Wellcome to Trip Review")->view('mail.register-email', ['email_data' => $this->email_data]);
     }
 }
