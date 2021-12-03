@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -48,8 +49,19 @@ Route::post('/password/reset',[ResetPasswordController::class,'reset'])->name('p
 
 //admin
 
-// Route::prefix('admin')->name('admin.')->group(function () {
-//     Route::get('/', [HomeController::class,'admin'])->name('index');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [HomeController::class,'admin'])->name('home');
 
-// });
-Route::get('/admin', [HomeController::class, 'admin'])->name('index');
+    Route::prefix('manager')->name('manager.')->group(function () {
+        Route::get('amenity',[AmenityController::class,'index'])->name('amenity');
+        Route::post('amenity/update',[AmenityController::class,'update'])->name('amenity.update');
+        Route::post('amenity/store', [AmenityController::class, 'store'])->name('amenity.store');
+        Route::post('amenity/delete', [AmenityController::class, 'delete'])->name('amenity.delete');
+
+        Route::get('roomtype', [AmenityController::class, 'index'])->name('roomtype');
+        Route::post('roomtype/update', [AmenityController::class, 'update'])->name('roomtype.update');
+        Route::post('roomtype/store', [AmenityController::class, 'store'])->name('roomtype.store');
+        Route::post('roomtype/delete', [AmenityController::class, 'delete'])->name('roomtype.delete');
+    });
+});
+
