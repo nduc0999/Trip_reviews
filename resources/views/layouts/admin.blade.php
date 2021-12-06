@@ -9,16 +9,24 @@
     
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    
     <link rel="stylesheet" href="{{ asset('dashboard/css/bootstrap.css') }}">
     
     <link rel="stylesheet" href="{{ asset('dashboard/vendors/iconly/bold.css') }}">
+
 
     <link rel="stylesheet" href="{{ asset('dashboard/vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard/vendors/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard/css/app.css') }}">
     <link rel="shortcut icon" href="{{ asset('dashboard/images/favicon.svg" type="image/x-icon') }}">
+    
+    {{-- <script src="{{ asset('dashboard/vendors/select2/js/select2.min.js') }}"></script> --}}
 
     @yield('head')
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
 </head>
 
 <body>
@@ -48,27 +56,27 @@
 
                            <li class="sidebar-item">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
+                                <i class="bi bi-check-circle"></i>
                                 <span>Approval Post</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
+                        <li class="sidebar-item  {{ url()->current() == route('admin.post') ? 'active':''}} ">
+                            <a href="{{ route('admin.post') }}" class='sidebar-link'>
+                                <i class="bi bi-pen-fill"></i>
                                 <span>Post</span>
                             </a>
                         </li>
 
                         
-                        <li class="sidebar-item  has-sub">
+                        <li class="sidebar-item   has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-stack"></i>
+                               <i class="bi bi-chat-square-text-fill"></i>
                                 <span>Manager Review</span>
                             </a>
                             <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="component-alert.html">Approval Review</a>
+                                <li class="submenu-item">
+                                    <a href="#">Approval Review</a>
                                 </li>
                                 <li class="submenu-item ">
                                     <a href="component-badge.html">Hide Review</a>
@@ -78,43 +86,43 @@
 
                         <li class="sidebar-item">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
+                                <i class="bi bi-folder-fill"></i>
                                 <span>Manager Post</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item {{ url()->current() == route('admin.manager.amenity') ? 'active':''}}">
                             <a href="{{ route('admin.manager.amenity') }}" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
+                                <i class="bi bi-speaker-fill"></i>
                                 <span>Manager Amenities</span>
                             </a>
                         </li>
 
-                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
+                         <li class="sidebar-item {{ url()->current() == route('admin.manager.roomtype') ? 'active':''}} ">
+                            <a href="{{ route('admin.manager.roomtype') }}" class='sidebar-link'>
+                               <i class="bi bi-shop"></i>
                                 <span>Manager Roomtype</span>
                             </a>
                         </li>
 
-                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
+                         <li class="sidebar-item {{ url()->current() == route('admin.manager.location') ? 'active':''}}">
+                            <a href="{{ route('admin.manager.location') }}" class='sidebar-link'>
+                                <i class="bi bi-geo-alt-fill"></i>
                                 <span>Manager Location</span>
                             </a>
                         </li>
 
-                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
+                         <li class="sidebar-item {{ url()->current() == route('admin.manager.question') ? 'active':''}}">
+                            <a href="{{ route('admin.manager.question') }}" class='sidebar-link'>
+                                <i class="bi bi-question-circle-fill"></i>
                                 <span>Manager Question</span>
                             </a>
                         </li>
 
-                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Manager Customer</span>
+                         <li class="sidebar-item {{ url()->current() == route('admin.manager.user') ? 'active':''}}">
+                            <a href="{{ route('admin.manager.user') }}" class='sidebar-link'>
+                                <i class="bi bi-person-circle"></i>
+                                <span>Manager User</span>
                             </a>
                         </li>
 
@@ -147,9 +155,9 @@
         </div>
     </div>
     <script src="{{ asset('dashboard/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('dashboard/vendors/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('dashboard/js/bootstrap.bundle.min.js') }}"></script>
     
-      <script src="{{ asset('main/vendor/jquery/jquery.min.js') }}"></script>
     {{-- <script src="{{ asset('dashboard/js/pages/dashboard.js') }}"></script> --}}
     @yield('script')
     <script src="{{ asset('dashboard/js/mazer.js') }}"></script>
