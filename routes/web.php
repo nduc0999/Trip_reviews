@@ -1,11 +1,17 @@
 <?php
 
+use App\Http\Controllers\Admin\AmenityController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\RoomtypeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,8 +54,38 @@ Route::post('/password/reset',[ResetPasswordController::class,'reset'])->name('p
 
 //admin
 
-// Route::prefix('admin')->name('admin.')->group(function () {
-//     Route::get('/', [HomeController::class,'admin'])->name('index');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [HomeController::class,'admin'])->name('home');
 
-// });
-Route::get('/admin', [HomeController::class, 'admin'])->name('index');
+    Route::get('/post',[PostController::class,'adminPost'])->name('post');
+
+    Route::prefix('manager')->name('manager.')->group(function () {
+        Route::get('amenity',[AmenityController::class,'index'])->name('amenity');
+        Route::post('amenity/update',[AmenityController::class,'update'])->name('amenity.update');
+        Route::post('amenity/store', [AmenityController::class, 'store'])->name('amenity.store');
+        Route::post('amenity/delete', [AmenityController::class, 'delete'])->name('amenity.delete');
+
+        Route::get('roomtype', [RoomtypeController::class, 'index'])->name('roomtype');
+        Route::post('roomtype/update', [RoomtypeController::class, 'update'])->name('roomtype.update');
+        Route::post('roomtype/store', [RoomtypeController::class, 'store'])->name('roomtype.store');
+        Route::post('roomtype/delete', [RoomtypeController::class, 'delete'])->name('roomtype.delete');
+
+        Route::get('location', [LocationController::class, 'index'])->name('location');
+        Route::post('location/update', [LocationController::class, 'update'])->name('location.update');
+        Route::post('location/store', [LocationController::class, 'store'])->name('location.store');
+        Route::post('location/delete', [LocationController::class, 'delete'])->name('location.delete');
+
+        Route::get('question', [QuestionController::class, 'index'])->name('question');
+        Route::post('question/update', [QuestionController::class, 'update'])->name('question.update');
+        Route::post('question/store', [QuestionController::class, 'store'])->name('question.store');
+        Route::post('question/delete', [QuestionController::class, 'delete'])->name('question.delete');
+
+        Route::get('user', [UserController::class, 'index'])->name('user');
+        Route::post('user/store', [UserController::class, 'store'])->name('user.store');
+        Route::post('user/ban-unban/review', [UserController::class, 'ban_unban_Review'])->name('user.ban.unban.review');
+
+       
+
+    });
+});
+
