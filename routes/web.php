@@ -58,6 +58,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [HomeController::class,'admin'])->name('home');
 
     Route::get('/post',[PostController::class,'adminPost'])->name('post');
+    Route::get('/post/list/amenity',[PostController::class,'listAmenity'])->name('post.list.amenity');
+    Route::get('/post/list/roomtype', [PostController::class, 'listRoomtype'])->name('post.list.roomtype');
+    Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
 
     Route::prefix('manager')->name('manager.')->group(function () {
         Route::get('amenity',[AmenityController::class,'index'])->name('amenity');
