@@ -8,8 +8,23 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
     crossorigin=""/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
   
+@endsection
+
+@section('map')
+
+    <script src="https://unpkg.com/esri-leaflet@3.0.4/dist/esri-leaflet.js"
+        integrity="sha512-oUArlxr7VpoY7f/dd3ZdUL7FGOvS79nXVVQhxlg6ij4Fhdc4QID43LUFRs7abwHNJ0EYWijiN5LP2ZRR2PY4hQ=="
+        crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@3.1.1/dist/esri-leaflet-geocoder.css"
+        integrity="sha512-IM3Hs+feyi40yZhDH6kV8vQMg4Fh20s9OzInIIAc4nx7aMYMfo+IenRUekoYsHZqGkREUgx0VvlEsgm7nCDW9g=="
+        crossorigin="">
+    <script src="https://unpkg.com/esri-leaflet-geocoder@3.1.1/dist/esri-leaflet-geocoder.js"
+        integrity="sha512-enHceDibjfw6LYtgWU03hke20nVTm+X5CRi9ity06lGQNtC9GkBNl/6LoER6XzSudGiXy++avi1EbIg9Ip4L1w=="
+        crossorigin=""></script>
+    
 @endsection
 
 @section('content')
@@ -174,7 +189,7 @@
                                         <input type="number" class="form-control" id="long_add" name="longtitude">
                                     </div>
                                 </div>
-                                      <div  id="map" style="height: 30vh; width: 48vw;"></div> 
+                                      <div  id="map" style="height: 200px; width: 100%;"></div> 
                             </div>
                             
                         </div>
@@ -207,7 +222,7 @@
 </script>
 <script src="{{ asset('dashboard/js/custom.js') }}"></script>
 <script src="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
 <script src="{{ asset('main/js/map.js') }}"></script>
     
 <script>

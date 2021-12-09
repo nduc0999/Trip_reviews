@@ -15,6 +15,7 @@
     
     <link rel="stylesheet" href="{{ asset('dashboard/vendors/iconly/bold.css') }}">
 
+     
 
     <link rel="stylesheet" href="{{ asset('dashboard/vendors/perfect-scrollbar/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard/vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -24,9 +25,13 @@
     {{-- <script src="{{ asset('dashboard/vendors/select2/js/select2.min.js') }}"></script> --}}
 
     @yield('head')
+     <link rel="stylesheet" href="{{ asset('main/css/loading.css') }}">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
+
+    @yield('map')
+    
 </head>
 
 <body>
@@ -153,6 +158,14 @@
                 </div>
             </footer>
         </div>
+    </div>
+    <div id="load" class="d-none" >
+        <h4 id="load-text">Loading</h4>
+        <img src="{{ asset('main/images/loading1.gif') }}" id="loader" alt="">
+        {{-- <div id="loader">
+            <div id="shadow"></div>
+            <div id="box"></div>
+        </div> --}}
     </div>
     <script src="{{ asset('dashboard/vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('dashboard/vendors/jquery/jquery.min.js') }}"></script>

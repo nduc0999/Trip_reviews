@@ -39,7 +39,33 @@ navigator.geolocation.getCurrentPosition( (pos) => {
     //         subdomains:['mt0','mt1','mt2','mt3']
     //     }).addTo(map);
 
-    L.Control.geocoder().addTo(map);
+     
+   $('#formAdd').on('show.bs.modal', function() {
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 10);
+        });
+
+     var searchControl = L.esri.Geocoding.geosearch({
+            position: 'topright',
+            placeholder: 'Enter an address or place e.g. 1 York St',
+            useMapBounds: false,
+            providers: [L.esri.Geocoding.arcgisOnlineProvider({
+            apikey: 'AAPKd6a06d2c8c554d78805498d2886e3420s_yUJw1NPIVVKGIGKJ3qqjW-6Z41MBZTN-pUAkfk6G8kjnuVo4fh-xrCK_NzORfy',
+            nearby: {
+                lat: -33.8688,
+                lng: 151.2093
+            }
+            })]
+            }).addTo(map);
+             var results = L.layerGroup().addTo(map);
+
+        searchControl.on('results', function (data) {
+            results.clearLayers();
+            for (var i = data.results.length - 1; i >= 0; i--) {
+            results.addLayer(L.marker(data.results[i].latlng));
+            }
+        });
 
     L.marker(position).addTo(map)
         .bindPopup(`<img src="https://chefjob.vn/wp-content/uploads/2020/04/homestay-duoc-nhieu-du-khach-lua-chon.jpg" alt="nha hang an cần" width="100px" height="100px">`)
@@ -71,12 +97,7 @@ navigator.geolocation.getCurrentPosition( (pos) => {
             .setContent("You clicked the map at " + e.latlng.toString())
             .openOn(map);
     });
-   
-   $('#formAdd').on('show.bs.modal', function() {
-        setTimeout(function() {
-            map.invalidateSize();
-        }, 10);
-        });
+  
 
 });
 
