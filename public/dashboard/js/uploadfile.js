@@ -162,10 +162,17 @@
         acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
         fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
             // Do custom type detection here and return with promise
+            html += `<div class="form-group col-md-6 mt-3">
+                        <label for="wall">Ghi chú ảnh ${source.name}</label>
+                        <input type="text" class="form-control" name="note[]">
+                    </div>`;
+
+            $('#note').html(html);
             resolve(type);
         })
     });
 
+    html = "";
     // Filepond: Image Resize
     FilePond.create(document.querySelector('.image-resize-filepond'), {
         allowImagePreview: true,
@@ -178,8 +185,12 @@
         imageResizeMode: 'cover',
         imageResizeUpscale: true,
         acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
+        storeAsFile: true,
+        // labelIdle:`<p>Kéo và thả file ảnh của bạn</p>`,
         fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
             // Do custom type detection here and return with promise
+
+            
             resolve(type);
         })
     });

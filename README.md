@@ -9,3 +9,11 @@
 
 ## About Laravel
 
+To start project
+
+- compser install
+
+- php artisan migrate
+
+(composer require nao-pon/flysystem-google-drive:~1.1) --cài package của google drive
+(composer require google/apiclient) 

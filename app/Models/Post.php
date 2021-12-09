@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
@@ -42,5 +44,17 @@ class Post extends Model
 
     public function PhotoUser(){
         return $this->hasMany(PhotoUser::class,'id_post');
+    }
+
+    public function uploadPhoto($photo){
+
+        foreach ($photo as $i) {
+            $name = time().'-'.$this->name;
+            $data = File::get($i);
+            $a = Storage::disk('photo')->put($name, $data);
+            $url = Storage::disk('photo')->url($name);
+            $pt = Photo::create(['id_post' => $this->id, 'path' => $url]);
+        }
+        return true;
     }
 }
