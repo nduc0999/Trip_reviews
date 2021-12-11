@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Question;
+use Exception;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -24,8 +25,11 @@ class QuestionController extends Controller
 
     public function update(Request $request)
     {
-
-        $check = Question::where('question', 'like', $request->question)->where('status', 0)->first();
+        try{
+            $check = Question::where('question', 'like', $request->question)->where('status', 0)->first();
+        }catch(Exception $e){
+            return response()->json(['status' => false, 'mess' => 'Lỗi không xác định']);
+        }
         if ($check) {
             return response()->json(['status' => false, 'mess' => 'Đã tồn tại câu hỏi']);
         }

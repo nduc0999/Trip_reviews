@@ -62,13 +62,7 @@ class PostController extends Controller
         $post->owner= 0;
         $post->type= $request->type;
         
-        $path_avatar = $request->file('img_avatar')->store('','avatar');
-        $path_wall = $request->file('img_wall')->store('','wall');
-        $rs_avatar = collect(Storage::disk('avatar')->listContents('/', false))->where('name', '=', $path_avatar)->first();
-        $rs_wall = collect(Storage::disk('wall')->listContents('/', false))->where('name', '=', $path_wall)->first();
-
-        $post->img_avatar = 'https://drive.google.com/uc?export=view&id=' . $rs_avatar['path'];
-        $post->img_wall = 'https://drive.google.com/uc?export=view&id=' . $rs_wall['path'];
+        $post->upAvatarWall($request->file('img_avatar'),$request->file('img_wall'));
 
         $post->save();
 

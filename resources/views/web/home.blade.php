@@ -4,6 +4,7 @@
 @section('head')
 
     <link rel="stylesheet" href="{{ asset('main/css/search.css') }}">
+  
 @endsection
 
 @section('content')
@@ -14,7 +15,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="text-content">
-                <h4>Post Details</h4>
+                <h4>Đánh giá Homestay - Resort</h4>
                 <h2>Single blog post</h2>
          
                 <div class="container">
@@ -42,70 +43,42 @@
 <div class="main-banner header-text">
       <div class="container-fluid">
         <div class="owl-banner owl-carousel">
-          <div class="item">
-            <img src="{{ asset('main/images/banner-item-01.jpg') }}" alt="">
-            <div class="item-content">
-              <div class="main-content">
-                <div class="meta-category">
-                  <span>Fashion</span>
+          @forelse ($post_slide as $item)
+            <div class="item">
+              <img src="{{ $item->img_avatar }}" alt="">
+              <div class="item-content">
+                <div class="main-content">
+                  <div class="meta-category">
+                    <span>{{ $item->type == 0 ? 'Homestsay':'Resort' }}</span>
+                  </div>
+                  <a href="post-details.html"><h4>{{ $item->name }}</h4></a>
+                  <ul class="post-info">
+                    <li><a href="#">Admin</a></li>
+                    <li><a href="#">May 12, 2020</a></li>
+                    <li><a href="#">12 Comments</a></li>
+                  </ul>
                 </div>
-                <a href="post-details.html"><h4>Morbi dapibus condimentum</h4></a>
-                <ul class="post-info">
-                  <li><a href="#">Admin</a></li>
-                  <li><a href="#">May 12, 2020</a></li>
-                  <li><a href="#">12 Comments</a></li>
-                </ul>
               </div>
             </div>
-          </div>
-          <div class="item">
-            <img src="{{ asset('main/images/banner-item-02.jpg') }}" alt="">
-            <div class="item-content">
-              <div class="main-content">
-                <div class="meta-category">
-                  <span>Nature</span>
+          @empty
+            <div class="item">
+              <img src="{{ asset('main/images/banner-item-04.jpg') }}" alt="">
+              <div class="item-content">
+                <div class="main-content">
+                  <div class="meta-category">
+                    <span>Fashion</span>
+                  </div>
+                  <a href="post-details.html"><h4>Responsive and Mobile Ready Layouts</h4></a>
+                  <ul class="post-info">
+                    <li><a href="#">Admin</a></li>
+                    <li><a href="#">May 18, 2020</a></li>
+                    <li><a href="#">48 Comments</a></li>
+                  </ul>
                 </div>
-                <a href="post-details.html"><h4>Donec porttitor augue at velit</h4></a>
-                <ul class="post-info">
-                  <li><a href="#">Admin</a></li>
-                  <li><a href="#">May 14, 2020</a></li>
-                  <li><a href="#">24 Comments</a></li>
-                </ul>
               </div>
-            </div>
-          </div>
-          <div class="item">
-            <img src="{{ asset('main/images/banner-item-03.jpg') }}" alt="">
-            <div class="item-content">
-              <div class="main-content">
-                <div class="meta-category">
-                  <span>Lifestyle</span>
-                </div>
-                <a href="post-details.html"><h4>Best HTML Templates on TemplateMo</h4></a>
-                <ul class="post-info">
-                  <li><a href="#">Admin</a></li>
-                  <li><a href="#">May 16, 2020</a></li>
-                  <li><a href="#">36 Comments</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <img src="{{ asset('main/images/banner-item-04.jpg') }}" alt="">
-            <div class="item-content">
-              <div class="main-content">
-                <div class="meta-category">
-                  <span>Fashion</span>
-                </div>
-                <a href="post-details.html"><h4>Responsive and Mobile Ready Layouts</h4></a>
-                <ul class="post-info">
-                  <li><a href="#">Admin</a></li>
-                  <li><a href="#">May 18, 2020</a></li>
-                  <li><a href="#">48 Comments</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+            </div>  
+          @endforelse
+         
           <div class="item">
             <img src="{{ asset('main/images/banner-item-05.jpg') }}" alt="">
             <div class="item-content">

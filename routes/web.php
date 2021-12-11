@@ -86,8 +86,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('user', [UserController::class, 'index'])->name('user');
         Route::post('user/store', [UserController::class, 'store'])->name('user.store');
         Route::post('user/ban-unban/review', [UserController::class, 'ban_unban_Review'])->name('user.ban.unban.review');
+        Route::post('user/profile', [UserController::class, 'profile'])->name('user.profile');
 
-       
 
     });
 });

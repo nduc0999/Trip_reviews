@@ -46,6 +46,22 @@ class Post extends Model
         return $this->hasMany(PhotoUser::class,'id_post');
     }
 
+    public function upAvatarWall($avatar, $wall){
+        $name_avatar = time() . '-' . $this->name.'-avatar';
+        $data_avatar = File::get($avatar);
+        $a = Storage::disk('avatar')->put($name_avatar, $data_avatar);
+        $url_avatar = Storage::disk('avatar')->url($name_avatar);
+        $this->img_avatar = $url_avatar;
+
+        $name_wall = time() . '-' . $this->name .'-wall';
+        $data_wall = File::get($wall);
+        $b = Storage::disk('wall')->put($name_wall, $data_wall);
+        $url_wall = Storage::disk('wall')->url($name_wall);
+        $this->img_wall = $url_wall;
+
+        return true;
+    }
+
     public function uploadPhoto($photo){
 
         foreach ($photo as $i) {

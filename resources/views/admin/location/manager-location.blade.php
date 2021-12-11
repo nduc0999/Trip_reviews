@@ -55,9 +55,10 @@
                             <div class="card-content">
                                 <div class="card-body d-flex justify-content-between">
 
-                                    <select name="" id="">
-                                        <option value="">1</option>
-                                        <option value="">2</option>
+                                    <select name="count" id="count">
+                                        <option value="5" selected>5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
                                     </select>
                                   
                                    <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#formAdd" id="btn-add">
@@ -218,7 +219,8 @@
 
 @section('script')
 <script>
-    var page
+    var page;
+    var mapGlobal;
 </script>
 <script src="{{ asset('dashboard/js/custom.js') }}"></script>
 <script src="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
@@ -267,6 +269,7 @@
         $.ajax({
             url: "{{ route('admin.manager.location') }}?page="+page,
             type: "GET",
+            data: { 'count' :  $('#count').val() },
             success: function(result){
                 $('#table-data').html(result);
                 showEdit()
@@ -292,7 +295,7 @@
                     Toast.fire({
                         icon: 'success',
                         title: 'Thêm mới thành công'
-                        })
+                        });
                     $('#province_add').val('');
                     $('#lat_add').val('');
                     $('#long_add').val('');
@@ -381,10 +384,17 @@
 
     $(document).ready(function(){
         Pagination();
+
         showEdit();
         deleteData();
+        
     });
-    
+
+    $('#count').change(function(){
+        loadPage(1);
+    })
+
+   
 
 </script>
 

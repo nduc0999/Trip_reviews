@@ -50,7 +50,7 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item @if(url()->current() == route('home')) active @endif">
-                <a class="nav-link" href="{{route('home')}}">Home
+                <a class="nav-link" href="{{route('home')}}"></i>Home
                   <span class="sr-only">(current)</span>
                 </a>
               </li> 

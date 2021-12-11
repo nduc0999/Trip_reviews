@@ -1,3 +1,24 @@
-#logo-brand{
+#logo-brand {
     height: 70px;
 }
+
+.item img {
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    filter: brightness(60%);
+}
+
+.item img:hover {
+    filter: brightness(70%);
+}
+
+.item {
+    height: 300px;
+}
+
+.owl-stage-outer {
+    border-radius: 20px;
+}
+
+.owl-prev, .owl-next {}
