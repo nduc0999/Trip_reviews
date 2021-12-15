@@ -83,14 +83,88 @@ jQuery( document ).ready(function( $ ) {
                         margin: 10
                     },
                     992: {
-                      items: 3,
+                      items: 2,
                       margin: 10
                     }
                 }
             });
         }
- 
+        
+         if ($('.owl-photo').length) {
+            $('.owl-photo').owlCarousel({
+                loop: true,
+                nav: true,
+                dots: true,
+                items: 1,
+                margin: 10,
+                autoplay: true,
+                smartSpeed: 700,
+                autoplayHoverPause:true,
+                autoplayTimeout: 5000,
+                responsive: {
+                    0: {
+                      items: 1,
+                      margin: 0
+                    },
+                    460: {
+                        items: 1,
+                        margin: 0
+                    },
+                    576: {
+                        items: 1,
+                        margin: 10
+                    },
+                    992: {
+                      items: 1,
+                      margin: 10
+                    }
+                }
+            });
+        }
+  if ($('.slider').length) {
+    $(".slider").owlCarousel({
+      loop: false,
+      nav: true,
+      dots: false,
+      items: 1,
+      margin: 10,
+      autoplay: false,
+      smartSpeed: 700,
+      navText : ["<i class='fa fa-arrow-left'></i>","<i class='fa fa-arrow-right'></i>"],
+      autoplayTimeout: 5000,
+
+      responsive: {
+        0: {
+          items: 1,
+          margin: 0,
+          nav: false,
+          stagePadding: 40,
+        },
+        460: {
+          items: 1,
+          margin: 0,
+          nav: false,
+          stagePadding: 40,
+        },
+        576: {
+          items: 1,
+          margin: 10,
+          nav: false,
+          stagePadding: 40,
+        },
+        992: {
+          items: 4,
+          margin: 10
+        }
+      },
+
+    });
+  }
+
 });
+
+
+        
 
  $(function() {
 	'use strict';
@@ -106,4 +180,3 @@ jQuery( document ).ready(function( $ ) {
 
  });
 
- 

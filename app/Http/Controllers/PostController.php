@@ -9,13 +9,18 @@ use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Roomtype;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 
 class PostController extends Controller
 {
+    
+    public $photoCount = 10;
+
     public function adminPost(){
 
         $location = Location::where('status',0)->orderBy('province', 'ASC')->get();
@@ -75,4 +80,46 @@ class PostController extends Controller
         return response()->json(['error' => $request->all()]);
     
     }
+
+    public function loadPost(Request $request){
+        $arrId = array();
+        if($request->ajax()){
+            $post = Post::find($request->id);
+            $photos = $post->photo()->paginate($this->photoCount);
+            return response()->json(['photos' => $photos]);
+        }
+        if($request->id){
+            
+            $post = Post::find($request->id);
+            $photos = $post->photo()->paginate($this->photoCount);
+            $location = $post->Location;
+            $amenity = $post->amenity;
+            $roomtype = $post->roomtype;
+
+            if (isset($_COOKIE['last_id'])) {
+                $arr_json = json_decode($_COOKIE['last_id'], true);
+                $arrId = $arr_json;
+                if (in_array((string)$request->id, $arrId)) {
+                    unset($arrId[array_search($request->id, $arrId)]);
+                }
+                array_unshift($arrId, $request->id);
+                $array_json = json_encode($arrId);
+                setcookie("last_id", $array_json, time() + 86400, "/");
+            } else {
+                $array_json = json_encode(array($request->id));
+                setcookie("last_id", $array_json, time() + 86400, "/");
+            }
+
+            return view('web.post-info',[   'post' => $post,
+                                            'photos' => $photos,
+                                            'location' => $location,
+                                            'amenity' => $amenity,
+                                            'roomtype' => $roomtype,
+
+                                        ]);
+        }
+        return "Page not found";
+    }
+
+    
 }

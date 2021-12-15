@@ -41,7 +41,8 @@
       </section>
     </div>
 <div class="main-banner header-text">
-      <div class="container-fluid">
+      <div class="container-fluid mt-4">
+        <h2 style="text-align: center;color: orange">Đánh giá cao</h2>
         <div class="owl-banner owl-carousel">
           @forelse ($post_slide as $item)
             <div class="item">
@@ -51,7 +52,7 @@
                   <div class="meta-category">
                     <span>{{ $item->type == 0 ? 'Homestsay':'Resort' }}</span>
                   </div>
-                  <a href="post-details.html"><h4>{{ $item->name }}</h4></a>
+                  <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}"><h4>{{ $item->name }}</h4></a>
                   <ul class="post-info">
                     <li><a href="#">Admin</a></li>
                     <li><a href="#">May 12, 2020</a></li>
@@ -68,7 +69,7 @@
                   <div class="meta-category">
                     <span>Fashion</span>
                   </div>
-                  <a href="post-details.html"><h4>Responsive and Mobile Ready Layouts</h4></a>
+                  <a href="#"><h4>Responsive and Mobile Ready Layouts</h4></a>
                   <ul class="post-info">
                     <li><a href="#">Admin</a></li>
                     <li><a href="#">May 18, 2020</a></li>
@@ -117,193 +118,202 @@
 
      <section class="blog-posts">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-8">
-            <div class="all-blog-posts">
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="blog-post">
-                    <div class="blog-thumb">
-                      <img src="{{ asset('main/images/blog-post-01.jpg') }}" alt="">
+        @if (isset($last_post))
+          <div class="row  mb-4">
+            <h3>Đã xem gần đây</h3>
+            <div class="slider owl-carousel mt-2">
+              @forelse ($last_post as $item)
+                <div class="card">
+                  <a class="link-name" href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
+                    <div class="img">
+                      <img class="img_hover" src="{{ $item->img_avatar }}" alt="">
                     </div>
-                    <div class="down-content">
-                      <span>Lifestyle</span>
-                      <a href="post-details.html"><h4>Best Template Website for HTML CSS</h4></a>
-                      <ul class="post-info">
-                        <li><a href="#">Admin</a></li>
-                        <li><a href="#">May 31, 2020</a></li>
-                        <li><a href="#">12 Comments</a></li>
-                      </ul>
-                      <p>Stand Blog is a free HTML CSS template for your CMS theme. You can easily adapt or customize it for any kind of CMS or website builder. You are allowed to use it for your business. You are NOT allowed to re-distribute the template ZIP file on any template collection site for the download purpose. <a rel="nofollow" href="https://templatemo.com/contact" target="_parent">Contact TemplateMo</a> for more info. Thank you.</p>
-                      <div class="post-options">
-                        <div class="row">
-                          <div class="col-6">
-                            <ul class="post-tags">
-                              <li><i class="fa fa-tags"></i></li>
-                              <li><a href="#">Beauty</a>,</li>
-                              <li><a href="#">Nature</a></li>
-                            </ul>
-                          </div>
-                          <div class="col-6">
-                            <ul class="post-share">
-                              <li><i class="fa fa-share-alt"></i></li>
-                              <li><a href="#">Facebook</a>,</li>
-                              <li><a href="#"> Twitter</a></li>
-                            </ul>
-                          </div>
-                        </div>
+                    <div class="content">
+                      <div class="title">{{ $item->name }}</div>
+                      <div class="sub-title">      
+                        <fieldset class="rating">
+                          <input type="radio" id="star5" name="last_view_{{$item->id}}" value="5" disabled/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                          <input type="radio" id="star4half" name="last_view_{{$item->id}}" value="4.5" checked disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                          <input type="radio" id="star4" name="last_view_{{$item->id}}" value="4" disabled /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                          <input type="radio" id="star3half" name="last_view_{{$item->id}}" value="3.5" disabled/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                          <input type="radio" id="star3" name="last_view_{{$item->id}}" value="3" disabled /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                          <input type="radio" id="star2half" name="last_view_{{$item->id}}" value="2.5" disabled/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                          <input type="radio" id="star2" name="last_view_{{$item->id}}" value="2" disabled/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                          <input type="radio" id="star1half" name="last_view_{{$item->id}}" value="1.5" disabled/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                          <input type="radio" id="star1" name="last_view_{{$item->id}}" value="1" disabled/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                          <input type="radio" id="starhalf" name="last_view_{{$item->id}}" value="0.5" disabled/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                        </fieldset>
                       </div>
                     </div>
+                  </a>
+                  <div class="add-heart">
+                    <i class="fa fa-heart-o" ></i>
+                    <i class="fa fa-heart d-none" style='color: #ff5d5d;'></i>
                   </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="blog-post">
-                    <div class="blog-thumb">
-                      <img src=" {{ asset('main/images/blog-post-02.jpg') }}" alt="">
-                    </div>
-                    <div class="down-content">
-                      <span>Healthy</span>
-                      <a href="post-details.html"><h4>Etiam id diam vitae lorem dictum</h4></a>
-                      <ul class="post-info">
-                        <li><a href="#">Admin</a></li>
-                        <li><a href="#">May 24, 2020</a></li>
-                        <li><a href="#">36 Comments</a></li>
-                      </ul>
-                      <p>You can support us by contributing a little via PayPal. Please contact <a rel="nofollow" href="https://templatemo.com/contact" target="_parent">TemplateMo</a> via Live Chat or Email. If you have any question or feedback about this template, feel free to talk to us. Also, you may check other CSS templates such as <a rel="nofollow" href="https://templatemo.com/tag/multi-page" target="_parent">multi-page</a>, <a rel="nofollow" href="https://templatemo.com/tag/resume" target="_parent">resume</a>, <a rel="nofollow" href="https://templatemo.com/tag/video" target="_parent">video</a>, etc.</p>
-                      <div class="post-options">
-                        <div class="row">
-                          <div class="col-6">
-                            <ul class="post-tags">
-                              <li><i class="fa fa-tags"></i></li>
-                              <li><a href="#">Best Templates</a>,</li>
-                              <li><a href="#">TemplateMo</a></li>
-                            </ul>
-                          </div>
-                          <div class="col-6">
-                            <ul class="post-share">
-                              <li><i class="fa fa-share-alt"></i></li>
-                              <li><a href="#">Facebook</a>,</li>
-                              <li><a href="#">Twitter</a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+                </div>   
+              @empty
+                <div class="card">
+                  <div class="img">
+                    <img src="#" alt="">
+                  </div>
+                  <div class="content">
+                    <div class="title">Pricilla Preez</div>
+                  
+                    <div class="btn">
+                      <button>Read more</button>
                     </div>
                   </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="blog-post">
-                    <div class="blog-thumb">
-                      <img src="{{ asset('main/images/blog-post-03.jpg') }}" alt="">
-                    </div>
-                    <div class="down-content">
-                      <span>Fashion</span>
-                      <a href="post-details.html"><h4>Donec tincidunt leo nec magna</h4></a>
-                      <ul class="post-info">
-                        <li><a href="#">Admin</a></li>
-                        <li><a href="#">May 14, 2020</a></li>
-                        <li><a href="#">48 Comments</a></li>
-                      </ul>
-                      <p>Nullam at quam ut lacus aliquam tempor vel sed ipsum. Donec pellentesque tincidunt imperdiet. Mauris sit amet justo vulputate, cursus massa congue, vestibulum odio. Aenean elit nunc, gravida in erat sit amet, feugiat viverra leo. Phasellus interdum, diam commodo egestas rhoncus, turpis nisi consectetur nibh, in vehicula eros orci vel neque.</p>
-                      <div class="post-options">
-                        <div class="row">
-                          <div class="col-6">
-                            <ul class="post-tags">
-                              <li><i class="fa fa-tags"></i></li>
-                              <li><a href="#">HTML CSS</a>,</li>
-                              <li><a href="#">Photoshop</a></li>
-                            </ul>
-                          </div>
-                          <div class="col-6">
-                            <ul class="post-share">
-                              <li><i class="fa fa-share-alt"></i></li>
-                              <li><a href="#">Facebook</a>,</li>
-                              <li><a href="#">Twitter</a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="main-button">
-                    <a href="blog.html">View All Posts</a>
-                  </div>
-                </div>
-              </div>
+                </div>   
+              @endforelse
+
             </div>
+          </div>   
+        @endif
+        <div class="row  mb-4 mg-top">
+          <h3>Homestay-Resrort mới</h3>
+          <div class="slider owl-carousel mt-2">
+            @forelse ($post_slide as $item)
+              <div class="card">
+                <a class="link-name" href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
+                  <div class="img">
+                    <img class="img_hover" src="{{ $item->img_avatar }}" alt="">
+                  </div>
+                  <div class="content">
+                    <div class="title">{{ $item->name }}</div>
+                    <div class="sub-title">      
+                      <fieldset class="rating">
+                        <input type="radio" id="star5" name="new_{{$item->id}}" value="5" disabled/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                        <input type="radio" id="star4half" name="new_{{$item->id}}" value="4.5" checked disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" id="star4" name="new_{{$item->id}}" value="4" disabled /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                        <input type="radio" id="star3half" name="new_{{$item->id}}" value="3.5" disabled/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                        <input type="radio" id="star3" name="new_{{$item->id}}" value="3" disabled /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                        <input type="radio" id="star2half" name="new_{{$item->id}}" value="2.5" disabled/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                        <input type="radio" id="star2" name="new_{{$item->id}}" value="2" disabled/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                        <input type="radio" id="star1half" name="new_{{$item->id}}" value="1.5" disabled/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                        <input type="radio" id="star1" name="new_{{$item->id}}" value="1" disabled/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                        <input type="radio" id="starhalf" name="new_{{$item->id}}" value="0.5" disabled/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                      </fieldset>
+                    </div>
+                  </div>
+                </a>
+                <div class="add-heart">
+                  <i class="fa fa-heart-o" aria-hidden="true"></i>
+                  <i class="fa fa-heart d-none" style='color: #ff5d5d;'></i>
+                </div>
+              </div>   
+            @empty
+              <div class="card">
+                <div class="img">
+                  <img src="#" alt="">
+                </div>
+                <div class="content">
+                  <div class="title">Pricilla Preez</div>
+                
+                  <div class="btn">
+                    <button>Read more</button>
+                  </div>
+                </div>
+              </div>   
+            @endforelse
+
           </div>
-          <div class="col-lg-4">
-            <div class="sidebar">
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="sidebar-item search">
-                    <form id="search_form" name="gs" method="GET" action="#">
-                      <input type="text" name="q" class="searchText" placeholder="type to search..." autocomplete="on">
-                    </form>
+        </div>
+        <div class="row mb-4 mg-top">
+          <h3>Có thể bạn sẽ thích</h3>
+          <div class="slider owl-carousel mt-2">
+            @forelse ($post_slide as $item)
+              <div class="card">
+                <a class="link-name" href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
+                  <div class="img">
+                    <img class="img_hover" src="{{ $item->img_avatar }}" alt="">
                   </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="sidebar-item recent-posts">
-                    <div class="sidebar-heading">
-                      <h2>Recent Posts</h2>
-                    </div>
-                    <div class="content">
-                      <ul>
-                        <li><a href="post-details.html">
-                          <h5>Vestibulum id turpis porttitor sapien facilisis scelerisque</h5>
-                          <span>May 31, 2020</span>
-                        </a></li>
-                        <li><a href="post-details.html">
-                          <h5>Suspendisse et metus nec libero ultrices varius eget in risus</h5>
-                          <span>May 28, 2020</span>
-                        </a></li>
-                        <li><a href="post-details.html">
-                          <h5>Swag hella echo park leggings, shaman cornhole ethical coloring</h5>
-                          <span>May 14, 2020</span>
-                        </a></li>
-                      </ul>
+                  <div class="content">
+                    <div class="title">{{ $item->name }}</div>
+                    <div class="sub-title">      
+                      <fieldset class="rating">
+                        <input type="radio" id="star5" name="like_{{$item->id}}" value="5" disabled/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                        <input type="radio" id="star4half" name="like_{{$item->id}}" value="4.5" checked disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" id="star4" name="like_{{$item->id}}" value="4" disabled /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                        <input type="radio" id="star3half" name="like_{{$item->id}}" value="3.5" disabled/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                        <input type="radio" id="star3" name="like_{{$item->id}}" value="3" disabled /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                        <input type="radio" id="star2half" name="like_{{$item->id}}" value="2.5" disabled/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                        <input type="radio" id="star2" name="like_{{$item->id}}" value="2" disabled/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                        <input type="radio" id="star1half" name="like_{{$item->id}}" value="1.5" disabled/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                        <input type="radio" id="star1" name="like_{{$item->id}}" value="1" disabled/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                        <input type="radio" id="starhalf" name="like_{{$item->id}}" value="0.5" disabled/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                      </fieldset>
                     </div>
                   </div>
+                </a>
+                <div class="add-heart">
+                  <i class="fa fa-heart-o" aria-hidden="true"></i>
+                  <i class="fa fa-heart d-none" style='color: #ff5d5d;'></i>
                 </div>
-                <div class="col-lg-12">
-                  <div class="sidebar-item categories">
-                    <div class="sidebar-heading">
-                      <h2>Categories</h2>
-                    </div>
-                    <div class="content">
-                      <ul>
-                        <li><a href="#">- Nature Lifestyle</a></li>
-                        <li><a href="#">- Awesome Layouts</a></li>
-                        <li><a href="#">- Creative Ideas</a></li>
-                        <li><a href="#">- Responsive Templates</a></li>
-                        <li><a href="#">- HTML5 / CSS3 Templates</a></li>
-                        <li><a href="#">- Creative &amp; Unique</a></li>
-                      </ul>
-                    </div>
+              </div>   
+            @empty
+              <div class="card">
+                <div class="img">
+                  <img src="#" alt="">
+                </div>
+                <div class="content">
+                  <div class="title">Pricilla Preez</div>
+                
+                  <div class="btn">
+                    <button>Read more</button>
                   </div>
                 </div>
-                <div class="col-lg-12">
-                  <div class="sidebar-item tags">
-                    <div class="sidebar-heading">
-                      <h2>Tag Clouds</h2>
-                    </div>
-                    <div class="content">
-                      <ul>
-                        <li><a href="#">Lifestyle</a></li>
-                        <li><a href="#">Creative</a></li>
-                        <li><a href="#">HTML5</a></li>
-                        <li><a href="#">Inspiration</a></li>
-                        <li><a href="#">Motivation</a></li>
-                        <li><a href="#">PSD</a></li>
-                        <li><a href="#">Responsive</a></li>
-                      </ul>
+              </div>   
+            @endforelse
+
+          </div>
+        </div>
+        <div class="row mg-top">
+          <h3>Địa điểm nổi bật</h3>
+          <div class="slider owl-carousel mt-2">
+            @forelse ($post_slide as $item)
+              <div class="card">
+                <a class="link-name" href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
+                  <div class="img">
+                    <img class="img_hover" src="{{ $item->img_avatar }}" alt="">
+                  </div>
+                  <div class="content">
+                    <div class="title">{{ $item->name }}</div>
+                    <div class="sub-title">      
+                      <fieldset class="rating">
+                        <input type="radio" id="star5" name="highlight_{{$item->id}}" value="5" disabled/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                        <input type="radio" id="star4half" name="highlight_{{$item->id}}" value="4.5" checked disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" id="star4" name="highlight_{{$item->id}}" value="4" disabled /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                        <input type="radio" id="star3half" name="highlight_{{$item->id}}" value="3.5" disabled/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                        <input type="radio" id="star3" name="highlight_{{$item->id}}" value="3" disabled /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                        <input type="radio" id="star2half" name="highlight_{{$item->id}}" value="2.5" disabled/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                        <input type="radio" id="star2" name="highlight_{{$item->id}}" value="2" disabled/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                        <input type="radio" id="star1half" name="highlight_{{$item->id}}" value="1.5" disabled/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                        <input type="radio" id="star1" name="highlight_{{$item->id}}" value="1" disabled/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                        <input type="radio" id="starhalf" name="highlight_{{$item->id}}" value="0.5" disabled/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                      </fieldset>
                     </div>
                   </div>
+                </a>
+                <div class="add-heart">
+                  <i class="fa fa-heart-o" aria-hidden="true"></i>
+                  <i class="fa fa-heart d-none" style='color: #ff5d5d;'></i>
                 </div>
-              </div>
-            </div>
+              </div>   
+            @empty
+              <div class="card">
+                <div class="img">
+                  <img src="#" alt="">
+                </div>
+                <div class="content">
+                  <div class="title">Pricilla Preez</div>
+                
+                  <div class="btn">
+                    <button>Read more</button>
+                  </div>
+                </div>
+              </div>   
+            @endforelse
+
           </div>
         </div>
       </div>
@@ -333,8 +343,14 @@
             $(".go-icon").click(function(){
             $(".search-form").submit();
             });
+
+            
         });
 
+        $(".add-heart").click(function(){
+          $(this).find('i').toggleClass('d-none');
+        });
 
     </script>
+   
 @endsection

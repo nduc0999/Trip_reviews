@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/Reiview-{slug}_{id}',[PostController::class,'loadPost'])->name('post.show');
 
 //Auth
 Route::get('/login/page', [LoginController::class, 'showLoginForm'])->name('login.page');

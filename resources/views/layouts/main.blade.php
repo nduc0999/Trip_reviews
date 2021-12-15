@@ -11,6 +11,7 @@
 
     <title>@yield('title')</title>
 
+
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('main/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
@@ -67,8 +68,9 @@
               @endguest
               @auth
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" style="padding-top: 0px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ Auth::user()->fullName() }}
+                    <img src="{{ Auth::user()->img_avatar }}" alt="Avatar" class="avatar">
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     @if (Auth::user()->email_verified_at == null)
@@ -130,13 +132,14 @@
 
 
     <!-- Additional Scripts -->
-    <script src="{{ asset('main/js/custom.js') }}"></script>
+   
     <script src="{{ asset('main/js/owl.js') }}"></script>
     <script src="{{ asset('main/js/slick.js') }}"></script>
     <script src="{{ asset('main/js/isotope.js') }}"></script>
     <script src="{{ asset('main/js/accordions.js') }}"></script>
     @yield('script')
-
+  
+    <script src="{{ asset('main/js/custom.js') }}"></script>
     <script language = "text/Javascript"> 
       cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
       function clearField(t){                   //declaring the array outside of the
