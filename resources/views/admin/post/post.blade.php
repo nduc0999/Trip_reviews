@@ -112,7 +112,7 @@
                                                     <span class="text-danger error-text streets_err"></span>
                                                 </div>
                                                 <div class="form-group ">
-                                                    <label for="first-name-column">Quận/Phường</label>
+                                                    <label for="first-name-column">Quận/Phường/Huyện</label>
                                                     <input type="text" id="district" class="form-control" placeholder="District" name="district">
                                                     <span class="text-danger error-text district_err"></span>
                                                 </div>

@@ -5,7 +5,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Câu hỏi</th>
-                                        <th>Trạng thái</th>
+                                        <th>Hoạt động</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
@@ -14,7 +14,12 @@
                                         <tr>
                                             <td>{{ $loop->iteration + $arr_data->firstItem() - 1 }}</td>
                                             <td>{{ $data->question }}</td>
-                                            <td>{{ $data->status }}</td>
+                                            <td>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input activity-question" 
+                                                    data-id={{ $data->id }} type="checkbox" id="activity-question" {{ $data->status == 0 ? 'checked':''}}>
+                                                </div>
+                                            </td>
                                             <td >
                                               
                                                     <i class="bi bi-pencil-square text-primary me-3" data-bs-toggle="modal" data-bs-target="#formEdit"></i>

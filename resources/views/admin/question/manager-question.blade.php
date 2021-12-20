@@ -176,11 +176,10 @@
 
     function showEdit(){
            $('.bi-pencil-square').click(function(){
-            let id = $(this).closest('tr').find('input').val();
+            let id = $(this).closest('tr').find('input[type=hidden]').val();
             let question = $(this).closest('tr').find('td').eq(1).html();
             $('#id').val(id);
             $('#question').val(question);
-            
         })
     }
 
@@ -193,6 +192,7 @@
                 $('#table-data').html(result);
                 showEdit()
                 deleteData();
+                saveActivity();
             }
         })
     }
@@ -218,7 +218,10 @@
                     $('#question_add').val('');
             
                 }else{
-                    alert(result.mess);
+                      Toast.fire({
+                        icon: 'warning',
+                        title: result.mess,
+                        })
                     $('formAdd').modal('show');
                 }      
             }
@@ -297,10 +300,66 @@
         })
     }
 
+
+     function activityQuestion(id,question){
+    
+
+            Swal.fire({
+                title: 'Bạn có muốn thay hoạt động câu hỏi này',
+                text: "",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        url: "{{ route('admin.manager.question.activity') }}",
+                        type: "POST",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "id": id
+                        },
+                        success: function(result){
+                            if(result.status){
+                                loadPage(page);
+                                Swal.fire(
+                                    'Đã thay đổi trạng thái câu hỏi!',
+                                    '',
+                                    'success'
+                                    )
+                            }else{
+                                Swal.fire(result.mess)
+                            }
+                       
+                        }
+                    })
+                }else {
+                    if($(question).is(':checked')){ 
+                        $(question).prop("checked", false);
+                    }else{
+                        $(question).prop("checked", true);
+                    }
+
+                }
+                })
+
+    }
+
+     function saveActivity(){
+        $('.activity-question').click(function(){
+            let id = $(this).data('id');
+            activityQuestion(id,this)
+        })
+    }
+
     $(document).ready(function(){
         Pagination();
         showEdit();
         deleteData();
+        saveActivity();
     });
 
     $('#count').change(function(){

@@ -40,11 +40,11 @@ navigator.geolocation.getCurrentPosition( (pos) => {
     //     }).addTo(map);
 
      
-   $('#formAdd').on('show.bs.modal', function() {
-        setTimeout(function() {
-            map.invalidateSize();
-        }, 10);
-        });
+    $('#formAdd').on('show.bs.modal', function() {
+            setTimeout(function() {
+                map.invalidateSize();
+            }, 10);
+            });
 
      var searchControl = L.esri.Geocoding.geosearch({
             position: 'topright',
@@ -97,7 +97,8 @@ navigator.geolocation.getCurrentPosition( (pos) => {
             .setContent("You clicked the map at " + e.latlng.toString())
             .openOn(map);
     });
-  
+    
+    mapGlobal = map;
 
 });
 

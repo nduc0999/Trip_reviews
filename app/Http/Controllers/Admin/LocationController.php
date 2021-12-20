@@ -4,20 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Location;
+use Exception;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
-    public $countRecord = 3;
+    public $countRecord = 5;
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $data = Location::where('status', 0)->orderBy('id', 'DESC')->paginate($request->count);
+            return view('admin.location.table-data', ['arr_data' => $data]);
+        }
 
         $data = Location::where('status', 0)->orderBy('id', 'DESC')->paginate($this->countRecord);
 
-        if ($request->ajax()) {
-            return view('admin.location.table-data', ['arr_data' => $data]);
-        }
 
         return view('admin.location.manager-location', ['arr_data' => $data]);
     }
@@ -26,12 +28,17 @@ class LocationController extends Controller
     public function update(Request $request)
     {
 
-        $checkProvince = Location::where('province', 'like', $request->province)->where('status', 0)->first();
-        $checkAll = Location::where('province', 'like', $request->province)
-                                    ->where('region','like',$request->region)
-                                    ->where('latitude','like',$request->latitude)
-                                    ->where('longtitude','like',$request->longtitude)
-                                    ->where('status', 0)->first();
+        try{
+            $checkProvince = Location::where('province', 'LIKE', $request->province)->where('status', 0)->first();
+            $checkAll = Location::where('province', 'like', $request->province)
+                                        ->where('region','like',$request->region)
+                                        ->where('latitude',$request->latitude)
+                                        ->where('longtitude',$request->longtitude)
+                                        ->where('status', 0)->first();
+        }catch(Exception $e){
+            return response()->json(['status' => false, 'mess' => 'Lỗi xảy ra']);
+        }
+
         if ($checkProvince) {
             if ($checkAll) {
                 return response()->json(['status' => false, 'mess' => 'Không có sự thay đổi địa điểm']);

@@ -4,20 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Roomtype;
+use Exception;
 use Illuminate\Http\Request;
 
 class RoomtypeController extends Controller
 {
-    public $countRecord = 3;
+    public $countRecord = 5;
 
     public function index(Request $request)
     {
 
-        $data = Roomtype::where('status', 0)->orderBy('id', 'DESC')->paginate($this->countRecord);
-
         if ($request->ajax()) {
+            $data = Roomtype::where('status', 0)->orderBy('id', 'DESC')->paginate($request->count);
             return view('admin.roomtype.table-data', ['arr_data' => $data]);
         }
+        $data = Roomtype::where('status', 0)->orderBy('id', 'DESC')->paginate($this->countRecord);
 
         return view('admin.roomtype.manager-roomtype', ['arr_data' => $data]);
     }
@@ -25,9 +26,12 @@ class RoomtypeController extends Controller
 
     public function update(Request $request)
     {
-
-        $checkName = Roomtype::where('name', 'like', $request->name)->where('status', 0)->first();
-        $checkDescription = Roomtype::where('name', 'like', $request->name)->where('description', 'like', $request->description)->where('status', 0)->first();
+        try{
+            $checkName = Roomtype::where('name', 'like', $request->name)->where('status', 0)->first();
+            $checkDescription = Roomtype::where('name', 'like', $request->name)->where('description', 'like', $request->description)->where('status', 0)->first();
+        }catch(Exception $e){
+            return response()->json(['status' => false, 'mess' => 'Lỗi ko xác định']);
+        }
         if ($checkName) {
             if ($checkDescription) {
                 return response()->json(['status' => false, 'mess' => 'Không có sự thay đổi loại phòng']);

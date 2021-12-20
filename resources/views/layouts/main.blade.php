@@ -9,7 +9,8 @@
     <meta name="author" content="TemplateMo">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
 
-    <title>@yield('title')</title>
+    <title>@yield('title')- Trip Review</title>
+
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('main/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -50,7 +51,7 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item @if(url()->current() == route('home')) active @endif">
-                <a class="nav-link" href="{{route('home')}}">Home
+                <a class="nav-link" href="#"><i class="fa fa-hospital-o mr-2" aria-hidden="true"></i>Đề xuất
                   <span class="sr-only">(current)</span>
                 </a>
               </li> 
@@ -67,8 +68,9 @@
               @endguest
               @auth
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" style="padding-top: 0px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ Auth::user()->fullName() }}
+                    <img src="{{ Auth::user()->img_avatar }}" alt="Avatar" class="avatar">
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     @if (Auth::user()->email_verified_at == null)
@@ -130,13 +132,14 @@
 
 
     <!-- Additional Scripts -->
-    <script src="{{ asset('main/js/custom.js') }}"></script>
+   
     <script src="{{ asset('main/js/owl.js') }}"></script>
     <script src="{{ asset('main/js/slick.js') }}"></script>
     <script src="{{ asset('main/js/isotope.js') }}"></script>
     <script src="{{ asset('main/js/accordions.js') }}"></script>
     @yield('script')
-
+  
+    <script src="{{ asset('main/js/custom.js') }}"></script>
     <script language = "text/Javascript"> 
       cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
       function clearField(t){                   //declaring the array outside of the

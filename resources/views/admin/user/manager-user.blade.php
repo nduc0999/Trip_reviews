@@ -5,7 +5,13 @@
 @section('head')
     {{-- <link rel="stylesheet" href="{{ asset('dashboard/vendors/simple-datatables/style.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.min.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('dashboard/css/custom.css') }}">
+
+    <style>
+        #tbl-info td{
+            padding-right: 20px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -34,8 +40,14 @@
                         <div class="card">
                            
                             <div class="card-content">
-                                <div class="card-body d-flex justify-content-end">
-                                  
+                                <div class="card-body d-flex justify-content-between">
+                                    
+                                    <select name="count" id="count">
+                                        <option value="5" selected>5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                    </select>
+
                                    <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#formAdd" id="btn-add">
                                         <i class="bi bi-plus-circle d-flex justify-content-center"></i>
                                    </button>
@@ -56,72 +68,55 @@
 
 
 
-<div  class="modal fade " id="formAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog  modal-lg modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Thêm địa điểm
-                </h5>
-                <button type="button" class="close" data-bs-dismiss="modal"
-                    aria-label="Close">
-                    <i data-feather="x"></i>
-                </button>
+<div  class="modal fade " id="formProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+      
+        <div class="container-profile">
+            <div class="cover-photo">
+                <img src="" class="profile" id="avatar-user">
             </div>
-        
-            <div class="modal-body">
-               <form id='add-user' >
-                   @csrf
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="province_add">Tên</label>
-                                    <input type="text" class="form-control" id="province_add" name="province">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="description" class="form-label">Miền</label>
-                                    <select class="form-select" aria-label="Default select example" id="region_add" name='region'>
-                                        {{-- <option selected>Open this select menu</option> --}}
-                                        <option selected  >Miền Bắc</option>
-                                        <option >Miền Trung</option>
-                                        <option >Miền Nam</option>
-                                    </select>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label for="name">Vĩ độ</label>
-                                        <input type="number" class="form-control" id="lat_add" name="latitude">
-                                    </div>
-                                     <div class="form-group col-md-6">
-                                        <label for="name">Kinh độ</label>
-                                        <input type="number" class="form-control" id="long_add" name="longtitude">
-                                    </div>
-                                </div>
-
-                            </div>
-                            
-                        </div>
-                    </div>
-               </form>
-             
+            <div id='name-user' class="profile-name"></div>
+            <div class="divider divider-left-center mt-3">
+                <div class="divider-text" style="background-color: transparent"><strong>Thông tin người dùng</strong></div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary"
-                    data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Đóng</span>
-                </button>
-                <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal" onclick="addUser()">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Thêm</span>
-                </button>
+            <div class="container d-flex justify-content-center">
+                
+                <table id='tbl-info'class="text-start">
+                    <tr>
+                        <td>Email:</td>
+                        <td id='email'>nduc@gmai.com</td>
+                    </tr>
+                    <tr> 
+                        <td>Ngày sinh:</td>
+                        <td id="dob">03/04/2007</td>
+                    </tr>
+                    <tr>
+                        <td>Số điện thoại:</td>
+                        <td id="phone">01234566789</td>
+                    </tr>
+                    <tr>
+                        <td>Quê quán:</td>
+                        <td id="country">Hạ Long Nam Định</td>
+                    </tr>
+                </table>
+
             </div>
-         
+            <div class="divider divider-left-center mt-3">
+                <div class="divider-text" style="background-color: transparent"><strong>Giới thiệu bản thân</strong></div>
+            </div>
+            <div class="container">
+                <p class="about" id="introduce"></p>
+            </div>
+
+            <div class="mb-3">
+                <button class="msg-btn">Message</button>
+                <button class="follow-btn">Following</button>
+            </div>
+           
         </div>
+    
     </div>
-</div
+</div>
 
 
 @endsection
@@ -155,9 +150,11 @@
         $.ajax({
             url: "{{ route('admin.manager.user') }}?page="+page,
             type: "GET",
+            data: { 'count' :  $('#count').val() },
             success: function(result){
                 $('#table-data').html(result);
                 save_ban_unban();
+                viewProfile();
             }
         })
     }
@@ -246,6 +243,9 @@
     $(document).ready(function(){
         Pagination();
         save_ban_unban();
+        viewProfile();
+        
+ 
     });
     
     function save_ban_unban(){
@@ -255,5 +255,41 @@
         })
     }
 
+    function viewProfile(){
+          $('.bi-eye-fill').click(function(){
+            
+            let id = $(this).closest('tr').find('input[type=hidden]').val();
+
+            $.ajax({
+                url:"{{ route('admin.manager.user.profile') }}",
+                type: "POST",
+                data: {
+                    "_token" : '{{csrf_token()}}',
+                    id,
+                },
+               
+                success: function(result){
+                    if(result.status){
+                        console.log(result.data);
+                        name = result.data.first_name +" "+result.data.last_name;
+                        $('#name-user').html(name);
+                        $('#avatar-user').attr('src', result.data.img_avatar);
+                        $('.cover-photo').css("background-image", `url('${result.data.img_wall}')`);
+                        $('#email').html(result.data.email);
+                        $('#dob').html(result.data.date_of_birth);
+                        $('#phone').html(result.data.phone);
+                        $('#country').html(result.data.country);
+                        $('#introduce').html(result.data.introduce);
+                        $('#formProfile').modal('show');
+                    }
+                }
+
+            })
+          });
+    }
+
+    $('#count').change(function(){
+        loadPage(1);
+    })
 </script>
 @endsection

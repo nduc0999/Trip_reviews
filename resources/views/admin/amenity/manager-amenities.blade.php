@@ -34,7 +34,13 @@
                         <div class="card">
                            
                             <div class="card-content">
-                                <div class="card-body d-flex justify-content-end">
+                                <div class="card-body d-flex justify-content-between">
+
+                                    <select name="count" id="count">
+                                        <option value="5" selected>5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                    </select>
                                   
                                    <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#formAdd">
                                         <i class="bi bi-plus-circle d-flex justify-content-center"></i>
@@ -198,6 +204,7 @@
         $.ajax({
             url: "{{ route('admin.manager.amenity') }}?page="+page,
             type: "GET",
+            data: { 'count' :  $('#count').val() },
             success: function(result){
                 $('#table-data').html(result);
                 showEdit()
@@ -261,6 +268,7 @@
                         icon: 'warning',
                         title: result.mess,
                         })
+                        console.log(result);
                     $('#formEdit').modal('show');
                 }
             }
@@ -317,7 +325,8 @@
     
 
     $('#count').change(function(){
-        alert($(this).val());
+        count = $(this).val();
+       loadPage(1);
     })
 </script>
 @endsection

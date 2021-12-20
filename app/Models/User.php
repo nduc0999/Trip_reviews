@@ -46,7 +46,7 @@ class User extends Authenticatable
     }
 
     public function LikeReview(){
-        return $this->belongsToMany(Review::class,'like_review','id_user','id_review');
+        return $this->belongsToMany(Review::class,'like_review','id_user','id_review')->withTimestamps();
     }
 
     public function Travel(){
@@ -64,5 +64,12 @@ class User extends Authenticatable
     public function fullName()
     {
         return $this->first_name . " " . $this->last_name;
+    }
+
+    public function isAdmin(){
+        if($this->role == 1){
+            return true;
+        }
+        return false;
     }
 }
