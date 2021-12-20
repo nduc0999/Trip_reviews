@@ -9,7 +9,7 @@
     <meta name="author" content="TemplateMo">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
 
-    <title>@yield('title')</title>
+    <title>@yield('title')- Trip Review</title>
 
 
     <!-- Bootstrap core CSS -->
@@ -51,7 +51,7 @@
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item @if(url()->current() == route('home')) active @endif">
-                <a class="nav-link" href="{{route('home')}}"></i>Home
+                <a class="nav-link" href="#"><i class="fa fa-hospital-o mr-2" aria-hidden="true"></i>Đề xuất
                   <span class="sr-only">(current)</span>
                 </a>
               </li> 

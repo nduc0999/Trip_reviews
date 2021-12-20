@@ -271,59 +271,30 @@
                         @endforelse
 
                       </ul>
-                      <hr>
+                     
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12 mb-4">
                   <div  id="map" style="height: 375px; width: 100%; z-index:1;"></div> 
                   <button class="btn btn-show-map" data-toggle="modal" data-target="#show-map">
                     <i class="fa fa-expand" aria-hidden="true"></i> Toàn màn hình
                   </button>
                 </div>
-                <div class="col-lg-12">
-                  <div class="sidebar-item comments">
-                    <div class="sidebar-heading">
-                      <h2>4 comments</h2>
-                    </div>
-                    <div class="content">
-                      <ul>
-                        <li>
-                          <div class="author-thumb">
-                            <img src="" alt="">
-                          </div>
-                          <div class="right-content">
-                            <h4>Charles Kate<span>May 16, 2020</span></h4>
-                            <p>Fusce ornare mollis eros. Duis et diam vitae justo fringilla condimentum eu quis leo. Vestibulum id turpis porttitor sapien facilisis scelerisque. Curabitur a nisl eu lacus convallis eleifend posuere id tellus.</p>
-                          </div>
-                        </li>
-                        <li class="replied">
-                          <div class="author-thumb">
-                            <img src="" alt="">
-                          </div>
-                          <div class="right-content">
-                            <h4>Thirteen Man<span>May 20, 2020</span></h4>
-                            <p>In porta urna sed venenatis sollicitudin. Praesent urna sem, pulvinar vel mattis eget.</p>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="author-thumb">
-                            <img src="" alt="">
-                          </div>
-                          <div class="right-content">
-                            <h4>Belisimo Mama<span>May 16, 2020</span></h4>
-                            <p>Nullam nec pharetra nibh. Cras tortor nulla, faucibus id tincidunt in, ultrices eget ligula. Sed vitae suscipit ligula. Vestibulum id turpis volutpat, lobortis turpis ac, molestie nibh.</p>
-                          </div>
-                        </li>
-                        <li class="replied">
-                          <div class="author-thumb">
-                            <img src="" alt="">
-                          </div>
-                          <div class="right-content">
-                            <h4>Thirteen Man<span>May 22, 2020</span></h4>
-                            <p>Mauris sit amet justo vulputate, cursus massa congue, vestibulum odio. Aenean elit nunc, gravida in erat sit amet, feugiat viverra leo.</p>
-                          </div>
-                        </li>
-                      </ul>
+               
+                <div class="col-lg-12" style="background-color: #f2f2f2;">
+
+                  <div class="down-content">
+                    <span>Đánh giá</span>    
+                    <hr>      
+                    <div class="sidebar-item comments">
+                      <div class="sidebar-heading d-flex justify-content-between ">
+                        <h2>{{$reviews->count()}} Đánh giá</h2>
+                        <a href="{{ route('form.review',['slug' => Str::slug($post->name),'id'=>$post->id]) }}" class="btn" target="_blank" style="background-color: #f48840;color:white;"><i class="fa fa-edit"></i> Viết đánh giá</a>
+                      </div>
+                      <hr>
+                      <div id="data-review">
+                        @include('web.post.data-review')
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -433,9 +404,70 @@
     </div>
   </div>
 
-  
+  {{-- <div class="modal fade " id="quick-login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Đăng nhập nhanh</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+           <form id='login'>
+             @csrf
+              <div class="form-group">
+                <label for="email-login">Email</label>
+                <input type="email" class="form-control" id="email-login" name ='email' aria-describedby="emailHelp" placeholder="Enter email">
+             
+              </div>
+              <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" name='password' placeholder="Password">
+              </div>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
+                <label class="custom-control-label" for="customCheck1">Remember</label>
+              </div>
+              <button type="submit" class="btn btn-primary float-right" id="btn-login">Đăng nhập</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <span>Nếu chưa có tài khoản, hãy cùng <a href="{{route('register.page')}}"> tham gia </a> TripReview</span>
+      </div>
+      
+      </div>
+    </div>
+  </div> --}}
 
-    
+
+  <div class="modal fade" id="edit-rep" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Sửa câu trả lời</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id='form-edit-rep'>
+            @csrf
+                <input type="hidden" name="id_review" id='id-edit-review'>
+           
+
+              <div class="form-group">
+                
+                  <textarea class="form-control write-rep-review" id="text-edit-rep" rows="10" name='rep' placeholder="Trả lời đánh giá"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary send-rep float-right">Lưu</button>
+          </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+   
 @endsection
 
 @section('script')
@@ -449,79 +481,88 @@
           long: "{{ $post->longtitude }}",
        };
 
-       console.log(diadiem);
       var position = [diadiem.lat, diadiem.long];
 
-    var map = L.map('map').setView(position, 15);
+      var map = L.map('map').setView(position, 15);
 
-    var map1 = L.map('map1').setView(position, 13);
+      var map1 = L.map('map1').setView(position, 13);
 
     
 
-    $(window).resize(function() {
-      var width = $(window).width();
-      if (width > 500){
-        map.dragging.disable();
-        map.touchZoom.disable();
-        map.doubleClickZoom.disable();
-        map.scrollWheelZoom.disable();
-       
-      }
-    });
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+      // $(window).resize(function() {
+        var width = $(window).width();
+        if (width > 500){
+          map.dragging.disable();
+          map.touchZoom.disable();
+          map.doubleClickZoom.disable();
+          map.scrollWheelZoom.disable();
+        
+        }
+      // });
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map1);
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map1);
 
 
-    $('#show-map').on('show.bs.modal', function() {
-              setTimeout(function() {
-                  map1.invalidateSize();
-                  L.marker([diadiem.lat,diadiem.long]).addTo(map1)
-                    .bindPopup(`<div class="card" style="width: 200px;height:200px">
-                                <img class="card-img-top" src="{{ $post->img_avatar }}" alt="Card image cap">
-                                <div class="card-body">
-                                {{$post->name}}
-                                </div>
-                              </div>`)
-                    .openPopup();
-              }, 10);
-              });
+      $('#show-map').on('show.bs.modal', function() {
+                setTimeout(function() {
+                    map1.invalidateSize();
+                    L.marker([diadiem.lat,diadiem.long]).addTo(map1)
+                      .bindPopup(`<div class="card" style="width: 200px;height:200px">
+                                  <img class="card-img-top" src="{{ $post->img_avatar }}" alt="Card image cap">
+                                  <div class="card-body">
+                                  {{$post->name}}
+                                  </div>
+                                </div>`)
+                      .openPopup();
+                }, 10);
+                });
 
-    L.marker([diadiem.lat,diadiem.long]).addTo(map)
-    .bindPopup(`<div class='row' style='width:100px;'>
-                  <div class='col-md-12'>
-                    <img src='{{ $post->img_avatar }}' style='width:100%;'>
-                  </div>
-                   <div class='col-md-12'>
-                    <span style='font-size:9px;'>{{$post->name}}</span>
-                  </div>
-                </div>`)
-    .openPopup();
+      L.marker([diadiem.lat,diadiem.long]).addTo(map)
+      .bindPopup(`<div class='row' style='width:100px;'>
+                    <div class='col-md-12'>
+                      <img src='{{ $post->img_avatar }}' style='width:100%;'>
+                    </div>
+                    <div class='col-md-12'>
+                      <span style='font-size:9px;'>{{$post->name}}</span>
+                    </div>
+                  </div>`)
+      .openPopup();
 
-    // [21.009516, 105.839284]
+      // [21.009516, 105.839284]
       
 
 
-    map1.on('click', function(e) {
-        $('#lat_add').val(e.latlng.lat);
-        $('#long_add').val(e.latlng.lng);
-            L.popup().setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(map1);
-    });
+      map1.on('click', function(e) {
+          $('#lat_add').val(e.latlng.lat);
+          $('#long_add').val(e.latlng.lng);
+              L.popup().setLatLng(e.latlng)
+              .setContent("You clicked the map at " + e.latlng.toString())
+              .openOn(map1);
+      });
   
 
     </script>
     <script>
 
+    
+
       $(document).ready(function(){
+        let searchParams = new URLSearchParams(window.location.search);
+        if(searchParams.has('review')){
+          a= $('#data-review').offset().top;
+          $(document).scrollTop(a+200);
+        }
+    
         popupPhoto();
+        
       });
+     
 
       var loadPhoto = 2;
       var lastPhoto = 2;
@@ -577,6 +618,194 @@
 
         });
       }
+
+      $('.fa-thumbs-o-up').click(function(){
+          let id = $(this).data('id');
+          let like = $(this);
+        $.ajax({
+          url: "{{route('review.like')}}",
+          type: 'POST',
+          data: {
+            "_token": "{{ csrf_token() }}",
+            "id": id
+          },
+          success: function(result){
+            console.log(result);
+            if(result.status){
+              
+            count = result.count+ ' cảm ơn';
+            like.closest('.nav-like-rep').find('.count-like').html(count);
+            }else{
+               if(like.hasClass('like')){
+                  like.removeClass('like');
+                }else{
+                  like.addClass('like');
+                }
+        
+              console.log(result.mess);
+            }
+          },
+          error: function(e){
+            if(like.hasClass('like')){
+                like.removeClass('like');
+              }else{
+                like.addClass('like');
+              }
+        
+        
+            // if( e.responseJSON.message == 'Unauthenticated.'){
+            //   $('#quick-login').modal('show');
+            // }
+            // console.log(e.responseJSON.message);
+          }
+        })
+        if(like.hasClass('like')){
+          like.removeClass('like');
+        }else{
+          like.addClass('like');
+        }
+        
+      });
+
+      $('.read-more').click(function(){
+        $(this).closest('.comment').find('.show-more').toggle();
+        if($(this).hasClass('read-less')){
+          $(this).removeClass('read-less');
+          let html =`<p style="text-decoration: underline;color:orange;font-size:14px">Đọc thêm</p><i class="fa fa-caret-down ml-2" aria-hidden="true"></i>`;
+          $(this).html(html);
+        }else{
+          $(this).addClass('read-less');
+          let html = `<p style="text-decoration: underline;color:orange;font-size:14px">Rút gọn</p><i class="fa fa-caret-up ml-2" aria-hidden="true"></i>`;
+          $(this).html(html);
+        }
+        
+      })
+
+      $('.read-more-rep').click(function(){
+        $(this).closest('.rep').find('.show-rep-dot').addClass('d-none');
+        $(this).closest('.rep').find('.show-rep').removeClass('d-none');
+        $(this).html('');
+      
+      })
+
+      $('.fa-comment-o').click(function(){
+        id_review = $(this).data('id');
+        id_post = $(this).data('id_post');
+        let html = `<form id='form-rep'>
+                      @csrf
+                         <input type="hidden" name="id_review" value='${id_review}'>
+                         <input type="hidden" name="id_post" value='${id_post}'>
+
+                        <div class="form-group">
+                            <label for="write-rep-review"></label>
+                            <textarea class="form-control write-rep-review"  rows="5" name='rep' placeholder="Trả lời đánh giá"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary send-rep">Rep</button>
+                    </form>`;
+        $(this).closest('.review-activity').find('.write-rep').html(html);
+        
+        $('.send-rep').click(function(e){
+          e.preventDefault();
+          let form = $(this).closest('#form-rep');
+          var data = new FormData(form[0]);
+        
+          $.ajax({
+                url: "{{ route('review.rep') }}",
+                type: "POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function(result){
+
+                    if(result.status){
+                      location.reload();
+                    }else{
+                      console.log(result.mess);
+                    }
+
+                },
+                error: function(e){
+                  console.log(e)
+                }
+          });
+        })
+      })
+
+      $('.fa-trash-o').click(function(){
+        id = $(this).data('id_review');
+        $.ajax({
+          url: "{{route('review.rep.delete')}}",
+          type: 'POST',
+          data: {
+            "_token": "{{ csrf_token() }}",
+            "id_review": id
+          },
+          success: function(result){
+          
+            if(result.status){
+              location.reload();
+            }else{
+              console.log(result.mess);
+            }
+
+          },
+        })
+      })
+
+      $('.fa-pencil-square-o').click(function(){
+        id = $(this).data('id_review');
+        rep = $(this).closest('.col-6').closest('.row').closest('.rep').find('.show-rep').text();
+        $('#id-edit-review').val(id);
+        $('#text-edit-rep').text(rep);
+      })
+      
+      $('#form-edit-rep').submit(function(e){
+        e.preventDefault();
+        let form = $(this);
+        var data = new FormData(form[0]);
+        
+          $.ajax({
+                url: "{{ route('review.rep.update') }}",
+                type: "POST",
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function(result){
+               
+
+                    if(result.status){
+                      location.reload();
+                    }else{
+                      console.log(result.mess);
+                    }
+
+                },
+                error: function(e){
+                  console.log(e)
+                }
+          });
+      })
+
+      $('.hidden-review').click(function(){
+        id = $(this).data('id');
+        $.ajax({
+          url: "{{route('review.hidden')}}",
+          type: 'POST',
+          data: {
+            "_token": "{{ csrf_token() }}",
+            "id_review": id
+          },
+          success: function(result){
+          
+            if(result.status){
+              location.reload();
+            }else{
+              console.log(result.mess);
+            }
+
+          },
+        })
+      })
 
     </script>
     

@@ -437,10 +437,10 @@ header .navbar {
 }
 
 .blog-posts .down-content {
-	padding: 40px;
-	border-right: 1px solid #eee;
-	border-left: 1px solid #eee;
-	border-bottom: 1px solid #eee;
+	padding: 20px;
+	border: 1px solid #eee;
+	margin-top: 10px;
+
 }
 
 .blog-posts .down-content span {
@@ -500,10 +500,9 @@ header .navbar {
 }
 
 .blog-posts .down-content p {
-	padding: 25px 0px;
-	margin: 25px 0px;
-	border-top: 1px solid #eee;
-	border-bottom: 1px solid #eee;
+	
+	margin-bottom: 0px;
+
 }
 
 .blog-posts .down-content ul.post-share {
@@ -591,7 +590,7 @@ ul.page-numbers li a:hover {
 }
 
 .blog-posts .comments {
-	margin-top: 30px;
+	margin-top: 0px;
 }
 
 .blog-posts .comments ul li {
@@ -622,7 +621,8 @@ ul.page-numbers li a:hover {
 }
 
 .blog-posts .comments ul li .right-content {
-	margin-left: 130px;
+	margin-left: 0px;
+	max-width: 100% !important;
 }
 
 .blog-posts .comments ul li .right-content h4 {

@@ -1,21 +1,29 @@
     // register desired plugins...
-    FilePond.registerPlugin(
-        // validates the size of the file...
-        FilePondPluginFileValidateSize,
-        // validates the file type...
-        FilePondPluginFileValidateType,
+FilePond.registerPlugin(
+    // validates the size of the file...
+    FilePondPluginFileValidateSize,
+    // validates the file type...
+    FilePondPluginFileValidateType,
 
-        // calculates & dds cropping info based on the input image dimensions and the set crop ratio...
-        FilePondPluginImageCrop,
-        // preview the image file type...
-        FilePondPluginImagePreview,
-        // filter the image file
-        FilePondPluginImageFilter,
-        // corrects mobile image orientation...
-        FilePondPluginImageExifOrientation,
-        // calculates & adds resize information...
-        FilePondPluginImageResize,
-    );
+    // calculates & dds cropping info based on the input image dimensions and the set crop ratio...
+    FilePondPluginImageCrop,
+    // preview the image file type...
+    FilePondPluginImagePreview,
+    // filter the image file
+    FilePondPluginImageFilter,
+    // corrects mobile image orientation...
+    FilePondPluginImageExifOrientation,
+    // calculates & adds resize information...
+    FilePondPluginImageResize,
+
+    FilePondPluginFileMetadata,
+);
+    
+FilePond.setOptions({
+    fileMetadataObject: {
+        hello: 'world',
+    },
+});
 
     // Filepond: Basic
     FilePond.create(document.querySelector('.basic-filepond'), {
@@ -172,9 +180,9 @@
         })
     });
 
-    html = "";
+html = '';
     // Filepond: Image Resize
-    FilePond.create(document.querySelector('.image-resize-filepond'), {
+    const pond = FilePond.create(document.querySelector('.image-resize-filepond'), {
         allowImagePreview: true,
         allowImageFilter: false,
         allowImageExifOrientation: false,
@@ -186,11 +194,43 @@
         imageResizeUpscale: true,
         acceptedFileTypes: ['image/png', 'image/jpg', 'image/jpeg'],
         storeAsFile: true,
+        allowFileMetadata: true,
+     
         // labelIdle:`<p>Kéo và thả file ảnh của bạn</p>`,
         fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
-            // Do custom type detection here and return with promise
+            
+            // html = `<input type="text" style="
+            //             margin: 20px;
+            //             z-index:4;
+            //             position: relative;
+            //             right: -500px;
+            //             top: 50%;">`
+                
+            // $('.filepond--item').append(html);
+            // html = '';
 
+              html += `<div class="form-group col-md-6 mt-3">
+                        <label for="wall">Ghi chú ảnh ${source.name}</label>
+                        <input type="text" class="form-control" name="note['${source.name}']">
+                    </div>`;
+
+            $('#note').html(html);
+        
             
             resolve(type);
         })
     });
+
+    // pond.onaddfile = (err, item) => {
+
+    //         if (err) {
+    //             console.warn(err);
+    //             return;
+    //         }
+            
+    //         // Get file item metadata
+    //         const metadata = item.getMetadata();
+
+    //         // Log the metadata to the console so we can verify it's there
+    //         console.log(metadata);
+    //     }

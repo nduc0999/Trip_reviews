@@ -27,9 +27,22 @@ use Illuminate\Support\Facades\Route;
 
 
 
-
+//Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+//Post, review, like 
 Route::get('/Reiview-{slug}_{id}',[PostController::class,'loadPost'])->name('post.show');
+
+Route::middleware('auth')->group(function(){
+    Route::get('/UserReviewEdit-{slug}_{id}',[PostController::class,'formReview'])->name('form.review');
+    Route::post('/review/store',[PostController::class,'storeReivew'])->name('review.store');
+    Route::post('/review/like',[PostController::class,'likeReview'])->name('review.like');
+    Route::get('/review/success',[PostController::class,'reviewSuccess'])->name('review.success');
+    Route::post('/review/rep', [PostController::class, 'repReview'])->name('review.rep');
+    Route::post('/review/rep/delete',[PostController::class,'deleteRep'])->name('review.rep.delete');
+    Route::post('/review/rep/update',[PostController::class,'repUpdate'])->name('review.rep.update');
+    Route::post('/review/hidden', [PostController::class, 'hiddenReview'])->name('review.hidden');
+});
 
 //Auth
 Route::get('/login/page', [LoginController::class, 'showLoginForm'])->name('login.page');
@@ -83,6 +96,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('question/update', [QuestionController::class, 'update'])->name('question.update');
         Route::post('question/store', [QuestionController::class, 'store'])->name('question.store');
         Route::post('question/delete', [QuestionController::class, 'delete'])->name('question.delete');
+        Route::post('question/activity', [QuestionController::class, 'activityQuestion'])->name('question.activity');
 
         Route::get('user', [UserController::class, 'index'])->name('user');
         Route::post('user/store', [UserController::class, 'store'])->name('user.store');

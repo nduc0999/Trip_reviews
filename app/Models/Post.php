@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -56,7 +57,7 @@ class Post extends Model
         $name_wall = time() . '-' . $this->name .'-wall';
         $data_wall = File::get($wall);
         $b = Storage::disk('wall')->put($name_wall, $data_wall);
-        $url_wall = Storage::disk('wall')->url($name_wall);
+        $url_wall = torage::disk('wall')->url($name_wall);
         $this->img_wall = $url_wall;
 
         return true;
@@ -72,5 +73,26 @@ class Post extends Model
             $pt = Photo::create(['id_post' => $this->id, 'path' => $url]);
         }
         return true;
+    }
+
+    public function getReview(){
+       $arr = array();
+        $reviews = Review::where('id_post',$this->id)->where('status',0)
+            ->with(array('user' => function ($query) {$query->select('id', 'first_name','last_name','img_avatar');},
+                        'likereview' => function ($query) {$query->select('id_user');} ))->orderBy('id','DESC')->paginate(1, ['*'], 'review');
+        foreach($reviews as $review){
+                foreach($review->likereview as $like){
+                    if($like->id_user == Auth::id()){
+                        $review->setAttribute('like', true);
+                        break 1;
+                    }else{
+                        $review->setAttribute('like', false);
+                    };
+                   
+                }
+
+        }
+
+        return $reviews;
     }
 }
