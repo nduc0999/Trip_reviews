@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ asset('main/css/templatemo-stand-blog.css') }}">
     <link rel="stylesheet" href="{{ asset('main/css/owl.css') }}">
     <link rel="stylesheet" href="{{ asset('main/css/custom.css') }}">
+    
 
     @yield('head')
 
@@ -37,6 +38,7 @@
         </div>
     </div>   --}}
     <!-- ***** Preloader End ***** -->
+    
 
     <!-- Header -->
     <header class="">
@@ -50,8 +52,8 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-              <li class="nav-item @if(url()->current() == route('home')) active @endif">
-                <a class="nav-link" href="#"><i class="fa fa-hospital-o mr-2" aria-hidden="true"></i>Đề xuất
+              <li class="nav-item @if(url()->current() == route('propose.show')) active @endif">
+                <a class="nav-link" href="{{ route('propose.show') }}"><i class="fa fa-hospital-o mr-2" aria-hidden="true"></i>Đề xuất
                   <span class="sr-only">(current)</span>
                 </a>
               </li> 

@@ -740,7 +740,7 @@ img.mfp-img {
 }
 
 .card .content .title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     flex-shrink: 1;
 }
@@ -1024,4 +1024,68 @@ img.mfp-img {
     text-decoration: underline;
     color: #2d86ff;
 
+}
+
+.hr-text {
+    position: relative;
+    border: none;
+    height: 1px;
+    background: #999;
+}
+
+.hr-text::before {
+    content: attr(data-content);
+    display: inline-block;
+    background: #fff;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: rgb(62, 62, 62);
+    border-radius: 30rem;
+    padding: 5px 5px;
+    position: absolute;
+    font-size: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.ratings i {
+    font-size: 16px;
+    color: red
+}
+
+.strike-text {
+    color: red;
+    text-decoration: line-through
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dot {
+    height: 7px;
+    width: 7px;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-top: 3px;
+    background-color: blue;
+    border-radius: 50%;
+    display: inline-block
+}
+
+.spec-1 {
+    color: #938787;
+    font-size: 15px
+}
+
+h5 {
+    font-weight: 400
+}
+
+.para {
+    font-size: 16px
 }

@@ -21,8 +21,9 @@
                 <div class="container">
                     <div class="search-box">
                         <div class="search-icon"><i class="fa fa-search search-icon"></i></div>
-                        <form action="" class="search-form">
-                            <input type="text" placeholder="Search" id="search" autocomplete="off">
+                        <form action="{{route('post.search.result')}}" method="GET" class="search-form">
+                       
+                            <input type="search" placeholder="Search" id="search" name='search' autocomplete="off">
                         </form>
                         <svg class="search-border" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" viewBox="0 0 671 111" style="enable-background:new 0 0 671 111;"
                         xml:space="preserve">
@@ -40,7 +41,7 @@
         </div>
       </section>
     </div>
-<div class="main-banner header-text">
+    <div class="main-banner header-text">
       <div class="container-fluid mt-4">
         <h2 style="text-align: center;color: orange">Đánh giá cao</h2>
         <div class="owl-banner owl-carousel">
@@ -116,7 +117,7 @@
       </div>
     </div>
 
-     <section class="blog-posts">
+    <section class="blog-posts">
       <div class="container">
         @if (isset($last_post))
           <div class="row  mb-4">

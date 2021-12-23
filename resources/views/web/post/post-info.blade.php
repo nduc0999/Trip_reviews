@@ -197,8 +197,8 @@
                             @endforelse
                                   
                         </div>
-                        <div class="row col-12 album-photo" >
-                          <div class="col-6 "  data-toggle="modal" data-target="#show-photo">
+                        <div class="row col-12 album-photo"  >
+                          <div class="col-6 "  data-toggle="modal" data-target="#show-photo" style="height: 200px">
                             <img src="{{ $photos[0]->path }}" alt="" >
                             <div class="text-photo">
                               <i class="fa fa-camera" aria-hidden="true"></i>

@@ -62,8 +62,11 @@ h1, h2, h3, h4, h5, h6 {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: cover;
-	background-image: url(../images/heading-bg.jpg);
+	background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('../images/bg-home.jpg');
+
+
 	border-radius: 15px;
+	opacity: 2;
 }
 
 .page-heading .text-content h4 {
@@ -500,7 +503,7 @@ header .navbar {
 }
 
 .blog-posts .down-content p {
-	
+
 	margin-bottom: 0px;
 
 }
@@ -1254,7 +1257,7 @@ footer p a:hover {
 
 	.owl-photo .owl-nav .owl-next {
 		right: 0px;
-	
+
 	}
 
 	.owl-photo .owl-nav button span {

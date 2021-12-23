@@ -32,6 +32,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //Post, review, like 
 Route::get('/Reiview-{slug}_{id}',[PostController::class,'loadPost'])->name('post.show');
+Route::post('/post/search',[PostController::class,'search'])->name('post.search');
+Route::get('/post/search/result', [PostController::class, 'searchPage'])->name('post.search.result');
 
 Route::middleware('auth')->group(function(){
     Route::get('/UserReviewEdit-{slug}_{id}',[PostController::class,'formReview'])->name('form.review');
@@ -42,6 +44,12 @@ Route::middleware('auth')->group(function(){
     Route::post('/review/rep/delete',[PostController::class,'deleteRep'])->name('review.rep.delete');
     Route::post('/review/rep/update',[PostController::class,'repUpdate'])->name('review.rep.update');
     Route::post('/review/hidden', [PostController::class, 'hiddenReview'])->name('review.hidden');
+
+    Route::get('/propose',[PostController::class,'showPropose'])->name('propose.show');
+    Route::get('/post/list/amenity', [PostController::class, 'listAmenity'])->name('post.list.amenity');
+    Route::get('/post/list/roomtype', [PostController::class, 'listRoomtype'])->name('post.list.roomtype');
+    Route::post('/post/propose/store', [PostController::class, 'storePropose'])->name('post.propose.store');
+    Route::get('/post/propose/success',[PostController::class,'proposeSuccess'])->name('post.propose.success');
 });
 
 //Auth
