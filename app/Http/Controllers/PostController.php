@@ -26,6 +26,7 @@ class PostController extends Controller
 {
     
     public $photoCount = 10;
+    public $countSearch = 10;
 
     public function adminPost(){
 
@@ -41,8 +42,7 @@ class PostController extends Controller
         return response()->json(['status' => false]);
     }
 
-    public function listRoomtype(Request $request)
-    {
+    public function listRoomtype(Request $request){
         if ($request->ajax()) {
             $roomtype = Roomtype::all();
             return view('admin.post.list-roomtype', ['arrayData' => $roomtype]);
@@ -54,8 +54,17 @@ class PostController extends Controller
         return view('web.post.review-success');
     }
 
+    public function proposeSuccess(){
+        return view('web.propose.propose-success');
+    }
+
+    public function showPropose(){
+
+        $location = Location::where('status', 0)->orderBy('province', 'ASC')->get();
+        return view('web.propose.propose',['locations'=>$location]);
+    }
+
     public function store(RequestPost $request){
-      
 
         $post = new Post();
         $post->name = $request->name;
@@ -84,11 +93,58 @@ class PostController extends Controller
         $post->Amenity()->attach($request->amenity);
         $post->Roomtype()->attach($request->roomtype);
 
-        $post->uploadPhoto($request->file('photo'));
+        $post->uploadPhoto($request->file('photo'),$request->note);
 
 
         return response()->json(['error' => $request->all()]);
     
+    }
+
+    public function storePropose(RequestPost $request){
+       
+
+        $post = new Post();
+        $post->name = $request->name;
+        $post->introduce = $request->introduce;
+        $post->address = $request->address;
+        $post->streets = $request->streets;
+        $post->district = $request->district;
+        $post->id_location = $request->id_location;
+        $post->link = $request->link != null ? $request->link : null;
+        $post->open = str_replace(":", "h", $request->open);
+        $post->closes = str_replace(":", "h", $request->closes);
+        $post->min_guest = $request->min_guest;
+        $post->max_guest = $request->max_guest;
+        $post->phone = $request->phone;
+        $post->latitude = $request->latitude;
+        $post->longtitude = $request->longtitude;
+        $post->email = $request->email != null ? $request->email : null;
+        $post->id_user = Auth::user()->id;
+        $post->owner = $request->owner != null? $request->owner:0;
+        $post->type = $request->type;
+        $post->status = 1;
+
+        try {
+            $post->upAvatarWall($request->file('img_avatar'), $request->file('img_wall'));
+
+            $post->save();
+
+            $post->Amenity()->attach($request->amenity);
+            $post->Roomtype()->attach($request->roomtype);
+
+            $post->uploadPhoto($request->file('photo'),$request->note);
+        } catch (Exception $e) {
+            return response()->json(['status'=>$post->owner,'mess' => 'Lỗi xử lý DB']);
+        }
+        return response()->json(['status' => true]);
+       
+        // $arr= array();
+        // foreach($request->file('photo') as $item){
+        //      $a = $item->getClientOriginalName();
+        //      $b = '\''.$a.'\'';
+        //      $arr[] = $request->note[$b];
+        // }
+        // return $arr;
     }
 
     public function loadPost(Request $request){
@@ -109,7 +165,8 @@ class PostController extends Controller
             
             if (isset($_COOKIE['last_id'])) {
                 $arr_json = json_decode($_COOKIE['last_id'], true);
-                $arrId = $arr_json;
+                
+                $arrId = array_slice($arr_json, 0, 6);
                 if (in_array((string)$request->id, $arrId)) {
                     unset($arrId[array_search($request->id, $arrId)]);
                 }
@@ -120,7 +177,6 @@ class PostController extends Controller
                 $array_json = json_encode(array($request->id));
                 setcookie("last_id", $array_json, time() + 86400, "/");
             }
-            // return $reviews;
 
             return view('web.post.post-info',[   'post' => $post,
                                             'photos' => $photos,
@@ -144,7 +200,6 @@ class PostController extends Controller
                                         'questions' => $question,
                                     ]);
     }
-
 
     public function storeReivew(RequestReview $request){
         
@@ -176,13 +231,6 @@ class PostController extends Controller
         }
 
         return response()->json(['status' => true]);
-   
-        // dd( $request->file('photo')->getClientOriginalName());
-        // foreach($request->file('photo') as $item){
-        //      $a = $item->getClientOriginalName();
-        //      $b = '\''.$a.'\'';
-        //      echo $request->note[$b].'</br>';
-        // }
       
        
     }
@@ -277,6 +325,116 @@ class PostController extends Controller
             return response()->json(['status' => false, 'mess' => 'Lỗi dữ liệu vào']);
         }
         return response()->json(['status' => false, 'mess' => 'Lỗi không thấy id']);
+    }
+
+    public function search(Request $request){
+
+        try {
+            if($request->search){
+                $data = Post::where('name', 'like', '%'.$request->search.'%')
+                            ->orWhere('address','like', '%' . $request->search . '%')
+                            ->orWhere('streets', 'like', '%'.$request->search.'%')
+                            ->orWhere('district', 'like', '%'.$request->search.'%')->with('location')->get();
+                if($request->ajax()){
+                    return response()->json(['status' => true, 'data' => $data]);
+                }
+
+                return view('web.search-page',['results' => $data]);
+            }
+            
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'mess' => 'Lỗi xử lý DB']);
+            
+        }
+        if($request->ajax()){
+            return response()->json(['status' => false ,'mess' => 'Giá trị search trống ']);
+        }
+        return view('web.search-page',['results' => array()]);
+    }
+
+    public function searchPage(Request $request){
+       
+        try {
+            if ($request->ajax()) {
+                if ($request->search == '') {
+                    return view('web.search.list-data', ['results' => array(), 'search' => $request->search]);
+                }
+            }
+            if ($request->search) {
+              
+                if($request->ajax()){
+                  
+                    switch ($request->type) {
+                        case 0:
+                            $result = Post::where([['name', 'like', '%' . $request->search . '%'], ['type', 0], ['status', 0]])
+                                ->orWhere([['address', 'like', '%' . $request->search . '%'], ['type', 0], ['status', 0]])
+                                ->orWhere([['streets', 'like', '%' . $request->search . '%'], ['type', 0], ['status', 0]])
+                                ->orWhere([['district', 'like', '%' . $request->search . '%'], ['type', 0], ['status', 0]])
+                                ->orWhere(function ($query) use ($request) {
+                                    $query->where('type', 0)->where('status',0)->WhereHas('location', function ($query1) use ($request) {
+                                        $query1->where('province', 'like', '%' . $request->search . '%');
+                                    });
+                                })
+                                ->paginate($this->countSearch)->appends(request()->query());
+                            $homestays = Post::setInfoPost($result); 
+                            return view('web.search.list-data',['results'=>$homestays]);
+                            
+                        case 1:
+                            $result =  Post::where([['name', 'like', '%' . $request->search . '%'], ['type', 1],['status',0]])
+                                ->orWhere([['address', 'like', '%' . $request->search . '%'], ['type', 1], ['status', 0]])
+                                ->orWhere([['streets', 'like', '%' . $request->search . '%'], ['type', 1], ['status', 0]])
+                                ->orWhere([['district', 'like', '%' . $request->search . '%'], ['type', 1], ['status', 0]])
+                                ->orWhere(function ($query) use ($request) {
+                                    $query->where('type', 1)->where('status',0)->WhereHas('location', function ($query1) use ($request) {
+                                        $query1->where('province', 'like', '%' . $request->search . '%');
+                                    });
+                                })
+                                ->paginate($this->countSearch)->appends(request()->query());
+                            $resorts = Post::setInfoPost($result);
+                            return view('web.search.list-data', ['results' => $resorts]);
+                        case 2:
+                            $result =  Post::where([['name', 'like', '%' . $request->search . '%'], ['status', 0]])
+                                ->orWhere([['address', 'like', '%' . $request->search . '%'], ['status', 0]])
+                                ->orWhere([['streets', 'like', '%' . $request->search . '%'], ['status', 0]])
+                                ->orWhere([['district', 'like', '%' . $request->search . '%'], ['status', 0]])
+                                ->orWhere(function ($query) use ($request) {
+                                    $query->where('status', 0)->WhereHas('location', function ($query1) use ($request) {
+                                        $query1->where('province', 'like', '%' . $request->search . '%');
+                                    });
+                                })
+                                ->paginate($this->countSearch)->appends(request()->query());
+
+                            $all = Post::setInfoPost($result);
+                            return view('web.search.list-data', ['results' => $all]);
+                        default:
+                            return view('web.search.list-data', ['results' => array(), 'search' => $request->search]);
+                           
+                    }
+                    
+                }
+                $result = Post::where([['name', 'like', '%' . $request->search . '%'], ['status', 0]])
+                                ->orWhere([['address', 'like', '%' . $request->search . '%'], ['status', 0]])
+                                ->orWhere([['streets', 'like', '%' . $request->search . '%'], ['status', 0]])
+                                ->orWhere([['district', 'like', '%' . $request->search . '%'], ['status', 0]])
+                                ->orWhere(function ($query) use ($request) {
+                                    $query->where('status', 0)->WhereHas('location', function ($query1) use ($request) {
+                                        $query1->where('province', 'like', '%' . $request->search . '%');
+                                    });
+                                })
+                                ->paginate($this->countSearch)->appends(request()->query());
+
+                $all = Post::setInfoPost($result);
+                
+                // return $result;
+                return view('web.search.search-page', ['results' => $all,'search' => $request->search]);
+            }
+          
+        } catch (Exception $e) {
+            return view('web.search.search-page', ['results' => array(), 'search' => $request->search]);
+      
+        }
+     
+        return view('web.search.search-page', ['results' => array(), 'search' => $request->search]);
     }
     
 }

@@ -72,16 +72,16 @@
                                                         <div class="row">
                                                             <div class="col-md-6 col-12">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio" name="type" id="type" value="0" checked>
-                                                                    <label class="form-check-label" for="flexRadioDefault1">
+                                                                    <input class="form-check-input" type="radio" name="type" id="type1" value="0" checked>
+                                                                    <label class="form-check-label" for="type1">
                                                                         Homestay
                                                                     </label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6 col-12">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio" name="type" id="type" value="1">
-                                                                    <label class="form-check-label" for="flexRadioDefault1">
+                                                                    <input class="form-check-input" type="radio" name="type" id="type2" value="1">
+                                                                    <label class="form-check-label" for="type2">
                                                                     Resort
                                                                     </label>
                                                                 </div>
@@ -367,6 +367,8 @@
     <script src="https://unpkg.com/filepond-plugin-image-filter/dist/filepond-plugin-image-filter.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-metadata/dist/filepond-plugin-file-metadata.js"></script>
+
    
 
     <!-- filepond -->

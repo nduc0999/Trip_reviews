@@ -9,7 +9,13 @@
   <tbody>
       @forelse ($arrayData as $item)
       <tr>
-        <td><input type="checkbox" class="select" name="select" data-id="{{ $item->id }}" data-name='{{ $item->name }}'></td>
+      
+        <td>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input select" id='amenity-{{$item->id}}' name="select" data-id="{{ $item->id }}" data-name='{{ $item->name }}'>
+            <label class="custom-control-label" for="amenity-{{$item->id}}"></label>
+          </div>
+        </td>
        
         <td>{{ $item->name }}</td>
         <td>{{ $item->description }}</td>

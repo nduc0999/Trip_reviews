@@ -1,0 +1,30 @@
+.search-bar {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+    border-radius: 10px;
+    height: 40px;
+    padding: 3px;
+
+}
+
+.search-bar input, .search-bar button {
+    outline: none;
+    border: none;
+}
+
+.search-bar input {
+    width: 90%;
+}
+
+.search-bar button {
+    background-color: transparent;
+}
+
+.search-bar:focus-within {
+    box-shadow: 0 0 5px rgb(255, 189, 46);
+    border: 1px solid rgba(255, 189, 46, 1);
+}
+
+.result-search {
+    max-height: 300px;
+    overflow-y: scroll;
+}
