@@ -60,8 +60,8 @@
               <li class="nav-item">
                 <a class="nav-link" href="about.html"><i class="fa fa-pencil-square-o fa-lg mr-2" aria-hidden="true"></i>Đánh giá</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="blog.html"><i class="fa fa-heart-o fa-lg mr-2" aria-hidden="true"></i>Chuyến đi</a>
+              <li class="nav-item @if(url()->current() == route('travel')) active @endif">
+                <a class="nav-link" href="{{ route('travel') }}"><i class="fa fa-heart-o fa-lg mr-2" aria-hidden="true"></i>Chuyến đi</a>
               @guest
                 </li>
                   <li class="nav-item @if(url()->current() == route('login.page') | url()->current() == route('register.page')) active @endif }}">

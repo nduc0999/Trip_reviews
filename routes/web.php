@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TravelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,12 +32,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //Post, review, like 
-Route::get('/Reiview-{slug}_{id}',[PostController::class,'loadPost'])->name('post.show');
+Route::get('/Review-{slug}_{id}',[PostController::class,'loadPost'])->name('post.show');
 Route::post('/post/search',[PostController::class,'search'])->name('post.search');
 Route::get('/post/search/result', [PostController::class, 'searchPage'])->name('post.search.result');
 
 Route::middleware('auth')->group(function(){
-    Route::get('/UserReviewEdit-{slug}_{id}',[PostController::class,'formReview'])->name('form.review');
+    Route::get('/UserReviewEdit-{slug}_{id}',[PostController::class,'formReview'])->name('form.review')->middleware('not_verify_email');
     Route::post('/review/store',[PostController::class,'storeReivew'])->name('review.store');
     Route::post('/review/like',[PostController::class,'likeReview'])->name('review.like');
     Route::get('/review/success',[PostController::class,'reviewSuccess'])->name('review.success');
@@ -50,6 +51,21 @@ Route::middleware('auth')->group(function(){
     Route::get('/post/list/roomtype', [PostController::class, 'listRoomtype'])->name('post.list.roomtype');
     Route::post('/post/propose/store', [PostController::class, 'storePropose'])->name('post.propose.store');
     Route::get('/post/propose/success',[PostController::class,'proposeSuccess'])->name('post.propose.success');
+
+    Route::get('/travel',[TravelController::class,'index'])->name('travel');
+    Route::post('/travel/store', [TravelController::class, 'store'])->name('travel.store');
+    Route::post('/travel/update', [TravelController::class, 'update'])->name('travel.update');
+    Route::get('/Travel-{slug}_{id}', [TravelController::class, 'infoTravel'])->name('travel.info');
+    Route::post('/travel/status', [TravelController::class, 'changeStatus'])->name('travel.status');
+    Route::get('/travel/search', [TravelController::class, 'search'])->name('travel.search');
+    Route::post('/travel/remove', [TravelController::class, 'removeTravel'])->name('travel.remove');
+    Route::post('/travel/remove/post',[TravelController::class,'removePost'])->name('travel.remove.post');
+    Route::post('/travel/add/post', [TravelController::class, 'addPost'])->name('travel.add.post');
+
+    Route::post('/home/list/travel',[HomeController::class,'listHomeTravel'])->name('home.list.travel');
+    Route::post('/home/add/travel', [HomeController::class, 'addToTravel'])->name('home.add.travel');
+
+
 });
 
 //Auth

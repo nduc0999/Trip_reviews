@@ -8,7 +8,7 @@
 
     <!-- Magnific Popup core CSS file -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.css">
-
+    <link rel="stylesheet" href="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.min.css') }}">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -48,19 +48,31 @@
       <div class="container shadow rounded">
         <div class="row p-4">
             <div class="col-lg-12">
+              <div>
                 <h4>{{ $post->name }}</h4>
-                  <fieldset class="rating">
-                    <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                    <input type="radio" id="star4half" name="rating" value="4.5" checked /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                    <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                    <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                    <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                    <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                    <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                    <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                    <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                    <input type="radio" id="starhalf" name="rating" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
-                  </fieldset>
+                <div class="add-heart" data-id="{{$post->id}}" style="box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;" >
+                    @if ($post->heart == 1)
+                      <i class="fa fa-heart" style='color: #ff5d5d;'></i>
+                        
+                    @else
+                      <i class="fa fa-heart-o" data-toggle="modal" data-target="#modal-list-travel"></i>
+                        
+                    @endif
+                
+                </div>
+              </div>
+              <fieldset class="rating">
+                <input type="radio" value="5" @if($post->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                <input type="radio" value="4.5" @if($post->avg_rate >= 4.5 and $post->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                <input type="radio" value="4" @if($post->avg_rate >= 4 and $post->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                <input type="radio" value="3.5" @if($post->avg_rate >= 3.5 and $post->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                <input type="radio" value="3" @if($post->avg_rate >= 3 and $post->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                <input type="radio" value="2.5" @if($post->avg_rate >= 2.5 and $post->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                <input type="radio" value="2" @if($post->avg_rate >= 2 and $post->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                <input type="radio" value="1.5" @if($post->avg_rate >= 1.5 and $post->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                <input type="radio" value="1" @if($post->avg_rate >= 1 and $post->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                <input type="radio" value="0.5" @if($post->avg_rate >= 0.5 and $post->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
+              </fieldset>
             </div>
             <div class="col-lg-4">
                 <div class="sidebar">
@@ -93,30 +105,47 @@
                             <div class="content">
                               <div class="row">
                                 <div class="col-2 d-flex justify-content-center" style="padding: 0px">
-                                  <span class='num-rate'>5.0</span>
+                                  <span class='num-rate'>{{ number_format($post->avg_rate, 1)}}</span>
                                 </div>
                                 <div class="col-10">
                                   <div class="row">
                                     <div class="col-12">
-                                      Tuyệt vời
+                                      @if ($post->avg_rate > 4 and $post->avg_rate <= 5  )
+                                          <span>Tuyệt vời</span>
+                                      @endif
+                                      @if ($post->avg_rate > 3 and $post->avg_rate <= 4  )
+                                          <span>Rất tốt</span>
+                                      @endif
+                                      @if ($post->avg_rate > 2 and $post->avg_rate <= 3  )
+                                          <span>Trung bình</span>
+                                      @endif
+                                      @if ($post->avg_rate > 1 and $post->avg_rate <= 2  )
+                                          <span>Tồi</span>
+                                      @endif
+                                      @if ($post->avg_rate > 0 and $post->avg_rate <= 1 )
+                                          <span>Kinh khủng</span>
+                                      @endif
+                                      @if ($post->avg_rate ==0 )
+                                          <span>Chưa có đánh giá nào</span>
+                                      @endif
                                     </div>
                                     <div class="col-12">
                                       <div class="row">
                                         <div class="col-6 col-md-12 p-0">
                                           <fieldset class="rating">
-                                            <input type="radio" id="star5" name="rating1" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                                            <input type="radio" id="star4half" name="rating1" value="4.5" checked /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                                            <input type="radio" id="star4" name="rating1" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                                            <input type="radio" id="star3half" name="rating1" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                                            <input type="radio" id="star3" name="rating1" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                                            <input type="radio" id="star2half" name="rating1" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                                            <input type="radio" id="star2" name="rating1" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                                            <input type="radio" id="star1half" name="rating1" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                                            <input type="radio" id="star1" name="rating1" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                                            <input type="radio" id="starhalf" name="rating1" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                            <input type="radio" value="5" @if($post->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                                            <input type="radio" value="4.5" @if($post->avg_rate >= 4.5 and $post->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                                            <input type="radio" value="4" @if($post->avg_rate >= 4 and $post->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" value="3.5" @if($post->avg_rate >= 3.5 and $post->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                                            <input type="radio" value="3" @if($post->avg_rate >= 3 and $post->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                                            <input type="radio" value="2.5" @if($post->avg_rate >= 2.5 and $post->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                                            <input type="radio" value="2" @if($post->avg_rate >= 2 and $post->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" value="1.5" @if($post->avg_rate >= 1.5 and $post->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                                            <input type="radio" value="1" @if($post->avg_rate >= 1 and $post->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                                            <input type="radio" value="0.5" @if($post->avg_rate >= 0.5 and $post->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
                                           </fieldset>
                                         </div>
-                                        <span class="col-6 col-md-12">3000 đánh giá</span>
+                                        <span class="col-6 col-md-12">{{$post->count_review}} Đánh giá</span>
                                       </div>
                                     </div>
                                   </div>
@@ -125,47 +154,47 @@
                               <hr>
                               <div class="row">
                                 <div class="col-12 " style="display: flex;padding: 0;align-items: center;">
-                                   <fieldset class="rating">
-                                      <input type="radio" id="star5" name="rating3" value="5" checked/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                                      <input type="radio" id="star4half" name="rating3" value="4.5"  /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                                      <input type="radio" id="star4" name="rating3" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                                      <input type="radio" id="star3half" name="rating3" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                                      <input type="radio" id="star3" name="rating3" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                                      <input type="radio" id="star2half" name="rating3" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                                      <input type="radio" id="star2" name="rating3" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                                      <input type="radio" id="star1half" name="rating3" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                                      <input type="radio" id="star1" name="rating3" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                                      <input type="radio" id="starhalf" name="rating3" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                    <fieldset class="rating">
+                                      <input type="radio" value="5" @if($post->avg_rate_service == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                                      <input type="radio" value="4.5" @if($post->avg_rate_service >= 4.5 and $post->avg_rate_service < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                                      <input type="radio" value="4" @if($post->avg_rate_service >= 4 and $post->avg_rate_service < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                                      <input type="radio" value="3.5" @if($post->avg_rate_service >= 3.5 and $post->avg_rate_service < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                                      <input type="radio" value="3" @if($post->avg_rate_service >= 3 and $post->avg_rate_service < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                                      <input type="radio" value="2.5" @if($post->avg_rate_service >= 2.5 and $post->avg_rate_service < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                                      <input type="radio" value="2" @if($post->avg_rate_service >= 2 and $post->avg_rate_service < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                                      <input type="radio" value="1.5" @if($post->avg_rate_service >= 1.5 and $post->avg_rate_service < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                                      <input type="radio" value="1" @if($post->avg_rate_service >= 1 and $post->avg_rate_service < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                                      <input type="radio" value="0.5" @if($post->avg_rate_service >= 0.5 and $post->avg_rate_service < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
                                     </fieldset>
                                     <span style="font-size: 15px">| Đánh giá dịch vụ</span>
                                 </div>
                                  <div class="col-12" style="display: flex;padding: 0;align-items: center;" >
-                                   <fieldset class="rating">
-                                      <input type="radio" id="star5" name="rating4" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                                      <input type="radio" id="star4half" name="rating4" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                                      <input type="radio" id="star4" name="rating4" value="4" checked/><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                                      <input type="radio" id="star3half" name="rating4" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                                      <input type="radio" id="star3" name="rating4" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                                      <input type="radio" id="star2half" name="rating4" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                                      <input type="radio" id="star2" name="rating4" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                                      <input type="radio" id="star1half" name="rating4" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                                      <input type="radio" id="star1" name="rating4" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                                      <input type="radio" id="starhalf" name="rating4" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                    <fieldset class="rating">
+                                      <input type="radio" value="5" @if($post->avg_rate_value == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                                      <input type="radio" value="4.5" @if($post->avg_rate_value >= 4.5 and $post->avg_rate_value < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                                      <input type="radio" value="4" @if($post->avg_rate_value >= 4 and $post->avg_rate_value < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                                      <input type="radio" value="3.5" @if($post->avg_rate_value >= 3.5 and $post->avg_rate_value < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                                      <input type="radio" value="3" @if($post->avg_rate_value >= 3 and $post->avg_rate_value < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                                      <input type="radio" value="2.5" @if($post->avg_rate_value >= 2.5 and $post->avg_rate_value < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                                      <input type="radio" value="2" @if($post->avg_rate_value >= 2 and $post->avg_rate_value < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                                      <input type="radio" value="1.5" @if($post->avg_rate_value >= 1.5 and $post->avg_rate_value < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                                      <input type="radio" value="1" @if($post->avg_rate_value >= 1 and $post->avg_rate_value < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                                      <input type="radio" value="0.5" @if($post->avg_rate_value >= 0.5 and $post->avg_rate_value < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
                                     </fieldset>
                                     <span style="font-size: 15px">| Đánh giá giá trị</span>
                                 </div>
                                  <div class="col-12" style="display: flex;padding: 0;align-items: center;">
-                                   <fieldset class="rating">
-                                      <input type="radio" id="star5" name="rating5" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                                      <input type="radio" id="star4half" name="rating5" value="4.5"  /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                                      <input type="radio" id="star4" name="rating5" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                                      <input type="radio" id="star3half" name="rating5" value="3.5" checked /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                                      <input type="radio" id="star3" name="rating5" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                                      <input type="radio" id="star2half" name="rating5" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                                      <input type="radio" id="star2" name="rating5" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                                      <input type="radio" id="star1half" name="rating5" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                                      <input type="radio" id="star1" name="rating5" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                                      <input type="radio" id="starhalf" name="rating5" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                    <fieldset class="rating">
+                                      <input type="radio" value="5" @if($post->avg_rate_sleep == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                                      <input type="radio" value="4.5" @if($post->avg_rate_sleep >= 4.5 and $post->avg_rate_sleep < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                                      <input type="radio" value="4" @if($post->avg_rate_sleep >= 4 and $post->avg_rate_sleep < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                                      <input type="radio" value="3.5" @if($post->avg_rate_sleep >= 3.5 and $post->avg_rate_sleep < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                                      <input type="radio" value="3" @if($post->avg_rate_sleep >= 3 and $post->avg_rate_sleep < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                                      <input type="radio" value="2.5" @if($post->avg_rate_sleep >= 2.5 and $post->avg_rate_sleep < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                                      <input type="radio" value="2" @if($post->avg_rate_sleep >= 2 and $post->avg_rate_sleep < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                                      <input type="radio" value="1.5" @if($post->avg_rate_sleep >= 1.5 and $post->avg_rate_sleep < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                                      <input type="radio" value="1" @if($post->avg_rate_sleep >= 1 and $post->avg_rate_sleep < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                                      <input type="radio" value="0.5" @if($post->avg_rate_sleep >= 0.5 and $post->avg_rate_sleep < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
                                     </fieldset>
                                     <span style="font-size: 15px">| Đánh giá giấc ngủ</span>
                                 </div>
@@ -344,6 +373,8 @@
       </div>
     </section>
 
+{{-- Modal --}}
+
   <div class="modal fade " id="show-photo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"  >
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document" style="z-index: 4" id="abc">
       <div class="modal-content">
@@ -441,7 +472,7 @@
   </div> --}}
 
 
-  <div class="modal fade" id="edit-rep" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="edit-rep" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -467,12 +498,109 @@
     </div>
   </div>
 </div>
-   
+
+
+<div class="modal fade" id="modal-list-travel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fa fa-heart-o"></i> Lưu một chuyến đi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body list-travel" style="height: 370px;overflow-y: scroll;overflow-x: hidden;">
+    
+       
+      </div>
+      <div class="modal-footer " style="justify-content: start">
+        <div class="row" style="padding: 0px 10px" data-toggle="modal" data-target="#modal-create-travel">
+          <div class="col-3 square-travel">
+
+              <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+            
+          </div>
+          <div class="col-9 d-flex align-items-center">
+            <h5>Tạo một chuyến đi</h5>
+          </div>
+        </div>
+     
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-create-travel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"><i class="fa fa-heart-o" aria-hidden="true"></i> Tạo một chuyến đi</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form id="form-create-travel">
+            @csrf
+            <div class="modal-body">
+                <div class="container">
+                    
+                        <div class="form-group">
+                            <label for="title">Tên chuyến đi</label>
+                            <input type="text" class="form-control" name="title" id="title"  value="">
+                            <span class="text-danger error-text title_err"></span>
+                        </div>
+                        <p>Chọn những người có thể thấy Chuyến đi của bạn</p>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="private" name="status" class="custom-control-input" value="0" checked="">
+                            <label class="custom-control-label" for="private">
+                                <div class="d-flex">
+                                    <div class="d-flex justify-content-center mr-3">
+                                        <div class="icon-status-modal">
+                                            <i class="fa fa-lock" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="">
+                                        <p><strong class="text-dark">Riêng tư</strong></p>
+                                        <p style="line-height: 1.2;">Không hiển thị với người dùng và thành viên TripReview khác, trừ bạn và bạn bè được chia sẻ Chuyến đi.</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div class="custom-control custom-radio mt-3">
+                            <input type="radio" id="public" name="status" class="custom-control-input" value="1" >
+                            <label class="custom-control-label" for="public">
+                                <div class="d-flex">
+                                    <div class="d-flex justify-content-center mr-3">
+                                        <div class="icon-status-modal">
+                                            <i class="fa fa-unlock" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="">
+                                        <p><strong class="text-dark">Công khai</strong></p>
+                                        <p style="line-height: 1.2;">Hiển thị với mọi khách du lịch trên TripReview, bao gồm mọi bạn bè được bạn chia sẻ Chuyến đi</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" type="submit" class="btn btn-primary btn-create-travel" disabled>Tạo</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js"></script>
+    <script src="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
     <script>
        
@@ -536,7 +664,10 @@
 
       // [21.009516, 105.839284]
       
-
+        var url_loadList = "{{route('home.list.travel')}}";
+        var url_addTravel = "{{ route('home.add.travel') }}";
+        var url_createTravel = "{{ route('travel.store') }}";
+        var csrf = "{{ csrf_token() }}";
 
       map1.on('click', function(e) {
           $('#lat_add').val(e.latlng.lat);
@@ -548,9 +679,8 @@
   
 
     </script>
+    <script src="{{asset('main/js/addTravel.js')}}"></script>
     <script>
-
-    
 
       $(document).ready(function(){
         let searchParams = new URLSearchParams(window.location.search);

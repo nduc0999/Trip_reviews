@@ -38,8 +38,8 @@
                                     <input type="radio" id="star5" name="rate" value="5" /><label class = "full" for="star5" title="Tuyệt vời"></label>
                                     <input type="radio" id="star4" name="rate" value="4" /><label class = "full" for="star4" title="Rất tốt"></label>
                                     <input type="radio" id="star3" name="rate" value="3" /><label class = "full" for="star3" title="Trung bình"></label>
-                                    <input type="radio" id="star2" name="rate" value="2" /><label class = "full" for="star2" title="Kinh khủng"></label>
-                                    <input type="radio" id="star1" name="rate" value="1" /><label class = "full" for="star1" title="Tồi"></label>
+                                    <input type="radio" id="star2" name="rate" value="2" /><label class = "full" for="star2" title="Tồi"></label>
+                                    <input type="radio" id="star1" name="rate" value="1" /><label class = "full" for="star1" title="Kinh khủng"></label>
                                 </fieldset>
                                 <span class="badge badge-pill badge-success ml-3 mt-3 show-title">Nhấp để xếp hạng</span>
 

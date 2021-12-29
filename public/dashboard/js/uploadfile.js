@@ -181,6 +181,7 @@ FilePond.setOptions({
     });
 
 html = '';
+count = 0;
     // Filepond: Image Resize
     const pond = FilePond.create(document.querySelector('.image-resize-filepond'), {
         allowImagePreview: true,
@@ -208,7 +209,8 @@ html = '';
                 
             // $('.filepond--item').append(html);
             // html = '';
-
+            count++;
+            console.log(count);
               html += `<div class="form-group col-md-6 mt-3">
                         <label for="wall">Ghi chú ảnh ${source.name}</label>
                         <input type="text" class="form-control" name="note['${source.name}']">

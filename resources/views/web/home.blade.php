@@ -4,7 +4,7 @@
 @section('head')
 
     <link rel="stylesheet" href="{{ asset('main/css/search.css') }}">
-  
+    <link rel="stylesheet" href="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.min.css') }}">
 @endsection
 
 @section('content')
@@ -132,24 +132,29 @@
                     <div class="content">
                       <div class="title">{{ $item->name }}</div>
                       <div class="sub-title">      
-                        <fieldset class="rating">
-                          <input type="radio" id="star5" name="last_view_{{$item->id}}" value="5" disabled/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                          <input type="radio" id="star4half" name="last_view_{{$item->id}}" value="4.5" checked disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                          <input type="radio" id="star4" name="last_view_{{$item->id}}" value="4" disabled /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                          <input type="radio" id="star3half" name="last_view_{{$item->id}}" value="3.5" disabled/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                          <input type="radio" id="star3" name="last_view_{{$item->id}}" value="3" disabled /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                          <input type="radio" id="star2half" name="last_view_{{$item->id}}" value="2.5" disabled/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                          <input type="radio" id="star2" name="last_view_{{$item->id}}" value="2" disabled/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                          <input type="radio" id="star1half" name="last_view_{{$item->id}}" value="1.5" disabled/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                          <input type="radio" id="star1" name="last_view_{{$item->id}}" value="1" disabled/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                          <input type="radio" id="starhalf" name="last_view_{{$item->id}}" value="0.5" disabled/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
-                        </fieldset>
+                           <fieldset class="rating">
+                            <input type="radio" value="5" @if($item->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                            <input type="radio" value="4.5" @if($item->avg_rate >= 4.5 and $item->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                            <input type="radio" value="4" @if($item->avg_rate >= 4 and $item->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                            <input type="radio" value="3.5" @if($item->avg_rate >= 3.5 and $item->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                            <input type="radio" value="3" @if($item->avg_rate >= 3 and $item->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                            <input type="radio" value="2.5" @if($item->avg_rate >= 2.5 and $item->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                            <input type="radio" value="2" @if($item->avg_rate >= 2 and $item->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                            <input type="radio" value="1.5" @if($item->avg_rate >= 1.5 and $item->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                            <input type="radio" value="1" @if($item->avg_rate >= 1 and $item->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                            <input type="radio" value="0.5" @if($item->avg_rate >= 0.5 and $item->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
+                          </fieldset>
                       </div>
                     </div>
                   </a>
-                  <div class="add-heart">
-                    <i class="fa fa-heart-o" ></i>
-                    <i class="fa fa-heart d-none" style='color: #ff5d5d;'></i>
+                  <div class="add-heart" >
+                    @if ($item->heart == 1)
+                      <i class="fa fa-heart" style='color: #ff5d5d;'></i>
+                        
+                    @else
+                      <i class="fa fa-heart-o" data-toggle="modal" data-target="#modal-list-travel"></i>
+                        
+                    @endif
                   </div>
                 </div>   
               @empty
@@ -173,7 +178,7 @@
         <div class="row  mb-4 mg-top">
           <h3>Homestay-Resrort mới</h3>
           <div class="slider owl-carousel mt-2">
-            @forelse ($post_slide as $item)
+            @forelse ($post_new as $item)
               <div class="card">
                 <a class="link-name" href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
                   <div class="img">
@@ -183,23 +188,29 @@
                     <div class="title">{{ $item->name }}</div>
                     <div class="sub-title">      
                       <fieldset class="rating">
-                        <input type="radio" id="star5" name="new_{{$item->id}}" value="5" disabled/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                        <input type="radio" id="star4half" name="new_{{$item->id}}" value="4.5" checked disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                        <input type="radio" id="star4" name="new_{{$item->id}}" value="4" disabled /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                        <input type="radio" id="star3half" name="new_{{$item->id}}" value="3.5" disabled/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                        <input type="radio" id="star3" name="new_{{$item->id}}" value="3" disabled /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                        <input type="radio" id="star2half" name="new_{{$item->id}}" value="2.5" disabled/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                        <input type="radio" id="star2" name="new_{{$item->id}}" value="2" disabled/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                        <input type="radio" id="star1half" name="new_{{$item->id}}" value="1.5" disabled/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                        <input type="radio" id="star1" name="new_{{$item->id}}" value="1" disabled/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                        <input type="radio" id="starhalf" name="new_{{$item->id}}" value="0.5" disabled/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                        <input type="radio" value="5" @if($item->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                        <input type="radio" value="4.5" @if($item->avg_rate >= 4.5 and $item->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" value="4" @if($item->avg_rate >= 4 and $item->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                        <input type="radio" value="3.5" @if($item->avg_rate >= 3.5 and $item->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                        <input type="radio" value="3" @if($item->avg_rate >= 3 and $item->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                        <input type="radio" value="2.5" @if($item->avg_rate >= 2.5 and $item->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                        <input type="radio" value="2" @if($item->avg_rate >= 2 and $item->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                        <input type="radio" value="1.5" @if($item->avg_rate >= 1.5 and $item->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                        <input type="radio" value="1" @if($item->avg_rate >= 1 and $item->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                        <input type="radio" value="0.5" @if($item->avg_rate >= 0.5 and $item->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
                       </fieldset>
                     </div>
                   </div>
                 </a>
-                <div class="add-heart">
-                  <i class="fa fa-heart-o" aria-hidden="true"></i>
-                  <i class="fa fa-heart d-none" style='color: #ff5d5d;'></i>
+                <div class="add-heart" data-id="{{$item->id}}" >
+                    @if ($item->heart == 1)
+                      <i class="fa fa-heart" style='color: #ff5d5d;'></i>
+                        
+                    @else
+                      <i class="fa fa-heart-o" data-toggle="modal" data-target="#modal-list-travel"></i>
+                        
+                    @endif
+                
                 </div>
               </div>   
             @empty
@@ -231,24 +242,30 @@
                   <div class="content">
                     <div class="title">{{ $item->name }}</div>
                     <div class="sub-title">      
-                      <fieldset class="rating">
-                        <input type="radio" id="star5" name="like_{{$item->id}}" value="5" disabled/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                        <input type="radio" id="star4half" name="like_{{$item->id}}" value="4.5" checked disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                        <input type="radio" id="star4" name="like_{{$item->id}}" value="4" disabled /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                        <input type="radio" id="star3half" name="like_{{$item->id}}" value="3.5" disabled/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                        <input type="radio" id="star3" name="like_{{$item->id}}" value="3" disabled /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                        <input type="radio" id="star2half" name="like_{{$item->id}}" value="2.5" disabled/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                        <input type="radio" id="star2" name="like_{{$item->id}}" value="2" disabled/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                        <input type="radio" id="star1half" name="like_{{$item->id}}" value="1.5" disabled/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                        <input type="radio" id="star1" name="like_{{$item->id}}" value="1" disabled/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                        <input type="radio" id="starhalf" name="like_{{$item->id}}" value="0.5" disabled/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                       <fieldset class="rating">
+                        <input type="radio" value="5" @if($item->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                        <input type="radio" value="4.5" @if($item->avg_rate >= 4.5 and $item->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" value="4" @if($item->avg_rate >= 4 and $item->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                        <input type="radio" value="3.5" @if($item->avg_rate >= 3.5 and $item->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                        <input type="radio" value="3" @if($item->avg_rate >= 3 and $item->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                        <input type="radio" value="2.5" @if($item->avg_rate >= 2.5 and $item->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                        <input type="radio" value="2" @if($item->avg_rate >= 2 and $item->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                        <input type="radio" value="1.5" @if($item->avg_rate >= 1.5 and $item->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                        <input type="radio" value="1" @if($item->avg_rate >= 1 and $item->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                        <input type="radio" value="0.5" @if($item->avg_rate >= 0.5 and $item->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
                       </fieldset>
                     </div>
                   </div>
                 </a>
-                <div class="add-heart">
-                  <i class="fa fa-heart-o" aria-hidden="true"></i>
-                  <i class="fa fa-heart d-none" style='color: #ff5d5d;'></i>
+               <div class="add-heart" data-id="{{$item->id}}" >
+                    @if ($item->heart == 1)
+                      <i class="fa fa-heart" style='color: #ff5d5d;'></i>
+                        
+                    @else
+                      <i class="fa fa-heart-o" data-toggle="modal" data-target="#modal-list-travel"></i>
+                        
+                    @endif
+                
                 </div>
               </div>   
             @empty
@@ -280,24 +297,30 @@
                   <div class="content">
                     <div class="title">{{ $item->name }}</div>
                     <div class="sub-title">      
-                      <fieldset class="rating">
-                        <input type="radio" id="star5" name="highlight_{{$item->id}}" value="5" disabled/><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                        <input type="radio" id="star4half" name="highlight_{{$item->id}}" value="4.5" checked disabled /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                        <input type="radio" id="star4" name="highlight_{{$item->id}}" value="4" disabled /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                        <input type="radio" id="star3half" name="highlight_{{$item->id}}" value="3.5" disabled/><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                        <input type="radio" id="star3" name="highlight_{{$item->id}}" value="3" disabled /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                        <input type="radio" id="star2half" name="highlight_{{$item->id}}" value="2.5" disabled/><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                        <input type="radio" id="star2" name="highlight_{{$item->id}}" value="2" disabled/><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                        <input type="radio" id="star1half" name="highlight_{{$item->id}}" value="1.5" disabled/><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                        <input type="radio" id="star1" name="highlight_{{$item->id}}" value="1" disabled/><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                        <input type="radio" id="starhalf" name="highlight_{{$item->id}}" value="0.5" disabled/><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                       <fieldset class="rating">
+                        <input type="radio" value="5" @if($item->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                        <input type="radio" value="4.5" @if($item->avg_rate >= 4.5 and $item->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" value="4" @if($item->avg_rate >= 4 and $item->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                        <input type="radio" value="3.5" @if($item->avg_rate >= 3.5 and $item->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                        <input type="radio" value="3" @if($item->avg_rate >= 3 and $item->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                        <input type="radio" value="2.5" @if($item->avg_rate >= 2.5 and $item->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                        <input type="radio" value="2" @if($item->avg_rate >= 2 and $item->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                        <input type="radio" value="1.5" @if($item->avg_rate >= 1.5 and $item->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                        <input type="radio" value="1" @if($item->avg_rate >= 1 and $item->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                        <input type="radio" value="0.5" @if($item->avg_rate >= 0.5 and $item->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
                       </fieldset>
                     </div>
                   </div>
                 </a>
-                <div class="add-heart">
-                  <i class="fa fa-heart-o" aria-hidden="true"></i>
-                  <i class="fa fa-heart d-none" style='color: #ff5d5d;'></i>
+                <div class="add-heart" data-id="{{$item->id}}" >
+                    @if ($item->heart == 1)
+                      <i class="fa fa-heart" style='color: #ff5d5d;'></i>
+                        
+                    @else
+                      <i class="fa fa-heart-o" data-toggle="modal" data-target="#modal-list-travel"></i>
+                        
+                    @endif
+                
                 </div>
               </div>   
             @empty
@@ -320,9 +343,108 @@
       </div>
     </section>
     
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-list-travel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fa fa-heart-o"></i> Lưu một chuyến đi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body list-travel" style="height: 370px;overflow-y: scroll;overflow-x: hidden;">
+    
+       
+      </div>
+      <div class="modal-footer " style="justify-content: start">
+        <div class="row" style="padding: 0px 10px" data-toggle="modal" data-target="#modal-create-travel">
+          <div class="col-3 square-travel">
+
+              <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+            
+          </div>
+          <div class="col-9 d-flex align-items-center">
+            <h5>Tạo một chuyến đi</h5>
+          </div>
+        </div>
+     
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-create-travel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle"><i class="fa fa-heart-o" aria-hidden="true"></i> Tạo một chuyến đi</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form id="form-create-travel">
+            @csrf
+            <div class="modal-body">
+                <div class="container">
+                    
+                        <div class="form-group">
+                            <label for="title">Tên chuyến đi</label>
+                            <input type="text" class="form-control" name="title" id="title"  value="">
+                            <span class="text-danger error-text title_err"></span>
+                        </div>
+                        <p>Chọn những người có thể thấy Chuyến đi của bạn</p>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="private" name="status" class="custom-control-input" value="0" checked="">
+                            <label class="custom-control-label" for="private">
+                                <div class="d-flex">
+                                    <div class="d-flex justify-content-center mr-3">
+                                        <div class="icon-status-modal">
+                                            <i class="fa fa-lock" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="">
+                                        <p><strong class="text-dark">Riêng tư</strong></p>
+                                        <p style="line-height: 1.2;">Không hiển thị với người dùng và thành viên TripReview khác, trừ bạn và bạn bè được chia sẻ Chuyến đi.</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div class="custom-control custom-radio mt-3">
+                            <input type="radio" id="public" name="status" class="custom-control-input" value="1" >
+                            <label class="custom-control-label" for="public">
+                                <div class="d-flex">
+                                    <div class="d-flex justify-content-center mr-3">
+                                        <div class="icon-status-modal">
+                                            <i class="fa fa-unlock" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="">
+                                        <p><strong class="text-dark">Công khai</strong></p>
+                                        <p style="line-height: 1.2;">Hiển thị với mọi khách du lịch trên TripReview, bao gồm mọi bạn bè được bạn chia sẻ Chuyến đi</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" type="submit" class="btn btn-primary btn-create-travel" disabled>Tạo</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
 @endsection
 @section('script')
-    
+    <script src="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script>
         $(document).ready(function(){
             $("#search").focus(function() {
@@ -348,10 +470,13 @@
             
         });
 
-        $(".add-heart").click(function(){
-          $(this).find('i').toggleClass('d-none');
-        });
+        var url_loadList = "{{route('home.list.travel')}}";
+        var url_addTravel = "{{ route('home.add.travel') }}";
+        var url_createTravel = "{{ route('travel.store') }}";
+        var csrf = "{{ csrf_token() }}";
 
     </script>
+
+    <script src="{{asset('main/js/addTravel.js')}}"></script>
    
 @endsection

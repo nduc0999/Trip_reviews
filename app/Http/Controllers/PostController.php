@@ -157,11 +157,18 @@ class PostController extends Controller
         if($request->id){
             
             $post = Post::find($request->id);
+            if($post->status == 1){
+                return redirect()->back();
+            }
+
             $photos = $post->photo()->paginate($this->photoCount);
             $location = $post->Location;
             $amenity = $post->amenity;
             $roomtype = $post->roomtype;
             $reviews = $post->getReview();
+            $post_all = $post->getSinglePost();
+
+        
             
             if (isset($_COOKIE['last_id'])) {
                 $arr_json = json_decode($_COOKIE['last_id'], true);
@@ -178,7 +185,7 @@ class PostController extends Controller
                 setcookie("last_id", $array_json, time() + 86400, "/");
             }
 
-            return view('web.post.post-info',[   'post' => $post,
+            return view('web.post.post-info',[   'post' => $post_all,
                                             'photos' => $photos,
                                             'location' => $location,
                                             'amenity' => $amenity,

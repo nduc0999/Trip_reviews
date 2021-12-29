@@ -108,6 +108,7 @@ class Post extends Model
             $rate_service = 0;
             $rate_value = 0;
             $rate_sleep = 0;
+
             foreach($post->review as $review){
                 $rate += $review->rate;
                 $rate_service += $review->rate_service;
@@ -133,9 +134,73 @@ class Post extends Model
                 $post->setAttribute('avg_rate_sleep', 0);
                 $post->setAttribute('count_review', 0);
             }
+
+            $p = Post::where('id',$post->id)->first();
+            $post_travel = $p->travel;
+            if(count($post_travel) != 0 and Auth::check()){
+                foreach($post_travel as $pt){
+                    if($pt->id_user == Auth::id()){
+                        $post->setAttribute('heart', 1);
+                        break 1;
+                    }else{
+                        $post->setAttribute('heart', 0);
+                    }
+                }
+            }else{
+                $post->setAttribute('heart', 0);
+            }
+        
         }
 
         return $posts;
         
+    }
+
+    public function getSinglePost(){
+
+        $rate = 0;
+        $rate_service = 0;
+        $rate_value = 0;
+        $rate_sleep = 0;
+        if (count($this->travel) != 0 and Auth::check()) {
+            foreach ($this->travel as $pt) {
+                if ($pt->id_user == Auth::id()) {
+                    $this->setAttribute('heart', 1);
+                    break 1;
+                } else {
+                    $this->setAttribute('heart', 0);
+                }
+            }
+        } else {
+            $this->setAttribute('heart', 0);
+        }
+
+        foreach ($this->review as $review) {
+            $rate += $review->rate;
+            $rate_service += $review->rate_service;
+            $rate_value += $review->rate_value;
+            $rate_sleep += $review->rate_sleep;
+        }
+        $count = count($this->review);
+        if ($count > 0) {
+            $avg_rate = round($rate / $count, 1);
+            $avg_rate_service = round($rate_service / $count, 1);
+            $avg_rate_value = round($rate_value / $count, 1);
+            $avg_rate_sleep = round($rate_sleep / $count, 1);
+            $this->setAttribute('avg_rate', $avg_rate);
+            $this->setAttribute('avg_rate_service', $avg_rate_service);
+            $this->setAttribute('avg_rate_value', $avg_rate_value);
+            $this->setAttribute('avg_rate_sleep', $avg_rate_sleep);
+            $this->setAttribute('count_review', $count);
+        } else {
+            $this->setAttribute('avg_rate', 0);
+            $this->setAttribute('avg_rate_service', 0);
+            $this->setAttribute('avg_rate_value', 0);
+            $this->setAttribute('avg_rate_sleep', 0);
+            $this->setAttribute('count_review', 0);
+        }
+
+
+        return $this;
     }
 }
