@@ -147,7 +147,7 @@
                       </div>
                     </div>
                   </a>
-                  <div class="add-heart" >
+                  <div class="add-heart" data-id="{{$item->id}}" >
                     @if ($item->heart == 1)
                       <i class="fa fa-heart" style='color: #ff5d5d;'></i>
                         

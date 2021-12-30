@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\RoomtypeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -127,6 +128,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('user/ban-unban/review', [UserController::class, 'ban_unban_Review'])->name('user.ban.unban.review');
         Route::post('user/profile', [UserController::class, 'profile'])->name('user.profile');
 
+        Route::get('review/approval', [ReviewController::class, 'listApproval'])->name('approval.review');
+        Route::get('review/list', [ReviewController::class, 'listReview'])->name('list.review');
+        Route::post('review/status/updaet', [ReviewController::class, 'updateStatus'])->name('review.status.update');
+        
 
     });
 });

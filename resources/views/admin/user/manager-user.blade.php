@@ -194,10 +194,21 @@
     }
 
     function ban_unban_Review(id,user){
-    
+            let alert;
+            if($(user).val() == 0){
+                alert = {
+                    title: 'Bạn muốn cấm đánh giá người này?',
+                    success: 'Đã cấm đánh giá!',
+                }
+            }else{
+                alert = {
+                    title: 'Bạn muốn huỷ cấm đánh giá người này?',
+                    success: 'Đã huỷ cấm đánh giá!',
+                }
+            }
 
             Swal.fire({
-                title: 'Bạn có chắc muốn cấm bình luận người dùng này',
+                title: alert.title,
                 text: "",
                 icon: 'warning',
                 showCancelButton: true,
@@ -218,7 +229,7 @@
                             if(result.status){
                                 loadPage(page);
                                 Swal.fire(
-                                    'Đã cấm bình luận!',
+                                    alert.success,
                                     '',
                                     'success'
                                     )

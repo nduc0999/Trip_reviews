@@ -174,6 +174,7 @@ class Post extends Model
         } else {
             $this->setAttribute('heart', 0);
         }
+        // $reviews = $this->review()->where('status',0)->get();
 
         foreach ($this->review as $review) {
             $rate += $review->rate;

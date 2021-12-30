@@ -317,7 +317,7 @@
                     <hr>      
                     <div class="sidebar-item comments">
                       <div class="sidebar-heading d-flex justify-content-between ">
-                        <h2>{{$reviews->count()}} Đánh giá</h2>
+                        <h2>{{$reviews->count()}} Đánh giá được hiển thị</h2>
                         <a href="{{ route('form.review',['slug' => Str::slug($post->name),'id'=>$post->id]) }}" class="btn" target="_blank" style="background-color: #f48840;color:white;"><i class="fa fa-edit"></i> Viết đánh giá</a>
                       </div>
                       <hr>

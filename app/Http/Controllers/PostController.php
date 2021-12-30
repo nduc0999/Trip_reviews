@@ -168,7 +168,7 @@ class PostController extends Controller
             $reviews = $post->getReview();
             $post_all = $post->getSinglePost();
 
-        
+            // return $post_all;
             
             if (isset($_COOKIE['last_id'])) {
                 $arr_json = json_decode($_COOKIE['last_id'], true);
@@ -221,6 +221,7 @@ class PostController extends Controller
         $review->rate_sleep = $request->rate_sleep;
         $review->id_post = $request->id_post;
         $review->id_user = Auth::user()->id;
+        $review->status = 2;
         $review->save();
 
         if(isset($request->answer)){

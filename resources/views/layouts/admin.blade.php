@@ -74,17 +74,17 @@
                         </li>
 
                         
-                        <li class="sidebar-item   has-sub">
+                        <li class="sidebar-item @if (url()->current() == route('admin.manager.approval.review') or url()->current() == route('admin.manager.list.review') )  active @endif  has-sub">
                             <a href="#" class='sidebar-link'>
                                <i class="bi bi-chat-square-text-fill"></i>
                                 <span>Manager Review</span>
                             </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item">
-                                    <a href="#">Approval Review</a>
+                            <ul class="submenu @if (url()->current() == route('admin.manager.approval.review') or url()->current() == route('admin.manager.list.review') )  active @endif">
+                                <li class="submenu-item {{ url()->current() == route('admin.manager.approval.review') ? 'active':''}}">
+                                    <a href="{{route('admin.manager.approval.review')}}">Duyệt các Đánh giá</a>
                                 </li>
-                                <li class="submenu-item ">
-                                    <a href="component-badge.html">Hide Review</a>
+                                <li class="submenu-item {{ url()->current() == route('admin.manager.list.review') ? 'active':''}} ">
+                                    <a href="{{route('admin.manager.list.review')}}">Danh sách các Đánh giá</a>
                                 </li>
                             </ul>
                         </li>
