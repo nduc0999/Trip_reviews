@@ -569,10 +569,7 @@
                     if(result.status){
                         window.location.href = "{{route('post.propose.success')}}";
                     }
-                  
-         
-            
-                
+  
                 },
                 error: function(e){
                     $('#loading').addClass('d-none');

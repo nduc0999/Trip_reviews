@@ -27,7 +27,7 @@
                                             <td>
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input ban-unban-review" 
-                                                    data-id={{ $data->id }} type="checkbox" id="ban-review" {{ $data->status == 1 ? 'checked':''}}>
+                                                    data-id={{ $data->id }} type="checkbox" value='{{$data->status}}' id="ban-review" {{ $data->status == 1 ? 'checked':''}}>
                                                 </div>
                                             </td>
                                             <td >
