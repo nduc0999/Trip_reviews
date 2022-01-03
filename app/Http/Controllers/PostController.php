@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RequestEditPost;
 use App\Http\Requests\RequestPost;
 use App\Http\Requests\RequestReview;
 use App\Models\Amenity;
@@ -25,13 +26,102 @@ use PhpParser\Node\Stmt\TryCatch;
 class PostController extends Controller
 {
     
-    public $photoCount = 10;
-    public $countSearch = 10;
+    private $photoCount = 9;
+    private $countSearch = 10;
+    private $count = 5;
+    private $drafts = 3;
+    private $activity = 0;
+    private $inactivity= 1;
+    private $approval= 2;
 
     public function adminPost(){
 
         $location = Location::where('status',0)->orderBy('province', 'ASC')->get();
         return view('admin.post.post',['locations' => $location]);
+    }
+
+    public function adminListPost(Request $request){
+        try {
+
+            if($request->ajax()){
+
+                switch ($request->filter) {
+                    case 0:
+                        $posts = Post::where('status',$this->activity)->where('name','like','%'.$request->search.'%');
+                        break;
+                    case 1:
+                        $posts = Post::where('status', $this->inactivity)->where('name', 'like', '%' . $request->search . '%');
+                        break;
+                    case 3:
+                        $posts = Post::where('status', $this->drafts)->where('name', 'like', '%' . $request->search . '%');
+                        break;
+                    case 4:
+                        $posts = Post::where('status', '!=', $this->approval)->where('name', 'like', '%' . $request->search . '%');
+                        break;
+                    default:
+                        $posts = Post::where('status', '!=', $this->approval)->where('name', 'like', '%' . $request->search . '%');
+                        break;
+                }
+
+
+                $list = $posts->paginate($request->count);
+                $result = Post::setInfoPost($list);
+
+                return view('admin.post.table-data-post',['list'=>$result]);
+
+            }
+
+            $list = Post::where('status','!=',$this->approval)->paginate($this->count);
+            $result = Post::setInfoPost($list);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+
+        return view('admin.post.manager-post',['list' => $result]);
+    }
+
+    public function listApproval(Request $request){
+        if($request->ajax()){
+            $list = Post::where('status', $this->approval)->paginate($request->count);
+            return view('admin.post.table-data-approval',['list'=> $list]);
+
+        }
+        $list = Post::where('status',$this->approval)->paginate($this->count);
+      
+        return view('admin.post.approval-post',['list' => $list]);
+    }
+
+    public function showApprovalPost($id){
+        
+        try {
+            $approval = Post::find($id);
+            if($approval->status != 2){
+                return redirect()->route('admin.approval.post');
+            }
+        
+        } catch (\Throwable $th) {
+            return redirect()->route('admin.approval.post');    
+        }
+        
+        return view('admin.post.show-approval-post',['data' => $approval]);
+    }
+
+    public function updateStatus(Request $request){
+
+        try {
+
+            if ($request->id != '') {
+                $post = Post::find($request->id);
+                $post->status = $request->status;
+                $post->save();
+
+                return response()->json(['status' => true]);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'mess' => $e->getMessage()]);
+        }
+
+        return response()->json(['status' => false, 'mess' => 'Không tìm thấy id']);
     }
 
     public function listAmenity(Request $request){
@@ -122,7 +212,7 @@ class PostController extends Controller
         $post->id_user = Auth::user()->id;
         $post->owner = $request->owner != null? $request->owner:0;
         $post->type = $request->type;
-        $post->status = 1;
+        $post->status = $this->approval;
 
         try {
             $post->upAvatarWall($request->file('img_avatar'), $request->file('img_wall'));
@@ -134,7 +224,7 @@ class PostController extends Controller
 
             $post->uploadPhoto($request->file('photo'),$request->note);
         } catch (Exception $e) {
-            return response()->json(['status'=>$post->owner,'mess' => 'Lỗi xử lý DB']);
+            return response()->json(['status'=>false,'mess' => 'Lỗi xử lý DB']);
         }
         return response()->json(['status' => true]);
        
@@ -207,7 +297,7 @@ class PostController extends Controller
                                         'questions' => $question,
                                     ]);
     }
-
+    
     public function storeReivew(RequestReview $request){
         
         $review = new Review();
@@ -444,5 +534,133 @@ class PostController extends Controller
      
         return view('web.search.search-page', ['results' => array(), 'search' => $request->search]);
     }
+
+    public function drafts(RequestPost $request){
+
+        $post = new Post();
+        $post->name = $request->name;
+        $post->introduce = $request->introduce;
+        $post->address = $request->address;
+        $post->streets = $request->streets;
+        $post->district = $request->district;
+        $post->id_location = $request->id_location;
+        $post->link = $request->link != null ? $request->link : null;
+        $post->open = str_replace(":", "h", $request->open);
+        $post->closes = str_replace(":", "h", $request->closes);
+        $post->min_guest = $request->min_guest;
+        $post->max_guest = $request->max_guest;
+        $post->phone = $request->phone;
+        $post->latitude = $request->latitude;
+        $post->longtitude = $request->longtitude;
+        $post->email = $request->email != null ? $request->email : null;
+        $post->id_user = Auth::user()->id;
+        $post->owner = $request->owner != null ? $request->owner : 0;
+        $post->type = $request->type;
+        $post->status = $this->drafts;
+
+        try {
+            $post->upAvatarWall($request->file('img_avatar'), $request->file('img_wall'));
+
+            $post->save();
+
+            $post->Amenity()->attach($request->amenity);
+            $post->Roomtype()->attach($request->roomtype);
+
+            $post->uploadPhoto($request->file('photo'), $request->note);
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'mess' => 'Lỗi xử lý DB']);
+        }
+        return response()->json(['status' => true]);
+    }
     
+    public function showEditPost($id){
+        try {
+            $post = Post::find($id);
+            $locations = Location::where('status',0)->get(); 
+            if ($post->status == 2) {
+                return redirect()->route('admin.manager.post.list');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->route('admin.manager.post.list');
+        }
+
+        return view('admin.post.edit-post', ['data' => $post,'locations' => $locations]);
+    }
+
+    public function updatePost(RequestEditPost $request){
+    
+        try {
+            $post = Post::find($request->id);
+            $post->name = $request->name;
+            $post->introduce = $request->introduce;
+            $post->address = $request->address;
+            $post->streets = $request->streets;
+            $post->district = $request->district;
+            $post->id_location = $request->id_location;
+            $post->link = $request->link != null ? $request->link : null;
+            $post->open = str_replace(":", "h", $request->open);
+            $post->closes = str_replace(":", "h", $request->closes);
+            $post->min_guest = $request->min_guest;
+            $post->max_guest = $request->max_guest;
+            $post->phone = $request->phone;
+            $post->latitude = $request->latitude;
+            $post->longtitude = $request->longtitude;
+            $post->email = $request->email != null ? $request->email : null;
+            $post->type = $request->type;
+
+            if($request->status != ''){
+                $post->status = 0;
+            }
+
+            $post->Amenity()->sync($request->amenity);
+            $post->Roomtype()->sync($request->roomtype);
+
+            if ($request->img_avatar != null) {
+                $post->changeAvatar($request->file('img_avatar'));
+            }
+
+            if ($request->img_wall != null) {
+                $post->changeWall($request->file('img_wall'));
+            }
+
+            $post->save();
+
+            if ($request->arrDelete != null) {
+                $arrDelete = explode(",", $request->arrDelete);
+
+                if (count($arrDelete) < count($post->photo)) {
+                    $a = $post->deletePhoto($arrDelete);
+                } else {
+                    return response()->json(['status' => false, 'error' => array('photo' => 'không được để ảnh trống')]);
+                }
+            }
+
+            if ($request->photo != null) {
+                $post->uploadPhoto($request->file('photo'), $request->note);
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => false,'mess' => 'Lỗi xử lý DB']);
+        }
+        
+
+        return response()->json(['status' => true]);
+        
+    }
+
+    public function deleteDrafts(Request $request){
+        try {
+            if($request->id!=null){
+                $post= Post::find($request->id);
+                $post->deleteDrafts();
+                $post->delete();
+
+                return response()->json(['status' => true]);
+                
+            }
+        } catch (Exception $e) {
+            return response()->json(['status' => false,'mess' => 'Lỗi xử lý trong DB']);
+        }
+        return response()->json(['status' => false, 'mess' => 'id trống']);
+
+    }
 }

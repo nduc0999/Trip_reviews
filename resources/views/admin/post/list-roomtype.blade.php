@@ -17,8 +17,8 @@
           </div>
         </td>
        
-        <td>{{ $item->name }}</td>
-        <td>{{ $item->description }}</td>
+        <td><label for="roomtype-{{$item->id}}">{{ $item->name }}</label></td>
+        <td><label for="roomtype-{{$item->id}}">{{ $item->description }}</label></td>
       </tr>
           
       @empty

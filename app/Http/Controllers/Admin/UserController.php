@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -55,5 +57,42 @@ class UserController extends Controller
             return response()->json(['status' => true,'data' => $data]);
         }
         return response()->json(["status" => false]);
+    }
+
+    public function addAdmin(Request $request){
+        request()->validate(
+            [
+                'first_name' => ['required', 'string', 'max:50'],
+                'last_name' => ['required', 'string', 'max:50'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8'],
+            ],
+            [
+                'first_name.max' => 'Vượt quá độ dài 50 ký tự',
+                'last_name.max' => 'Vượt quá độ dài 50 ký tự',
+                'email.unique' => 'Đã tồn tại email',
+                'password.min' => 'Mật khẩu cần ít nhất 8 ký tự'
+            ]
+        );
+
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $date = date('Y-m-d H:i:s');
+        try {
+            $user = new User();
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->verification_code = sha1(time());
+            $user->email_verified_at = $date;
+            $user->role = 1;
+            $user->save();
+        } catch (Exception $e) {
+            return response()->json(['status' => false,'mess' => 'Lỗi giá trị trong DB']);
+        }
+
+        return response()->json(['status' => true]);
+
+        
     }
 }

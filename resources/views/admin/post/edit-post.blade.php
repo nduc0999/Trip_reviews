@@ -4,6 +4,7 @@
 
 @section('head')
     <link rel="stylesheet" href="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/custom.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
     integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
     crossorigin=""/>
@@ -33,14 +34,15 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Đăng Thông tin về Homestay-Resort</h3>
+                <h3>{{$data->name}}</h3>
                 <p class="text-subtitle text-muted">For user to check they list</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Đăng bài</li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.manager.post.list') }}">Quản lý bài đăng</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{$data->name}}</li>
                     </ol>
                 </nav>
             </div>
@@ -51,19 +53,20 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Đăng bài</h4>
+                        <h4 class="card-title">Homestay-Resort</h4>
                     </div>
                     <div class="card-content">
                         <div class="card-body">
                             <form class="form"  id='form-post' enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="id" value="{{$data->id}}">
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="row">
                                             <div  class="col-12">
                                                 <div class="form-group ">
                                                     <label for="name">Tên Homestay-Resort</label>
-                                                    <input type="text" id="name" class="form-control " placeholder="Name Homestay-Resort" value="{{ old('name') }}" name="name">
+                                                    <input type="text" id="name" class="form-control " placeholder="Name Homestay-Resort" value="{{ $data->name }}" name="name">
                                                     <span class="text-danger error-text name_err"></span>
                                                   
                                                 </div>
@@ -72,7 +75,7 @@
                                                         <div class="row">
                                                             <div class="col-md-6 col-12">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio" name="type" id="type1" value="0" checked>
+                                                                    <input class="form-check-input" type="radio" name="type" id="type1" value="0" {{$data->type == 0 ? 'checked':''}}>
                                                                     <label class="form-check-label" for="type1">
                                                                         Homestay
                                                                     </label>
@@ -80,7 +83,7 @@
                                                             </div>
                                                             <div class="col-md-6 col-12">
                                                                 <div class="form-check">
-                                                                    <input class="form-check-input" type="radio" name="type" id="type2" value="1">
+                                                                    <input class="form-check-input" type="radio" name="type" id="type2" value="1" {{$data->type == 1 ? 'checked':''}} >
                                                                     <label class="form-check-label" for="type2">
                                                                     Resort
                                                                     </label>
@@ -98,7 +101,7 @@
                                                     <select class="form-control" id="location" name='id_location'>
                                                         <option value="">--- Chọn Tỉnh/Thành ---</option>
                                                         @forelse ($locations as $item)
-                                                            <option value="{{ $item->id }}">{{ $item->province }}</option>
+                                                            <option value="{{ $item->id }}" {{ $data->location->id == $item->id? 'selected':'' }}>{{ $item->province }}</option>
                                                         @empty
                                                             <option value="">--- No data ---</option>                                                          
                                                         @endforelse
@@ -108,17 +111,17 @@
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="first-name-column">Đường</label>
-                                                    <input type="text" id="streets" class="form-control" placeholder="Street" name="streets">
+                                                    <input type="text" id="streets" class="form-control" placeholder="Street" name="streets" value="{{$data->streets}}">
                                                     <span class="text-danger error-text streets_err"></span>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="first-name-column">Quận/Phường/Huyện</label>
-                                                    <input type="text" id="district" class="form-control" placeholder="District" name="district">
+                                                    <input type="text" id="district" class="form-control" placeholder="District" name="district" value="{{$data->district}}">
                                                     <span class="text-danger error-text district_err"></span>
                                                 </div>
                                                 <div class="form-group mb-4">
                                                     <label for="first-name-column">Địa chỉ</label>
-                                                    <input type="text" id="address" class="form-control" placeholder="Address" name="address">
+                                                    <input type="text" id="address" class="form-control" placeholder="Address" name="address" value="{{$data->address}}">
                                                     <span class="text-danger error-text address_err"></span>
                                                 </div>
 
@@ -128,17 +131,17 @@
 
                                                 <div class="form-group ">
                                                     <label for="phone">Số điện thoại</label>
-                                                    <input type="text" id="phone" class="form-control" placeholder="Phone number" name="phone">
+                                                    <input type="text" id="phone" class="form-control" placeholder="Phone number" name="phone" value="{{$data->phone}}">
                                                     <span class="text-danger error-text phone_err"></span>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="email">Email</label>
-                                                    <input type="email" id="email" class="form-control" placeholder="Email" name="email">
+                                                    <input type="email" id="email" class="form-control" placeholder="Email" name="email" value="{{$data->email}}">
                                                     <span class="text-danger error-text email_err"></span>
                                                 </div>
                                                 <div class="form-group ">
                                                     <label for="link">URL Trang web</label>
-                                                    <input type="text" id="link" class="form-control" placeholder="URL Web" name="link">
+                                                    <input type="text" id="link" class="form-control" placeholder="URL Web" name="link" value="{{$data->link}}">
                                                     <span class="text-danger error-text link_err"></span>
                                                 </div>
 
@@ -158,14 +161,14 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group ">
                                                             <label for="lat_add">Vĩ độ</label>
-                                                            <input type="text" id="lat_add" class="form-control" placeholder="Latitude" name="latitude">
+                                                            <input type="text" id="lat_add" class="form-control" placeholder="Latitude" name="latitude" value="{{$data->latitude}}">
                                                             <span class="text-danger error-text latitude_err"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group ">
                                                             <label for="long_add">Kinh độ</label>
-                                                            <input type="text" id="long_add" class="form-control" placeholder="Longtitude" name="longtitude">
+                                                            <input type="text" id="long_add" class="form-control" placeholder="Longtitude" name="longtitude" value="{{$data->longtitude}}">
                                                             <span class="text-danger error-text longtitude_err"></span>
                                                         </div>
                                                     </div>
@@ -177,14 +180,14 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group ">
                                                             <label for="first-name-column">Giờ mở cửa</label>
-                                                            <input type="time" id="open" class="form-control" placeholder="Open time" name="open">
+                                                            <input type="time" id="open" class="form-control" placeholder="Open time" name="open" value="{{str_replace('h', ':', $data->open)}}">
                                                             <span class="text-danger error-text open_err"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group ">
                                                             <label for="first-name-column">Giờ đóng cửa</label>
-                                                            <input type="time" id="closes" class="form-control" placeholder="Close time" name="closes">
+                                                            <input type="time" id="closes" class="form-control" placeholder="Close time" name="closes"value="{{str_replace('h', ':', $data->closes)}}">
                                                             <span class="text-danger error-text closes_err"></span>
                                                         </div>
                                                     </div>
@@ -192,14 +195,14 @@
                                                        <div class="col-md-6">
                                                         <div class="form-group ">
                                                             <label for="first-name-column">Số khách tối thiểu</label>
-                                                            <input type="number" id="min_guest" class="form-control" placeholder="Min guest" name="min_guest">
+                                                            <input type="number" id="min_guest" class="form-control" placeholder="Min guest" name="min_guest"  value="{{$data->min_guest}}">
                                                             <span class="text-danger error-text min_guest_err"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group ">
                                                             <label for="first-name-column">Số khách tối đa</label>
-                                                            <input type="number" id="max_guest" class="form-control" placeholder="Max guest" name="max_guest">
+                                                            <input type="number" id="max_guest" class="form-control" placeholder="Max guest" name="max_guest" value="{{$data->max_guest}}">
                                                             <span class="text-danger error-text max_guest_err"></span>
                                                         </div>
                                                     </div>
@@ -210,7 +213,7 @@
                                         <div class="col-12">
                                             <div class="form-group ">
                                                 <label for="first-name-column">Giới thiệu</label>
-                                                <textarea class="form-control" id="introduce" rows="4" name="introduce"></textarea>  
+                                                <textarea class="form-control" id="introduce" rows="4" name="introduce">{{$data->introduce}}</textarea>  
                                                 <span class="text-danger error-text introduce_err"></span>
                                             </div>
                                         </div>
@@ -224,12 +227,21 @@
                                                 <div class="divider-text"> <h4>Tiện ích và loại phòng</h4></div>
                                             </div>
                                     </div>
-                                    {{-- <i class="btn btn-primary" data-toggle="modal" data-target="#list-amenity">Chọn tiện ích</i> --}}
+                               
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#list-amenity">
                                        Chọn các tiện ích
                                     </button>
                                     <div class="row mt-4" id="select-amenity">
-                 
+                                         @forelse ($data->amenity as $item)
+                                            <div class="col-3">
+                                                <input type='checkbox' class="form-check-input me-2" name="amenity[]" value="{{$item->id}}"  checked>{{$item->name}}
+                                            </div>
+                                        @empty
+                                            <span>Không có dữ liệu</span>
+                                        @endforelse
+                                        <div class="row mt-4" id="edit-amenity">
+
+                                        </div>
                                     </div>
                                     <span class="text-danger error-text amenity_err"></span>
 
@@ -239,7 +251,16 @@
                                        Chọn các loại phòng
                                     </button>
                                     <div class="row mt-4" id="select-roomtype">
-                 
+                                        @forelse ($data->roomtype as $item)
+                                            <div class="col-3">
+                                                <input type='checkbox' class="form-check-input me-2" name='roomtype[]' value="{{$item->id}}"  checked>{{$item->name}}
+                                            </div>
+                                        @empty
+                                            <span>Không có dữ liệu</span>
+                                        @endforelse
+                                    </div>
+                                    <div class="row mt-4" id="edit-roomtype">
+
                                     </div>
                                     <span class="text-danger error-text roomtype_err"></span>
 
@@ -251,19 +272,20 @@
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label for="first-name-column">Ảnh đại diện</label>
-                                            {{-- <input type="file" class="image-preview-filepond"> --}}
+                                    
                                             <input class="form-control" type="file" name='img_avatar' id="avatar"  oninput="pic1.src=window.URL.createObjectURL(this.files[0])" >
                                        
-                                             <img id="pic1" alt="" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}">
+                                             <img id="pic1" src='{{$data->img_avatar}}' alt="" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}">
                                         </div>
-                                        <span class="text-danger error-text img_avatar_err"></span>div>
+                                        <span class="text-danger error-text img_avatar_err"></span>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label for="wall">Ảnh nền</label>
-                                            {{-- <input type="file" class="image-preview-filepond"> --}}
+                         
                                             <input class="form-control" type="file" name='img_wall' id="wall"  oninput="pic2.src=window.URL.createObjectURL(this.files[0])">
   
-                                            <img id="pic2" alt="" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}">
+                                            <img id="pic2" src='{{$data->img_wall}}' alt="" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}">
              
                                         </div>
                                         <span class="text-danger error-text img_wall_err"></span>
@@ -280,12 +302,25 @@
                                             {{-- <input type="file" class="form-control" id="photo" name='photo[]' multiple accept="image/jpg,image/png,image/jpeg,image/gif" />
                                             <div class="row" id="show-image"> --}}
 
-                                                <input type="file" class="image-resize-filepond"  name="photo[]" data-max-file-size="3MB" value="{{ old('photo') }}" multiple>
+                                                <div class="row">
+                                                    @forelse ($data->photo as $item)
+                                                        <div class="col-md-4 pt-2 photo">
+                                                            <img id="" src="{{$item->path}}" class="data-img" alt="" style="height: 200px; width:100%; object-fit:cover" class="pre-img">
+                                                            <i class="bi bi-x-circle delete-photo"></i>
+      
+                                                        </div>
+                                                    @empty
+                                                        <span>Không có dữ liệu</span>
+                                                    @endforelse
+                                                </div>
+                                                <span class="text-danger error-text photo_err"></span>
+
+                                                <input type="file" class="image-resize-filepond mt-3"  name="photo[]" data-max-file-size="3MB" value="{{ old('photo') }}" multiple>
 
                                                 <div id="note">
 
                                                 </div>
-                                                <span class="text-danger error-text photo_err"></span>
+                                              
 
                                             </div>
                                         </div>
@@ -293,9 +328,11 @@
 
                                 </div>
 
-                                <div class="col-12 d-flex justify-content-end">
-                                    <button  class="btn btn-primary me-1 mb-1" id='btn-post'>Post</button>
-                                    <button  class="btn btn-light-secondary me-1 mb-1" id="btn-drafts">Drats</button>
+                                <div class="col-12 d-flex justify-content-end pr-4">
+                                    @if ($data->status == 3)
+                                        <button  class="btn btn-primary me-1 mb-1" id='btn-post'>Đăng bài</button>
+                                    @endif
+                                    <button  class="btn btn-light-secondary me-1 mb-1" id="btn-save-post">Lưu</button>
                                 </div>
                             </form>
                         </div>
@@ -354,7 +391,7 @@
 @section('script')
     <script src="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    <script src="{{ asset('main/js/map.js') }}"></script>
+
 
     <!-- filepond validation -->
     <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
@@ -374,6 +411,62 @@
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
     <script src="{{ asset('dashboard/js/uploadfile.js') }}"></script>
+    
+    <script>
+        var map = L.map('map');
+
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+    
+        var searchControl = L.esri.Geocoding.geosearch({
+                position: 'topright',
+                placeholder: 'Nhập tên địa chỉ hoặc đường phố',
+                useMapBounds: false,
+                providers: [L.esri.Geocoding.arcgisOnlineProvider({
+                apikey: 'AAPKd6a06d2c8c554d78805498d2886e3420s_yUJw1NPIVVKGIGKJ3qqjW-6Z41MBZTN-pUAkfk6G8kjnuVo4fh-xrCK_NzORfy',
+                nearby: {
+                    lat: -33.8688,
+                    lng: 151.2093
+                }
+                })]
+                }).addTo(map);
+                var results = L.layerGroup().addTo(map);
+
+            searchControl.on('results', function (data) {
+                results.clearLayers();
+                for (var i = data.results.length - 1; i >= 0; i--) {
+                results.addLayer(L.marker(data.results[i].latlng));
+                }
+            });
+        
+        
+            let lat = '{{$data->latitude}}';
+            let long = '{{$data->longtitude}}';
+            
+            map.setView([lat,long],15);
+        
+            L.marker([lat,long]).addTo(map)
+                .bindPopup(`<div class='maker-post'>
+                                <span>{{$data->name}}</span>
+                            </div>`)
+                .openPopup();
+            
+            map.on('click', function(e) {
+                $('#lat_add').val(e.latlng.lat);
+                $('#long_add').val(e.latlng.lng);
+                    L.popup().setLatLng(e.latlng)
+                    .setContent("You clicked the map at " + e.latlng.toString())
+                    .openOn(map);
+            });
+    
+
+            // [21.009516, 105.839284]
+        
+
+    </script>
 
     <script>
 
@@ -451,8 +544,11 @@
                                 'id': id,
                                 'name': name,
                             }
+                    
                             arr.push(obj);
-                             arrHtml(arr,'roomtype');
+
+                            console.log(arr);
+                            arrHtml(arr,'roomtype');
                         
                         }else{
                             arr.forEach((e,index) => {
@@ -461,6 +557,7 @@
                             
                                 }
                             })
+
             
                             arrHtml(arr,'roomtype');
                         }
@@ -480,10 +577,18 @@
                             <input type='checkbox' class="form-check-input me-2" name='${string}[]' value=${i.id} checked>${i.name}
                             </div>`;
             })
+                let select = '#edit-'+ string;            
+                $(select).html(html);
          
-            let select = '#select-'+ string;            
-            $(select).html(html);
+            
         }
+        var arrDelete=[];
+        $('.delete-photo').click(function(){
+            $(this).closest('.photo').hide();
+            src= $(this).closest('.photo').find('.data-img').attr('src');
+            arrDelete.push(src);
+  
+        })
 
         var err;
         $('#btn-post').click(function(e){
@@ -491,9 +596,10 @@
             e.preventDefault();
             let form = $('#form-post');
             var data = new FormData(form[0]);
+            data.append('status',0);
             $('#load').removeClass('d-none');
             $.ajax({
-                url: "{{ route('admin.post.store') }}",
+                url: "{{ route('admin.manager.post.edit.update') }}",
                 type: "POST",
                 data: data,
                 processData: false,
@@ -503,12 +609,16 @@
                         removeErrorMsg(err);     
                     }
                     $('#load').addClass('d-none');
-                    $(window).scrollTop(0);
-                    Toast.fire({
-                    icon: 'success',
-                    title: 'Đăng thành công'
-                    })
-                    location.reload();
+                    console.log(result);
+                    if(result.status){
+                        Toast.fire({
+                        icon: 'success',
+                        title: 'Đã lưu thay đổi'
+                        })
+                        location.reload();
+                    }else{
+                        printErrorMsg(result.error)
+                    }
             
                 
                 },
@@ -522,14 +632,15 @@
          
         })
 
-         $('#btn-drafts').click(function(e){
+        $('#btn-save-post').click(function(e){
            
             e.preventDefault();
             let form = $('#form-post');
             var data = new FormData(form[0]);
+            data.append('arrDelete',arrDelete);
             $('#load').removeClass('d-none');
             $.ajax({
-                url: "{{ route('admin.post.drafts') }}",
+                url: "{{ route('admin.manager.post.edit.update') }}",
                 type: "POST",
                 data: data,
                 processData: false,
@@ -539,13 +650,17 @@
                         removeErrorMsg(err);     
                     }
                     $('#load').addClass('d-none');
-                    $(window).scrollTop(0);
-                    Toast.fire({
-                    icon: 'success',
-                    title: 'Đã lưu trạng thái nháp'
-                    })
-                    location.reload();
-            
+
+                    console.log(result);
+                    if(result.status){
+                        Toast.fire({
+                        icon: 'success',
+                        title: 'Đăng bài thành công'
+                        })
+                        location.reload();
+                    }else{
+                        printErrorMsg(result.error)
+                    }
                 
                 },
                 error: function(e){
@@ -557,6 +672,7 @@
             });
          
         })
+
 
         function printErrorMsg (msg) {
             
@@ -579,52 +695,7 @@
         }
 
 
-        // function readURL(input) {
-        //     for(var i =0; i< input.files.length; i++){
-        //         if (input.files[i]) {
-        //             var reader = new FileReader();
-
-        //             reader.onload = function (e) {
-        //             let html =  '<img class="img-fluid abc col-md-6 mt-3 ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}">'+
-        //                         '<div class="form-group col-md-6 mt-3">'+
-        //                             '<label for="wall">Ghi chú</label>'+
-        //                             '<input type="text" class="form-control" name="note[]">'+
-        //                             '<button class="btn btn-primary mt-3" onclick=deleteImg()>Xoá ảnh</button>'+
-        //                         '</div>';
-        //             var img = $(html);
-        //             img.attr('src', e.target.result);
-        //             img.appendTo('#show-image');  
-        //             }
-        //             reader.readAsDataURL(input.files[i]);
-        //         }
-        //     }
-        // }
-
-
-        // $("#photo").change(function(){
-            
-        //     var ext = $(this).val().split('.').pop().toLowerCase();
-        //     if($.inArray(ext, ['gif','png','jpg','jpeg']) == -1) {
-        //         $(this).val('');
-        //     }else{
-               
-        //         readURL(this);
-        //     }
-        // });
-
         
-
-        // function actionTr(){
-        //     $('tr').click(function(){
-        //         let input = $(this).find('input');
-        //         if(input.is(':checked')){
-        //             input.prop('checked', false);
-        //         }else{
-        //             input.prop('checked', true);
-        //         }
-                
-        //     })
-        // }
     </script>
     
 @endsection

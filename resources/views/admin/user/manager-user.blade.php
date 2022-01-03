@@ -118,6 +118,60 @@
     </div>
 </div>
 
+<div class="modal fade" id="formAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Thêm quản trị
+                </h5>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+        
+            <div class="modal-body">
+               <form id='add-admin' >
+                   @csrf
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                   <label for="first-name" class="form-label">Tên</label>
+                                   <input type="text" class="form-control" id="first-name" name="first_name" aria-describedby="alert-first-name">
+                                   <span class="text-danger error-text first_name_err"></span>
+                               </div>
+                            </div>
+                             <div class="col-md-6">
+                                <div class="mb-3">
+                                   <label for="last-name" class="form-label">Họ</label>
+                                   <input type="text" class="form-control" id="last-name" name="last_name" aria-describedby="alert-last-name">
+                                  <span class="text-danger error-text last_name_err"></span>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" id="email">
+                            <span class="text-danger error-text email_err"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" name="password" id="password">
+                            <span class="text-danger error-text password_err"></span>
+                        </div>
+                       
+                    </div>
+               </form>
+            </div>
+            <div class="modal-footer">
+                
+                <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal" onclick="addUser()">
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Thêm</span>
+                </button>
+            </div>
+         
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -159,35 +213,44 @@
         })
     }
 
-
+    
+    var err;
     function addUser(){
-        let form = $("#add-user");
+        let form = $("#add-admin");
         var data = new FormData(form[0]);
 
         $.ajax({
-            url: "{{ route('admin.manager.user.store') }}",
+            url: "{{ route('admin.manager.user.add.admin') }}",
             type: "POST",
             data: data,
             processData: false,
             contentType: false,
             success: function(result){
+                console.log(result);
+                if(err != null){
+                    removeErrorMsg(err);
+                         
+                }
                 if(result.status){
                     loadPage(1)
                     Toast.fire({
                         icon: 'success',
-                        title: 'Thêm mới thành công'
+                        title: 'Thêm thành công'
                         })
-                    $('#province_add').val('');
-                    $('#lat_add').val('');
-                    $('#long_add').val('');
+                    $('#first-name').val('');
+                    $('#last-name').val('');
+                    $('#email').val('');
+                    $('#password').val('');
                 }else{
-                   Toast.fire({
-                        icon: 'warning',
-                        title: result.mess,
-                        });
-                    $('#formAdd').modal('show');
+                  console.log(result.mess)
                 }
               
+            },
+            error: function(e){
+                removeErrorMsg(err);
+                err = e.responseJSON.errors; 
+                printErrorMsg(e.responseJSON.errors);
+                $('#formAdd').modal('show');
             }
         })
 
@@ -258,6 +321,26 @@
         
  
     });
+
+    function printErrorMsg (msg) {
+        
+        $.each( msg, function( key, value ) {
+            $('.'+key+'_err').text(value);     
+        });
+        let e = Object.keys(msg)[0]+'_err';
+        let top= $('.'+e).offset().top;
+        
+        $(window).scrollTop(top-200);
+    
+    }
+    
+    function removeErrorMsg (msg) {
+        
+        $.each( msg, function( key, value ) {
+            $('.'+key+'_err').text('');
+        });
+    
+    }
     
     function save_ban_unban(){
         $('.ban-unban-review').click(function(){

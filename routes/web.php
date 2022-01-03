@@ -94,12 +94,18 @@ Route::post('/password/reset',[ResetPasswordController::class,'reset'])->name('p
 //admin
 
 Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('login',[LoginController::class,'formLoginAdmin'])->name('login');
+    Route::post('login/check',[LoginController::class, 'checkLoginAdmin'])->name('login.check');
+Route::middleware(['auth_admin','is_admin'])->group(function () {
     Route::get('/', [HomeController::class,'admin'])->name('home');
 
     Route::get('/post',[PostController::class,'adminPost'])->name('post');
     Route::get('/post/list/amenity',[PostController::class,'listAmenity'])->name('post.list.amenity');
     Route::get('/post/list/roomtype', [PostController::class, 'listRoomtype'])->name('post.list.roomtype');
     Route::post('/post/store', [PostController::class, 'store'])->name('post.store');
+    Route::post('/post/drafts', [PostController::class, 'drafts'])->name('post.drafts');
+    Route::get('/post/approval',[PostController::class,'listApproval'])->name('approval.post');
+    Route::get('/post/approval/{id}/show', [PostController::class, 'showApprovalPost'])->name('approval.post.show');
 
     Route::prefix('manager')->name('manager.')->group(function () {
         Route::get('amenity',[AmenityController::class,'index'])->name('amenity');
@@ -124,15 +130,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('question/activity', [QuestionController::class, 'activityQuestion'])->name('question.activity');
 
         Route::get('user', [UserController::class, 'index'])->name('user');
-        Route::post('user/store', [UserController::class, 'store'])->name('user.store');
+        Route::post('user/add/admin', [UserController::class, 'addAdmin'])->name('user.add.admin');
         Route::post('user/ban-unban/review', [UserController::class, 'ban_unban_Review'])->name('user.ban.unban.review');
         Route::post('user/profile', [UserController::class, 'profile'])->name('user.profile');
 
         Route::get('review/approval', [ReviewController::class, 'listApproval'])->name('approval.review');
         Route::get('review/list', [ReviewController::class, 'listReview'])->name('list.review');
-        Route::post('review/status/updaet', [ReviewController::class, 'updateStatus'])->name('review.status.update');
-        
+        Route::post('review/status/update', [ReviewController::class, 'updateStatus'])->name('review.status.update');
+
+        Route::get('post/list', [PostController::class, 'adminListPost'])->name('post.list');
+        Route::post('post/status/update', [PostController::class, 'updateStatus'])->name('post.status.update');
+        Route::get('post/edit/{id}/show', [PostController::class, 'showEditPost'])->name('post.edit.show');
+        Route::post('post/edit/update',[PostController::class,'updatePost'])->name('post.edit.update');
+        Route::post('post/drafts/delete',[PostController::class,'deleteDrafts'])->name('post.drafts.delete');
 
     });
+});
 });
 

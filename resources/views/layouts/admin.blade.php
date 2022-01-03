@@ -59,8 +59,8 @@
                             </a>
                         </li>
 
-                           <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                           <li class="sidebar-item  @if (url()->current() == route('admin.approval.post') or Request::is('admin/post/approval/*/show') )  active @endif ">
+                            <a href="{{route('admin.approval.post') }}" class='sidebar-link'>
                                 <i class="bi bi-check-circle"></i>
                                 <span>Approval Post</span>
                             </a>
@@ -89,8 +89,8 @@
                             </ul>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item  @if (url()->current() == route('admin.manager.post.list') or Request::is('admin/manager/post/edit/*/show') )  active @endif  ">
+                            <a href="{{route('admin.manager.post.list')}}" class='sidebar-link'>
                                 <i class="bi bi-folder-fill"></i>
                                 <span>Manager Post</span>
                             </a>
