@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -39,4 +40,30 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function formLoginAdmin(){
+        return view('admin.login-admin');
+    }
+
+    public function checkLoginAdmin(Request $request){
+        request()->validate(
+            [
+                'email' => 'email|required|string',
+                'password' => 'required|string',
+            ],
+            [
+                'email.required' => 'Cần nhập email',
+                'password.required' => 'Cần nhập mật khẩu',
+               
+            ]
+        );
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
+            return redirect()->route('admin.home');
+        }else{
+            return redirect()->back()->withErrors(
+                [
+                    'email' => 'Sai email hoặc mật khẩu!'
+                ]
+            );
+        }
+    }
 }

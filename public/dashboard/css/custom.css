@@ -71,3 +71,34 @@
 .container i:hover {
     color: #03bfbc;
 }
+
+.photo {
+    position: relative;
+}
+
+.data-img:hover {
+    filter: blur(3px);
+}
+
+.delete-photo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-20px, -15px);
+    font-size: 30px;
+    color: white;
+    display: none;
+}
+
+.delete-photo:hover {
+    display: block;
+}
+
+.delete-photo:hover+.data-img {
+    filter: blur(3px);
+
+}
+
+.data-img:hover+.delete-photo {
+    display: block;
+}

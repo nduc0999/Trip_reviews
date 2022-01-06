@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RequestPost extends FormRequest
+class RequestEditPost extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -41,25 +41,19 @@ class RequestPost extends FormRequest
             'link' => 'max:255',
             'amenity' => 'required',
             'roomtype' => 'required',
-            'img_avatar' => 'required',
-            'img_wall' => 'required',
-            'photo' => 'required',
-            'owner' => 'numeric',
+            
         ];
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [
             'required' => 'Không được để trống ô nhập trên.',
             'id_location.required' => 'Cần chọn tỉnh/thành phố',
             'max' => 'Không vượt quá :max ký tự.',
             'email' => 'Không đúng định dạng email.',
             'amenity.required' => 'Cần chọn các loại tiện ích',
-            'roomtype.required' => 'Cần chọn các loại phòng',
-            'img_avatar.required' => 'Không được để ảnh đại diện trống',
-            'img_wall.required' => 'Không đước để ảnh nền trống',
-            'photo.required' => 'Cần cung cấp một số ảnh về Homestay - Resort',
-            'owner.numeric' => 'Bạn phải xác nhận mình có là chủ',
+            'roomtype.required' => 'Cần chọn các loại phòng',   
         ];
     }
 }

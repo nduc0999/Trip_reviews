@@ -27,7 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $post_slide = Post::with('review')->get();
+        $post_slide = Post::where('status', 0)->with('review')->get();
         $post_new = Post::where('status',0)->with('review')->orderBy('id','DESC')->take(6)->get();
   
 
@@ -41,9 +41,11 @@ class HomeController extends Controller
             $last_id = json_decode($_COOKIE['last_id'],true);
             foreach($last_id as $i){
                 $post = Post::find($i);
-                $review = $post->review;
-                $post->setAttribute('review',$review);
-                $last_post[] = $post;
+                if($post->status == 0){
+                    $review = $post->review;
+                    $post->setAttribute('review',$review);
+                    $last_post[] = $post;
+                }
             }
             $last_post_rate = Post::setInfoPost($last_post);
 
