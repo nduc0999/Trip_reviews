@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -71,5 +73,37 @@ class User extends Authenticatable
             return true;
         }
         return false;
+    }
+
+    public function changeAvatar($avatar){
+        if($this->img_avatar != null){
+            preg_match('/id=(.+)&/', $this->img_avatar, $arr);
+            $delete_avatar =  collect(Storage::disk('avatar_user')->listContents('/', false))->where('path', '=', $arr[1])->first();
+            Storage::disk('avatar_user')->delete($delete_avatar);
+        }
+
+        $name_avatar = time() . '-' . $this->fullName() . '-avatar';
+        $data_avatar = File::get($avatar);
+        $a = Storage::disk('avatar_user')->put($name_avatar, $data_avatar);
+        $url_avatar = Storage::disk('avatar_user')->url($name_avatar);
+        $this->img_avatar = $url_avatar;
+
+        return $url_avatar;
+    }
+    
+    public function changeWall($wall){
+        if($this->img_wall != null){
+            preg_match('/id=(.+)&/', $this->img_wall, $arr);
+            $delete_wall =  collect(Storage::disk('wall_user')->listContents('/', false))->where('path', '=', $arr[1])->first();
+            Storage::disk('wall_user')->delete($delete_wall);
+        }
+
+        $name_wall = time() . '-' . $this->fullName() . '-wall';
+        $data_wall = File::get($wall);
+        $b = Storage::disk('wall_user')->put($name_wall, $data_wall);
+        $url_wall = Storage::disk('wall_user')->url($name_wall);
+        $this->img_wall = $url_wall;
+
+        return true;
     }
 }

@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function(){
     Route::post('/review/rep/delete',[PostController::class,'deleteRep'])->name('review.rep.delete');
     Route::post('/review/rep/update',[PostController::class,'repUpdate'])->name('review.rep.update');
     Route::post('/review/hidden', [PostController::class, 'hiddenReview'])->name('review.hidden');
+    Route::post('/review/remove',[PostController::class, 'removeReview'])->name('review.remove');
 
     Route::get('/propose',[PostController::class,'showPropose'])->name('propose.show');
     Route::get('/post/list/amenity', [PostController::class, 'listAmenity'])->name('post.list.amenity');
@@ -66,6 +67,15 @@ Route::middleware('auth')->group(function(){
     Route::post('/home/list/travel',[HomeController::class,'listHomeTravel'])->name('home.list.travel');
     Route::post('/home/add/travel', [HomeController::class, 'addToTravel'])->name('home.add.travel');
 
+    Route::get('/list/post/review',[PostController::class,'listReview'])->name('list.post.review');
+
+    Route::get('/profile/{name}_{id}',[UserController::class,'profileUser'])->name('profile.user');
+    Route::post('/profile/update',[UserController::class,'updateProfile'])->name('profile.update');
+    Route::post('/profile/change/avatar', [UserController::class, 'changeAvatar'])->name('profile.change.avatar');
+    Route::post('/profile/change/wall', [UserController::class, 'changeWall'])->name('profile.change.wall');
+    Route::post('/user/post/photo', [UserController::class, 'postPhoto'])->name('user.post.photo');
+    Route::post('/postphoto/like',[UserController::class, 'likePostPhoto'])->name('postphoto.like');
+    Route::post('/postphoto/delete',[UserController::class,'deletePostPhoto'])->name('post.photo.delete');
 
 });
 

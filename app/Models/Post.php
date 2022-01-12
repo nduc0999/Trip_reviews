@@ -108,14 +108,17 @@ class Post extends Model
             $rate_service = 0;
             $rate_value = 0;
             $rate_sleep = 0;
-
+            $count_review = 0;
             foreach($post->review as $review){
-                $rate += $review->rate;
-                $rate_service += $review->rate_service;
-                $rate_value += $review->rate_value;
-                $rate_sleep += $review->rate_sleep;
+                if($review->status == 0){
+                    $rate += $review->rate;
+                    $rate_service += $review->rate_service;
+                    $rate_value += $review->rate_value;
+                    $rate_sleep += $review->rate_sleep;
+                    $count_review++;
+                }
             }
-            $count = count($post->review);
+            $count = $count_review;
             if($count > 0){
                 $avg_rate = round($rate/$count,1);
                 $avg_rate_service = round($rate_service/$count,1);
@@ -174,15 +177,15 @@ class Post extends Model
         } else {
             $this->setAttribute('heart', 0);
         }
-        // $reviews = $this->review()->where('status',0)->get();
+        $reviews = $this->review()->where('status',0)->get();
 
-        foreach ($this->review as $review) {
+        foreach ($reviews as $review) {
             $rate += $review->rate;
             $rate_service += $review->rate_service;
             $rate_value += $review->rate_value;
             $rate_sleep += $review->rate_sleep;
         }
-        $count = count($this->review);
+        $count = count($reviews);
         if ($count > 0) {
             $avg_rate = round($rate / $count, 1);
             $avg_rate_service = round($rate_service / $count, 1);
@@ -220,9 +223,11 @@ class Post extends Model
 
     public function changeAvatar($avatar){
 
-        preg_match('/id=(.+)&/', $this->img_avatar, $arr);
-        $delete_avatar =  collect(Storage::disk('avatar')->listContents('/', false))->where('path', '=', $arr[1])->first();
-        Storage::disk('avatar')->delete($delete_avatar);
+        if($this->img_avatar != null){
+            preg_match('/id=(.+)&/', $this->img_avatar, $arr);
+            $delete_avatar =  collect(Storage::disk('avatar')->listContents('/', false))->where('path', '=', $arr[1])->first();
+            Storage::disk('avatar')->delete($delete_avatar);
+        }
 
         $name_avatar = time() . '-' . $this->name . '-avatar';
         $data_avatar = File::get($avatar);
@@ -235,9 +240,11 @@ class Post extends Model
 
     public function changeWall($wall){
 
-        preg_match('/id=(.+)&/', $this->img_wall, $arr);
-        $delete_wall =  collect(Storage::disk('wall')->listContents('/', false))->where('path', '=', $arr[1])->first();
-        Storage::disk('wall')->delete($delete_wall);
+        if($this->img_wall != null){
+            preg_match('/id=(.+)&/', $this->img_wall, $arr);
+            $delete_wall =  collect(Storage::disk('wall')->listContents('/', false))->where('path', '=', $arr[1])->first();
+            Storage::disk('wall')->delete($delete_wall);
+        }
 
         $name_wall = time() . '-' . $this->name . '-wall';
         $data_wall = File::get($wall);

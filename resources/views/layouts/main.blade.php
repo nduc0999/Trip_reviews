@@ -58,7 +58,7 @@
                 </a>
               </li> 
               <li class="nav-item">
-                <a class="nav-link" href="about.html"><i class="fa fa-pencil-square-o fa-lg mr-2" aria-hidden="true"></i>Đánh giá</a>
+                <a class="nav-link {{ url()->current() == route('list.post.review')? 'active':'' }}" href="{{ route('list.post.review') }}"><i class="fa fa-pencil-square-o fa-lg mr-2" aria-hidden="true"></i>Đánh giá</a>
               </li>
               <li class="nav-item @if(url()->current() == route('travel')) active @endif">
                 <a class="nav-link" href="{{ route('travel') }}"><i class="fa fa-heart-o fa-lg mr-2" aria-hidden="true"></i>Chuyến đi</a>
@@ -78,7 +78,7 @@
                     @if (Auth::user()->email_verified_at == null)
                         <a class="dropdown-item" href="#">Xác nhận tài khoản email</a>
                     @endif
-                    <a class="dropdown-item" href="#">Xem tiểu sử</a>
+                    <a class="dropdown-item" href="{{route('profile.user',['name' => Str::slug(Auth::user()->fullName()),'id'=>Auth::id()])}}">Xem tiểu sử</a>
                     <a class="dropdown-item" href="#">Thông tin tài khoản</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('logout') }}">Đăng xuất</a>
@@ -131,14 +131,13 @@
    
     <script src="{{ asset('main/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-
-
     <!-- Additional Scripts -->
    
     <script src="{{ asset('main/js/owl.js') }}"></script>
     <script src="{{ asset('main/js/slick.js') }}"></script>
     <script src="{{ asset('main/js/isotope.js') }}"></script>
     <script src="{{ asset('main/js/accordions.js') }}"></script>
+    
     @yield('script')
   
     <script src="{{ asset('main/js/custom.js') }}"></script>

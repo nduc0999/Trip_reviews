@@ -2,42 +2,50 @@
     <div class="col-md-12" style="background-color: white">
         <div class="row mt-4">
             <div class="col-12 p-3">
-                <img src="{{Auth::user()->img_avatar}}" class='avatar' alt="">
-                <div class="btn-group float-right">
-                    <i class="fa fa-ellipsis-h " data-toggle="dropdown" ></i>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#modal-edit-travel">Chỉnh sửa chuyến đi</button>
-                        @if ($travel->status == 0)
-                            <button class="dropdown-item btn-change-status" data-status="1" type="button">Công khai chuyến đi</button>
-                        @else
-                            <button class="dropdown-item btn-change-status" data-status="0" type="button">Chuyển chuyến đi sang chế độ riêng tư</button>
-                        @endif
-                        <button class="dropdown-item delete-travel" data-id-travel="{{$travel->id}}" type="button">Xoá chuyến đi</button>
+                <img src="{{$travel->user->img_avatar}}" class='avatar' alt="">
+                @if (Auth::id() == $travel->id_user)
+                    <div class="btn-group float-right">
+                        <i class="fa fa-ellipsis-h " data-toggle="dropdown" ></i>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button" data-toggle="modal" data-target="#modal-edit-travel">Chỉnh sửa chuyến đi</button>
+                            @if ($travel->status == 0)
+                                <button class="dropdown-item btn-change-status" data-status="1" type="button">Công khai chuyến đi</button>
+                            @else
+                                <button class="dropdown-item btn-change-status" data-status="0" type="button">Chuyển chuyến đi sang chế độ riêng tư</button>
+                            @endif
+                            <button class="dropdown-item delete-travel" data-id-travel="{{$travel->id}}" type="button">Xoá chuyến đi</button>
+                        </div>
                     </div>
-                </div>
+                    
+                @endif
                 
             </div>
             <div class="col-12"></div>
             <div class="col-12 mb-4">
                 <h3>{{$travel->title}}</h3>
-                <span>Bởi <strong>{{Auth::user()->first_name}}</strong>,</span><br>
+                <span>Bởi <strong>{{$travel->user->first_name}}</strong>,</span><br>
                 <div class="mt-2 mb-2">
-                    @if ($travel->note == null)
-                        <span class="add-note" data-toggle="modal" data-target="#modal-edit-travel">+ Thêm mô tả</span>
-                    @else
-                        <span>{!! nl2br($travel->note) !!}</span>
+                    @if (Auth::id() == $travel->id_user)
+                        @if ($travel->note == null)
+                            <span class="add-note" data-toggle="modal" data-target="#modal-edit-travel">+ Thêm mô tả</span>
+                        @else
+                            <span>{!! nl2br($travel->note) !!}</span>
+                        @endif
                     @endif
                 </div>
                 <p>{{count($posts)}} mục, Cập nhật vào tháng {{date('m', strtotime($travel->updated_at))}} năm {{date('Y', strtotime($travel->updated_at))}}</p>
                 <div class="col-12 p-0 mt-3" >
-                    <div class="search-bar d-flex">
-                       
-                        <input type="search" name="search" placeholder="Tìm kiếm Homestay-Resort" id='search' >
-                        <button class="search-btn" type="submit">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                        </button>
+                    @if (Auth::id() == $travel->id_user)
+                        <div class="search-bar d-flex">
                         
-                    </div>
+                            <input type="search" name="search" placeholder="Tìm kiếm Homestay-Resort" id='search' >
+                            <button class="search-btn" type="submit">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                            
+                        </div>
+                        
+                    @endif
                     <div style="position: relative;">
                         <div  id='result-search' style="position: absolute; " >
                            
@@ -60,12 +68,14 @@
                                     <a href="{{route('post.show',['slug' => Str::slug($item->name),'id' => $item->id])}}" class="name-post" style="color: black;" >{{$item->name}}
                                     </a>
                                 </h5>
-                                <div class="btn-group">
-                                    <i class="fa fa-ellipsis-h " data-toggle="dropdown" ></i>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <button class="dropdown-item remove-post" data-id-post="{{$item->id}}" data-id-travel="{{$travel->id}}" type="button">Xoá khỏi danh sách</button>
-                                    </div>
-                                </div>
+                                 @if ($travel->user->id == Auth::id())
+                                    <div class="btn-group">
+                                        <i class="fa fa-ellipsis-h " data-toggle="dropdown" ></i>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <button class="dropdown-item remove-post" data-id-post="{{$item->id}}" data-id-travel="{{$travel->id}}" type="button">Xoá khỏi danh sách</button>
+                                        </div>
+                                    </div>            
+                                @endif
                             </div>
 
             

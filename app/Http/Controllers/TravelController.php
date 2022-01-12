@@ -111,7 +111,7 @@ class TravelController extends Controller
         try {
             $travel = Travel::find($request->id);
             $posts = $travel->post;
-            if($travel->status ==2 ){
+            if($travel->status ==2 || (Auth::id() != $travel->user->id && $travel->status == 0  )){
                 return redirect()->back();
             }
             $result = Post::setInfoPost($posts);

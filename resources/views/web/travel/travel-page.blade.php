@@ -301,7 +301,7 @@
             $(this).closest('.select-status').find('.active').removeClass('active');
             $(this).addClass('active');
             status = $(this).data('status');
-            // loadPage();
+            loadPage();
         })
 
         

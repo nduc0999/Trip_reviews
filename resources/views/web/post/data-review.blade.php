@@ -3,10 +3,16 @@
         @forelse ($reviews as $item)
         <li class="row">
             <div class="author-thumb col-md-2">
-            <img src="{{$item->user->img_avatar}}" alt="" class="avatar">
+                <a href="{{route('profile.user',['name' => Str::slug($item->user->fullName()),'id'=>$item->user->id])}}">
+                    <img src="{{$item->user->img_avatar}}" alt="" class="avatar">
+                </a>
             </div>
             <div class="right-content col-md-10">
-            <h4>{{ $item->user->first_name.' '.$item->user->last_name }}<span>{{$item->created_at}}</span>
+            <h4>
+                <a class="text-dark" href="{{route('profile.user',['name' => Str::slug($item->user->fullName()),'id'=>$item->user->id])}}">
+                    {{ $item->user->first_name.' '.$item->user->last_name }}
+                </a>
+                <span>{{$item->created_at}}</span>
                 @auth
                 @if (Auth::user()->isAdmin())
                     <div class="btn-group float-right" >

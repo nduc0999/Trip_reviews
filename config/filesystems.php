@@ -105,6 +105,21 @@ return [
             'folderId' => env('PHOTO_USER_GOOGLE_DRIVE_FOLDER_ID'),
         ],
 
+        'avatar_user' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId' => env('AVATAR_USER_GOOGLE_DRIVE_FOLDER_ID'),
+        ],
+
+        'wall_user' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId' => env('WALL_USER_GOOGLE_DRIVE_FOLDER_ID'),
+        ],
     ],
 
     /*

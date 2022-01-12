@@ -13,6 +13,7 @@ use App\Models\Post;
 use App\Models\Question;
 use App\Models\Review;
 use App\Models\Roomtype;
+use App\Models\Travel;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -662,5 +663,38 @@ class PostController extends Controller
         }
         return response()->json(['status' => false, 'mess' => 'id trống']);
 
+    }
+
+    public function removeReview(Request $request){
+        try {
+            if ($request->id) {
+                $travel = Review::find($request->id);
+                $travel->status = 3;
+                $travel->save();
+                return response()->json(['status' => true]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['status' => false, 'mess' => 'Lỗi xử lý DB']);
+        }
+        return response()->json(['status' => false, 'mess' => 'Xoá thất bại']);
+    }
+
+    public function listReview(){
+        $arrId = array();
+        $travels = Travel::where('id_user',Auth::id())->get();
+        foreach($travels as $travel){
+            if(count($travel->post)>0){
+                foreach($travel->post as $post){
+                   $arrId[] = $post->id;
+                }
+            }
+        }
+       $posts = Post::whereIn('id',$arrId)->get(['id','name','img_avatar','introduce','created_at']);
+       $list = Post::setInfoPost($posts);
+
+        $random = Post::inRandomOrder()->limit(6)->get();
+        $listRandom = Post::setInfoPost($random);
+       
+        return view('web.post.list-post-review',['list' => $list,'listRandom' => $listRandom]);
     }
 }
