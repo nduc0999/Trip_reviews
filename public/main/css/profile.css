@@ -1,0 +1,407 @@
+.profile-banner {
+    width: 100%;
+    height: 300px;
+    background-position: center center !important;
+    background-size: cover !important;
+    position: relative;
+    background-color: #252932;
+    border-bottom: 4px solid #fff;
+    box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.1);
+    background-repeat: no-repeat !important;
+
+}
+
+.avatar-container {
+    height: 300px;
+    text-align: center;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    position: relative;
+    margin: 0px auto;
+    margin-top: 196px;
+    border: 4px solid #f3f3f3;
+    object-fit: cover;
+}
+
+.profile-actions {
+    position: absolute;
+    bottom: 20px;
+}
+
+.user-profile-2 {
+    margin-top: 50px;
+}
+
+.user-profile-sidebar {
+    margin: 0 0 20px 0;
+}
+
+.user-profile-sidebar .user-identity {
+    margin: 20px 0 0 0;
+}
+
+.user-profile-sidebar img {
+    width: 90px;
+}
+
+.account-status-data {
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px dashed #ddd;
+    border-bottom: 1px dashed #ddd;
+    margin: 10px 0 20px 0;
+}
+
+.account-status-data h5 {
+    font-size: 11px;
+    line-height: 150%;
+    color: #909090;
+}
+
+.user-button {
+    margin: 15px 0;
+}
+
+.user-button .btn {
+    margin: 5px 0;
+}
+
+#social {
+    padding: 10px;
+    background: #E5E9EC;
+    text-align: center;
+}
+
+#social a:hover {
+    text-decoration: none;
+}
+
+.fa-circle.facebook {
+    color: #5471AE;
+}
+
+.fa-circle.twitter {
+    color: #4EC6F6;
+}
+
+.fa-circle.gplus {
+    color: #E24E3E;
+}
+
+.fa-circle.tumblr {
+    color: #4D77A3;
+}
+
+.fa-circle.linkedin {
+    color: #3097CE;
+}
+
+.user-profile-content {
+    margin: 30px 15px;
+}
+
+.tab-pane {
+    padding-top: 20px;
+}
+
+.user-message {
+    width: 50px;
+    height: 50px;
+}
+
+.list-group-item {
+    border: none;
+    padding: .5rem 1rem;
+    font-size: 14px;
+    text-align: left;
+    border: none;
+}
+
+.fade-background {
+    width: 100%;
+    height: 300px;
+    position: absolute;
+    top: 0;
+    border-bottom: 4px solid #fff;
+    filter: blur(20px);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.nav-link {
+    border: none !important;
+}
+
+.active {
+    /* border-bottom: 2px solid orange !important; */
+    background-color: transparent !important;
+    /* font-weight: 600; */
+    z-index: 4;
+    transition: all ease-in-out .2s;
+}
+
+.fa-pencil-square-o {
+    font-size: 16px;
+}
+
+.fa-pencil-square-o:hover {
+    text-decoration: none !important;
+    color: #212529 !important;
+}
+
+.user-action {
+    color: #212529 !important;
+}
+
+.user-action:hover {
+    text-decoration: underline !important;
+}
+
+.fa-cog {
+    color: #212529;
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 5px 5px 0px;
+    cursor: pointer;
+}
+
+.btn-edit-profile {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    height: 30px;
+    border-right: 1px solid #e0e0e0;
+    border-radius: 5px 0 0 5px;
+
+}
+
+.pre-avatar {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 100%;
+    border: none;
+    margin: 0 auto;
+}
+
+.pre-wall {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+
+    border: none;
+    margin: 0 auto;
+}
+
+.action-edit {
+    cursor: pointer;
+}
+
+.action-edit:hover {
+    color: cornflowerblue;
+}
+
+.pre-photo-user {
+    width: 100%;
+    height: 200px;
+}
+
+.ui-menu-item {
+    border-bottom: 1px solid black;
+    padding: 0px 10px;
+}
+
+.ui-menu-item:hover {
+    background-color: blanchedalmond;
+}
+
+.new-feed {
+    background-color: white;
+    padding: 10px;
+    border-radius: 7px;
+}
+
+.font-date {
+    color: #757575;
+    font-size: 12px;
+    font-family: Arial, Tahoma, Bitstream Vera Sans, sans-serif;
+
+}
+
+.action-after-name {
+    color: #333;
+    font-size: 14;
+    line-height: 18px;
+    font-weight: 400;
+}
+
+.avatar-post {
+    width: 83px;
+    height: 83px;
+}
+
+.title-post {
+    margin-left: 10px;
+}
+
+.title-post .full, .title-post .half {
+    display: flex;
+    flex-direction: column;
+    font-size: 10px;
+}
+
+.title-post p {
+    font-size: 12px;
+}
+
+.title-post a {
+    font-size: 12px;
+    color: black;
+}
+
+.title-post a:hover {
+    text-decoration: underline !important;
+}
+
+.img-thumbnail {
+    width: 49%;
+    height: 15rem;
+    border: none;
+    object-fit: cover;
+}
+
+.lg-backdrop {}
+
+.last-photo {
+    position: relative;
+}
+
+.more-photo {
+    position: absolute;
+    top: 0;
+    right: 0%;
+    width: 100%;
+    height: 100%;
+    /* background-color: white; */
+    display: flex;
+    justify-content: center;
+
+}
+
+.more-photo span {
+    color: white;
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+
+}
+
+.read-more-feed, .read-more-travel {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.read-more-feed span, .read-more-travel span {
+    color: white;
+    cursor: pointer;
+}
+
+.box-travel {
+    position: relative;
+}
+
+.travel-avatar-user {
+    position: absolute;
+    bottom: -25px;
+    left: 40px;
+}
+
+.travel-avatar-user img {
+    height: 9vh;
+    width: 9vh;
+}
+
+.title-travel {
+    margin-top: 30px;
+}
+
+.fa-chevron-right, .prev-post {
+    font-size: 20px;
+    color: black;
+}
+
+.next-post, .prev-post {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+.img-travel-post {
+    width: 90%;
+    height: 450px;
+}
+
+.null-post {
+    width: 90%;
+    height: 450px;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.null-post i {
+    font-size: 10vh;
+}
+
+.title-travel a {
+    color: black;
+}
+
+.title-travel a:hover {
+    text-decoration: underline !important;
+}
+
+.tag {
+    color: black !important;
+}
+
+.tag:hover {
+    text-decoration: underline !important;
+}
+
+
+@media only screen and (max-width: 995px) {
+    .img-thumbnail {
+        height: 10rem;
+    }
+
+    .img-travel-post {
+        height: 450px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .img-thumbnail {
+        height: 7rem;
+    }
+
+    .img-travel-post, .null-post {
+        height: 200px;
+    }
+
+}
