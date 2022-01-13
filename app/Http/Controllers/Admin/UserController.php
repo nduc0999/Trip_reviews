@@ -16,16 +16,20 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public $countRecord = 10;
+    public $countRecord = 1;
 
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::orderBy('id', 'DESC')->paginate($request->count);
+            if($request->filter == 1){
+                $data = User::where('role', 1)->orderBy('id', 'DESC')->paginate($request->count);
+            }else{
+                $data = User::where('role',0)->orderBy('id', 'DESC')->paginate($request->count);
+            }
             return view('admin.user.table-data', ['arr_data' => $data]);
         }
 
-        $data = User::orderBy('id', 'DESC')->paginate($this->countRecord);
+        $data = User::where('role', 0)->orderBy('id', 'DESC')->paginate($this->countRecord);
 
         return view('admin.user.manager-user', ['arr_data' => $data]);
     }
@@ -48,21 +52,34 @@ class UserController extends Controller
     public function profile(Request $request){
         if($request->id){
             $user = User::find($request->id);
-            $data = array(
-                "email" => $user->email,
-                "first_name" => $user->first_name,
-                "last_name" => $user->last_name,
-                "date_of_birth" => $user->date_of_birth,
-                "introduce" =>$user->introduce,
-                'img_avatar' => $user->img_avatar,
-                "img_wall" => $user->img_wall,
-                "phone" => $user->phone,
-                "country" => $user->country,
-            );
 
-            return response()->json(['status' => true,'data' => $data]);
+            return response()->json(['status' => true,'data' => $user]);
         }
         return response()->json(["status" => false]);
+    }
+
+    public function viewChangePassword(){
+        return view('auth.passwords.change-password');
+    }
+
+    public function resetPasswordAdmin(Request $request){
+        $comb = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $shfl = str_shuffle($comb);
+        $pwd = substr($shfl, 0, 8);
+        
+        try {
+            if(is_int($request->id)){
+                $user = User::find($request->id);
+                $user->password = Hash::make($pwd);
+                $user->save();
+                return response()->json(['status' => true,'pass' => $pwd]);
+            }
+            
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'mess' => 'Lỗi giá trị trong DB']);
+        }
+        return response()->json(['status' => false, 'mess' => 'Lỗi id']);
+
     }
 
     public function addAdmin(Request $request){
@@ -318,7 +335,9 @@ class UserController extends Controller
             if($request->id){
                 $postPhoto = PostPhoto::find($request->id);
                 $photoUser = PhotoUser::where('id_postphoto',$request->id)->get();
-                return $photoUser;
+                PhotoUser::deletePhotoUser($photoUser);
+                $postPhoto->delete();
+                return response()->json(['status' => true]);
             }
             
         } catch (Exception $e) {

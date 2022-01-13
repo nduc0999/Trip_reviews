@@ -79,7 +79,7 @@
                         <a class="dropdown-item" href="#">Xác nhận tài khoản email</a>
                     @endif
                     <a class="dropdown-item" href="{{route('profile.user',['name' => Str::slug(Auth::user()->fullName()),'id'=>Auth::id()])}}">Xem tiểu sử</a>
-                    <a class="dropdown-item" href="#">Thông tin tài khoản</a>
+                    <a class="dropdown-item" href="{{route('password.change')}}">Thay đổi mật khẩu</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('logout') }}">Đăng xuất</a>
                   </div>

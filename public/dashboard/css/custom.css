@@ -1,10 +1,10 @@
 .container-profile {
     user-select: none;
-    margin: 100px auto;
+    /* margin: 100px auto; */
     background: #231e39;
     color: #b3b8cd;
     border-radius: 5px;
-    width: 450px;
+    width: 100%;
     text-align: center;
     box-shadow: 0 10px 20px -10px rgba(0, 0, 0, .75);
 }

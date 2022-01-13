@@ -99,6 +99,7 @@ Route::get('/password/reset',[ForgotPasswordController::class, 'showLinkRequestF
 Route::post('/password/emai',[ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/password/reset/{token}',[ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset',[ResetPasswordController::class,'reset'])->name('password.update');
+Route::get('/password/change',[UserController::class,'viewChangePassword'])->name('password.change');
 
 
 //admin
@@ -143,6 +144,8 @@ Route::middleware(['auth_admin','is_admin'])->group(function () {
         Route::post('user/add/admin', [UserController::class, 'addAdmin'])->name('user.add.admin');
         Route::post('user/ban-unban/review', [UserController::class, 'ban_unban_Review'])->name('user.ban.unban.review');
         Route::post('user/profile', [UserController::class, 'profile'])->name('user.profile');
+        Route::post('user/admin/resetpassword', [UserController::class, 'resetPasswordAdmin'])->name('user.admin.resetpassword');
+
 
         Route::get('review/approval', [ReviewController::class, 'listApproval'])->name('approval.review');
         Route::get('review/list', [ReviewController::class, 'listReview'])->name('list.review');

@@ -43,14 +43,23 @@
                                 <div class="card-body d-flex justify-content-between">
                                     
                                     <select name="count" id="count">
-                                        <option value="5" selected>5</option>
+                                        <option value="1" selected>5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
                                     </select>
 
-                                   <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#formAdd" id="btn-add">
-                                        <i class="bi bi-plus-circle d-flex justify-content-center"></i>
-                                   </button>
+                                    <div>
+                                        @if (Auth::user()->role == 2)
+                                            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#formAdd" id="btn-add">
+                                                <i class="bi bi-plus-circle d-flex justify-content-center"></i>
+                                            </button>
+                                            <select name="" id="filter">
+                                                <option value="0">Người dùng</option>
+                                                <option value="1">Admin</option>      
+                                            </select>
+                                        @endif
+                                    </div>
+                                  
                                 
                                 </div>
                                 <!-- table striped -->
@@ -70,7 +79,7 @@
 
 <div  class="modal fade " id="formProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-      
+      <div class="modal-content">
         <div class="container-profile">
             <div class="cover-photo">
                 <img src="" class="profile" id="avatar-user">
@@ -84,19 +93,19 @@
                 <table id='tbl-info'class="text-start">
                     <tr>
                         <td>Email:</td>
-                        <td id='email'>nduc@gmai.com</td>
+                        <td id='email'></td>
                     </tr>
                     <tr> 
                         <td>Ngày sinh:</td>
-                        <td id="dob">03/04/2007</td>
+                        <td id="dob"></td>
                     </tr>
                     <tr>
                         <td>Số điện thoại:</td>
-                        <td id="phone">01234566789</td>
+                        <td id="phone"></td>
                     </tr>
                     <tr>
                         <td>Quê quán:</td>
-                        <td id="country">Hạ Long Nam Định</td>
+                        <td id="country"></td>
                     </tr>
                 </table>
 
@@ -108,13 +117,12 @@
                 <p class="about" id="introduce"></p>
             </div>
 
-            <div class="mb-3">
-                <button class="msg-btn">Message</button>
-                <button class="follow-btn">Following</button>
+            <div class="mb-3 box-action" >
+                
             </div>
            
         </div>
-    
+      </div>
     </div>
 </div>
 
@@ -204,7 +212,9 @@
         $.ajax({
             url: "{{ route('admin.manager.user') }}?page="+page,
             type: "GET",
-            data: { 'count' :  $('#count').val() },
+            data: { 'count' :  $('#count').val(),
+                    'filter': $('#filter').val(),
+                 },
             success: function(result){
                 $('#table-data').html(result);
                 save_ban_unban();
@@ -318,8 +328,8 @@
         Pagination();
         save_ban_unban();
         viewProfile();
-        
- 
+        resetPassword();
+     
     });
 
     function printErrorMsg (msg) {
@@ -363,18 +373,22 @@
                 },
                
                 success: function(result){
+                    console.log(result);
                     if(result.status){
-                        console.log(result.data);
                         name = result.data.first_name +" "+result.data.last_name;
                         $('#name-user').html(name);
-                        $('#avatar-user').attr('src', result.data.img_avatar);
-                        $('.cover-photo').css("background-image", `url('${result.data.img_wall}')`);
+                        $('#avatar-user').attr('src', result.data.img_avatar? result.data.img_avatar :'https://drive.google.com/uc?id=1k4YLSor3SKwcT6v_3HcX_MCiDYkssn9V&export=media' );
+                        $('.cover-photo').css("background-image", result.data.img_wall? `url('${result.data.img_wall}?')`:`url('https://drive.google.com/uc?id=1k4YLSor3SKwcT6v_3HcX_MCiDYkssn9V&export=media')`);
                         $('#email').html(result.data.email);
                         $('#dob').html(result.data.date_of_birth);
                         $('#phone').html(result.data.phone);
                         $('#country').html(result.data.country);
                         $('#introduce').html(result.data.introduce);
                         $('#formProfile').modal('show');
+                        if(result.data.role == 1){
+                            $('.box-action').html(`<button class="btn-reset-pass msg-btn" data-id='${result.data.id}'>Reset mật khẩu</button>`);
+                        }
+                        resetPassword();
                     }
                 }
 
@@ -382,6 +396,27 @@
           });
     }
 
+    function resetPassword(){
+        $('.btn-reset-pass').click(function(){
+            let id = $(this).data('id');
+            $.ajax({
+                url:"{{ route('admin.manager.user.admin.resetpassword') }}",
+                type: "POST",
+                data: {
+                    "_token" : '{{csrf_token()}}',
+                    id,
+                },
+                success: function(result){
+                    console.log(result);
+                }
+            })
+        })
+
+    }
+
+    $('#filter').change(function(){
+        loadPage(1);
+    })
     $('#count').change(function(){
         loadPage(1);
     })

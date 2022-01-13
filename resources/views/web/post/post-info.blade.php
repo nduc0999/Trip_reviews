@@ -18,6 +18,17 @@
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
     
+    <style>
+    .image-source-link {
+      color: #98C3D1;
+    }
+    .mfp-title{
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      
+    }
+
+    </style>
 
 @endsection
 
@@ -212,30 +223,34 @@
                   <div class="blog-post">
                     <div class="blog-thumb">
                       <div class="row">
-                        <div class="owl-photo owl-carousel">
-                            @forelse ($photos as $item)
-                                <div class="item">
-                                    <img class="photo-item" src="{{ $item->path }}" alt="">
-                                
-                                </div>
-                            @empty
-                                 <div class="item">
-                                    <img src="{{ asset('main/images/banner-item-04.jpg') }}" alt="">
-                                
-                                </div>
-                            @endforelse
-                                  
+                        <div class="owl-photo owl-carousel ">
+
+                          @if (isset($photos))
+                            @for ($i = 0; $i < $photos->count(); $i++)
+                              @if ($i==5)
+                                  @break
+                              @endif
+                              <div class="item">
+                                  <img class="photo-item" src="{{ $photos[$i]->path }}" alt="">
+                              </div>    
+                            @endfor
+                          @else
+                            <div class="item">
+                                <img src="{{ asset('main/images/banner-item-04.jpg') }}" alt="">
+                            </div>
+                          @endif
+                            
                         </div>
-                        <div class="row col-12 album-photo"  >
-                          <div class="col-6 "  data-toggle="modal" data-target="#show-photo" style="height: 200px">
+                        <div class="row col-12 album-photo pr-0">
+                          <div class="col-6 pr-0"  data-toggle="modal" data-target="#show-photo" style="height: 200px">
                             <img src="{{ $photos[0]->path }}" alt="" >
                             <div class="text-photo">
                               <i class="fa fa-camera" aria-hidden="true"></i>
                               <p> Ảnh phòng</p>
                             </div>
                           </div>
-                          <div class="col-6">
-                            <img src="{{ $post->img_avatar }}" alt=""  >
+                          <div class="col-6 pr-0" data-toggle="modal" data-target="#show-photo-user" style="height: 200px">
+                            <img src="{{ $photoUser[0]->path }}" alt=""  >
                             <div class="text-photo">
                               <i class="fa fa-hospital-o" aria-hidden="true"></i>
                               <p> Khách du lịch</p>
@@ -392,8 +407,8 @@
                   <div class="row" id="gallery-photo">
                     @forelse ($photos as $item)
                       <div class="magnific-img col-12 col-md-4 mt-2">
-                        <a class="image-popup-vertical-fit" href="{{ $item->path }}" title="1.jpg">
-                          <img src="{{ $item->path }}" alt="1.jpg" />
+                        <a class="image-popup-vertical-fit" href="{{ $item->path }}" data-source="" data-name="{{$post->name}}" title="{{$item->note}}">
+                          <img src="{{ $item->path }}"  />
                         </a>
                       </div>
 
@@ -403,6 +418,45 @@
                           <img src="https://unsplash.it/888/?random" alt="1.jpg" />
                       
                         </a>
+                      </div>
+                    @endforelse
+
+                  </div>
+                </section>
+                <div class="clear"></div>
+              </p>
+
+          </div>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade " id="show-photo-user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"  >
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document" style="z-index: 4" id="abc">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" >Ảnh về {{ $post->name }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="load-more-photo-user">
+          <div class="container">
+             <h1>Ảnh của Resort</h1>    
+              <p>
+                <section class="img-gallery-magnific">
+                  <div class="row" id="gallery-photo-user">
+                    @forelse ($photoUser as $item)
+                      <div class="magnific-img col-12 col-md-4 mt-2">
+                        <a class="image-popup-vertical-fit" href="{{ $item->path }}" data-source="{{route('profile.user',['name' => Str::slug($item->postphoto->user->fullname()),'id'=>$item->postphoto->id_user])}}" data-name="{{$item->postphoto->user->fullname()}}" title="{{$item->description}}">
+                          <img src="{{ $item->path }}" alt="1.jpg" />
+                        </a>
+                      </div>
+                    @empty
+                      <div class="magnific-img  col-md-4">
+                        <h3>Không có ảnh nào</h3>
                       </div>
                     @endforelse
 
@@ -704,10 +758,13 @@
                 $.ajax({
                   url:"{{ route('post.show',['slug' => Str::slug($post->name),'id' => $post->id]) }}?page="+loadPhoto,
                   type: "get",
+                  data: {
+                    'type': 'photo',
+                  },
                   success: function(result){
                     loadPhoto = result.photos.current_page+1;
                     lastPhoto = result.photos.last_page;
-                      html = '';
+                    let html = '';
                         result.photos.data.forEach(element => {
                             html += `<div class="magnific-img  col-md-4">
                                       <a class="image-popup-vertical-fit" href="${element.path}" title="1.jpg">
@@ -720,7 +777,46 @@
                   }
                 })
                 }else{
-                console.log('Đã trang cuối');
+                console.log('Đã trang cuối photo');
+              }
+            }
+        
+      });
+
+
+      var loadPhotoUser = 2;
+      var lastPhotoUser = 2;
+      $('#load-more-photo-user').scroll(function() {
+         let div = $(this).get(0);
+        
+            if(div.scrollTop + div.clientHeight + 1 >= div.scrollHeight){
+              
+              if(loadPhotoUser <= lastPhotoUser){
+                $.ajax({
+                  url:"{{ route('post.show',['slug' => Str::slug($post->name),'id' => $post->id]) }}?photoUser="+loadPhotoUser,
+                  type: "get",
+                  data: {
+                    'type': 'photoUser',
+                  },
+                  success: function(result){
+                    console.log(result);
+                    loadPhotoUser = result.photoUser.current_page+1;
+                    lastPhotoUser = result.photoUser.last_page;
+                    let html = '';
+                        result.photoUser.data.forEach(element => {
+                            html += `<div class="magnific-img  col-md-4">
+                                      <a class="image-popup-vertical-fit" href="${element.path}" >
+                                        <img src="${element.path}"/>
+                                      </a>
+                                    </div>`
+                        });
+                      $('#gallery-photo-user').append(html);
+                      popupPhoto();
+                
+                  }
+                })
+                }else{
+                console.log('Đã trang cuối photo user');
               }
             }
         
@@ -729,7 +825,13 @@
       function popupPhoto(){
         $('.image-popup-vertical-fit').magnificPopup({
           type: 'image',
-          mainClass: 'mfp-with-zoom', 
+          mainClass: 'mfp-with-zoom',
+          image: {
+            verticalFit: true,
+            titleSrc: function(item) {
+              return item.el.attr('title') + ' &middot; <a class="image-source-link" href="'+item.el.attr('data-source')+'" target="_blank">'+item.el.attr('data-name')+'</a>';
+            }
+          },
           gallery:{
               enabled:true
             },
@@ -747,7 +849,7 @@
         }
 
         });
-      }
+      }    
 
       $('.fa-thumbs-o-up').click(function(){
           let id = $(this).data('id');

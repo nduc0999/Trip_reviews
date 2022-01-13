@@ -49,6 +49,9 @@
                     <div id="carousel-post-{{$item->id}}" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner">
                            @for ($i = 0; $i < $item->post->count(); $i=$i+2)
+                             @if ($i >6)
+                                    @break
+                                @endif
                                 @if ($i==0)
                                     <div class="carousel-item active">
                                         <div class="row">
@@ -184,6 +187,7 @@
                                         </div>
                                     </div>
                                 @endif
+                              
                            @endfor
                         </div>
                         <a class="carousel-control-prev" href="#carousel-post-{{$item->id}}" style="z-index: 100" role="button" data-slide="prev">

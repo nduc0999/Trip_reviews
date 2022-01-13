@@ -11,6 +11,7 @@
                                         <th>Trạng thái</th>
                                         <th>Cấm bình luận</th>
                                         <th>Thao tác</th>
+                                
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -31,12 +32,13 @@
                                                 </div>
                                             </td>
                                             <td >
-                                              
+
                                                     <i class="bi bi-eye-fill text-primary me-3" ></i>
                                               
-                                                    <i class="bi bi-trash text-danger bi-2x" data-id={{ $data->id }}></i>
-                                              
+                                                    {{-- <i class="bi bi-trash text-danger bi-2x" data-id={{ $data->id }}></i> --}}
+
                                             </td>
+                                        
                                             <input type="hidden" name="id" value="{{ $data->id }}">
                                         </tr>
                                         

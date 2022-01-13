@@ -2,30 +2,37 @@
     <ul>
         @forelse ($reviews as $item)
         <li class="row">
-            <div class="author-thumb col-md-2">
+            {{-- <div class="author-thumb col-md-2">
                 <a href="{{route('profile.user',['name' => Str::slug($item->user->fullName()),'id'=>$item->user->id])}}">
                     <img src="{{$item->user->img_avatar}}" alt="" class="avatar">
                 </a>
-            </div>
-            <div class="right-content col-md-10">
-            <h4>
-                <a class="text-dark" href="{{route('profile.user',['name' => Str::slug($item->user->fullName()),'id'=>$item->user->id])}}">
-                    {{ $item->user->first_name.' '.$item->user->last_name }}
-                </a>
-                <span>{{$item->created_at}}</span>
-                @auth
-                @if (Auth::user()->isAdmin())
-                    <div class="btn-group float-right" >
-                    <i class="fa fa-ellipsis-h"  data-toggle="dropdown" ></i>
-            
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item hidden-review" type="" data-id="{{$item->id}}">Ẩn đánh giá</button>
-                    
-                    </div>
-                    </div>
-                @endif
-                @endauth
-            </h4>
+            </div> --}}
+            <div class="right-content col-12 d-flex justify-content-between">
+                <div class="d-flex">
+                    <a href="{{route('profile.user',['name' => Str::slug($item->user->fullName()),'id'=>$item->user->id])}}">
+                        <img src="{{$item->user->img_avatar}}" alt="" class="avatar">
+                    </a>
+                    <h4 class="pl-2">
+                        <a class="text-dark" href="{{route('profile.user',['name' => Str::slug($item->user->fullName()),'id'=>$item->user->id])}}">
+                            {{ $item->user->first_name.' '.$item->user->last_name }}
+                        </a>
+                        <span>{{$item->created_at}}</span>
+                        
+                    </h4>
+                </div>
+             
+                    @auth
+                        @if (Auth::user()->isAdmin())
+                            <div class="btn-group float-right" style="padding: 20px 0;" >
+                                <i class="fa fa-ellipsis-h"  data-toggle="dropdown" ></i>
+                        
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <button class="dropdown-item hidden-review" type="" data-id="{{$item->id}}">Ẩn đánh giá</button>    
+                                </div>
+                            </div>
+                        @endif
+                    @endauth
+              
 
             </div>
             <div class="col-md-12">
