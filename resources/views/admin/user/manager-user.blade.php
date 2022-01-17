@@ -43,14 +43,23 @@
                                 <div class="card-body d-flex justify-content-between">
                                     
                                     <select name="count" id="count">
-                                        <option value="5" selected>5</option>
+                                        <option value="1" selected>5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
                                     </select>
 
-                                   <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#formAdd" id="btn-add">
-                                        <i class="bi bi-plus-circle d-flex justify-content-center"></i>
-                                   </button>
+                                    <div>
+                                        @if (Auth::user()->role == 2)
+                                            <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#formAdd" id="btn-add">
+                                                <i class="bi bi-plus-circle d-flex justify-content-center"></i>
+                                            </button>
+                                            <select name="" id="filter">
+                                                <option value="0">Người dùng</option>
+                                                <option value="1">Admin</option>      
+                                            </select>
+                                        @endif
+                                    </div>
+                                  
                                 
                                 </div>
                                 <!-- table striped -->
@@ -70,7 +79,7 @@
 
 <div  class="modal fade " id="formProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-      
+      <div class="modal-content">
         <div class="container-profile">
             <div class="cover-photo">
                 <img src="" class="profile" id="avatar-user">
@@ -84,19 +93,19 @@
                 <table id='tbl-info'class="text-start">
                     <tr>
                         <td>Email:</td>
-                        <td id='email'>nduc@gmai.com</td>
+                        <td id='email'></td>
                     </tr>
                     <tr> 
                         <td>Ngày sinh:</td>
-                        <td id="dob">03/04/2007</td>
+                        <td id="dob"></td>
                     </tr>
                     <tr>
                         <td>Số điện thoại:</td>
-                        <td id="phone">01234566789</td>
+                        <td id="phone"></td>
                     </tr>
                     <tr>
                         <td>Quê quán:</td>
-                        <td id="country">Hạ Long Nam Định</td>
+                        <td id="country"></td>
                     </tr>
                 </table>
 
@@ -108,14 +117,41 @@
                 <p class="about" id="introduce"></p>
             </div>
 
-            <div class="mb-3">
-                <button class="msg-btn">Message</button>
-                <button class="follow-btn">Following</button>
+            <div class="mb-3 box-action" >
+                
             </div>
            
         </div>
-    
+      </div>
     </div>
+</div>
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-new-password">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-new-password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="name-admin"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h2>Mật khẩu mới là: </h2>
+        
+        <p id="show-new-pass">daumoiAB</p>
+        <a href="#" class="btn-copy" >Copy</a>    
+       
+      </div>
+      <div class="modal-footer">
+         <p style="color: green; display:none" id="copy-success"><i class="bi bi-check2"> Đã copy</i></p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="modal fade" id="formAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -182,6 +218,7 @@
 <script src="{{ asset('dashboard/js/custom.js') }}"></script>
 <script src="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
+
     
 <script>
     
@@ -204,7 +241,9 @@
         $.ajax({
             url: "{{ route('admin.manager.user') }}?page="+page,
             type: "GET",
-            data: { 'count' :  $('#count').val() },
+            data: { 'count' :  $('#count').val(),
+                    'filter': $('#filter').val(),
+                 },
             success: function(result){
                 $('#table-data').html(result);
                 save_ban_unban();
@@ -318,8 +357,8 @@
         Pagination();
         save_ban_unban();
         viewProfile();
-        
- 
+        resetPassword();
+     
     });
 
     function printErrorMsg (msg) {
@@ -364,17 +403,20 @@
                
                 success: function(result){
                     if(result.status){
-                        console.log(result.data);
                         name = result.data.first_name +" "+result.data.last_name;
                         $('#name-user').html(name);
-                        $('#avatar-user').attr('src', result.data.img_avatar);
-                        $('.cover-photo').css("background-image", `url('${result.data.img_wall}')`);
+                        $('#avatar-user').attr('src', result.data.img_avatar? result.data.img_avatar :'https://drive.google.com/uc?id=1k4YLSor3SKwcT6v_3HcX_MCiDYkssn9V&export=media' );
+                        $('.cover-photo').css("background-image", result.data.img_wall? `url('${result.data.img_wall}?')`:`url('https://drive.google.com/uc?id=1k4YLSor3SKwcT6v_3HcX_MCiDYkssn9V&export=media')`);
                         $('#email').html(result.data.email);
                         $('#dob').html(result.data.date_of_birth);
                         $('#phone').html(result.data.phone);
                         $('#country').html(result.data.country);
                         $('#introduce').html(result.data.introduce);
                         $('#formProfile').modal('show');
+                        if(result.data.role == 1){
+                            $('.box-action').html(`<button class="btn-reset-pass msg-btn" data-id='${result.data.id}'>Reset mật khẩu</button>`);
+                        }
+                        resetPassword();
                     }
                 }
 
@@ -382,6 +424,60 @@
           });
     }
 
+    function resetPassword(){
+        $('.btn-reset-pass').click(function(){
+            let id = $(this).data('id');
+            Swal.fire({
+                title: 'Bạn có chắc thay đổi mật khẩu',
+                text: "",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url:"{{ route('admin.manager.user.admin.resetpassword') }}",
+                            type: "POST",
+                            data: {
+                                "_token" : '{{csrf_token()}}',
+                                id,
+                            },
+                            success: function(result){
+                                if(result.status){
+                                    $('#name-admin').text('admin: '+result.name);
+                                    $('#show-new-pass').text(result.pass);
+                                    $('#modal-new-password').modal('show');
+                                  
+                                }else{
+                                    console.log(result.mess);
+                                }
+                            }
+                        })              
+                    }
+                })
+        })
+
+    }
+
+    $('.btn-copy').click(function(e){
+        e.preventDefault();
+        let copyText = $('#show-new-pass').text().trim();
+
+        var textField = document.createElement('textarea');
+        textField.innerText = copyText;
+        document.body.appendChild(textField);
+        textField.select();
+        textField.focus(); //SET FOCUS on the TEXTFIELD
+        document.execCommand('copy');
+        textField.remove();
+        $("#copy-success").show().delay(3000).fadeOut();
+    })
+    
+    $('#filter').change(function(){
+        loadPage(1);
+    })
     $('#count').change(function(){
         loadPage(1);
     })

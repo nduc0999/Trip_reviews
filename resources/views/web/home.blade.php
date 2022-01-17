@@ -56,9 +56,24 @@
                   <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}"><h4>{{ $item->name }}</h4></a>
                   <ul class="post-info">
                     <li><a href="#">Admin</a></li>
-                    <li><a href="#">May 12, 2020</a></li>
-                    <li><a href="#">12 Comments</a></li>
+                    <li><a href="#">{{date('M d, Y', strtotime($item->created_at))}}</a></li>
+                    <li><a href="#">{{$item->count_review}} đánh giá</a></li>
+                    
                   </ul>
+                  <div class="show-star-hight" >   
+                    <fieldset class="rating">
+                      <input type="radio" value="5" @if($item->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                      <input type="radio" value="4.5" @if($item->avg_rate >= 4.5 and $item->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                      <input type="radio" value="4" @if($item->avg_rate >= 4 and $item->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                      <input type="radio" value="3.5" @if($item->avg_rate >= 3.5 and $item->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                      <input type="radio" value="3" @if($item->avg_rate >= 3 and $item->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                      <input type="radio" value="2.5" @if($item->avg_rate >= 2.5 and $item->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                      <input type="radio" value="2" @if($item->avg_rate >= 2 and $item->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                      <input type="radio" value="1.5" @if($item->avg_rate >= 1.5 and $item->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                      <input type="radio" value="1" @if($item->avg_rate >= 1 and $item->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                      <input type="radio" value="0.5" @if($item->avg_rate >= 0.5 and $item->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
+                    </fieldset>
+                  </div>
                 </div>
               </div>
             </div>
@@ -81,38 +96,6 @@
             </div>  
           @endforelse
          
-          <div class="item">
-            <img src="{{ asset('main/images/banner-item-05.jpg') }}" alt="">
-            <div class="item-content">
-              <div class="main-content">
-                <div class="meta-category">
-                  <span>Nature</span>
-                </div>
-                <a href="post-details.html"><h4>Cras congue sed augue id ullamcorper</h4></a>
-                <ul class="post-info">
-                  <li><a href="#">Admin</a></li>
-                  <li><a href="#">May 24, 2020</a></li>
-                  <li><a href="#">64 Comments</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <img src="{{ asset('main/images/banner-item-06.jpg') }}" alt="">
-            <div class="item-content">
-              <div class="main-content">
-                <div class="meta-category">
-                  <span>Lifestyle</span>
-                </div>
-                <a href="post-details.html"><h4>Suspendisse nec aliquet ligula</h4></a>
-                <ul class="post-info">
-                  <li><a href="#">Admin</a></li>
-                  <li><a href="#">May 26, 2020</a></li>
-                  <li><a href="#">72 Comments</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -121,7 +104,7 @@
       <div class="container">
         @if (isset($last_post))
           <div class="row  mb-4">
-            <h3>Đã xem gần đây</h3>
+            <h3 class="pl-3">Đã xem gần đây</h3>
             <div class="slider owl-carousel mt-2">
               @forelse ($last_post as $item)
                 <div class="card">
@@ -132,7 +115,7 @@
                     <div class="content">
                       <div class="title">{{ $item->name }}</div>
                       <div class="sub-title">      
-                           <fieldset class="rating">
+                          <fieldset class="rating">
                             <input type="radio" value="5" @if($item->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
                             <input type="radio" value="4.5" @if($item->avg_rate >= 4.5 and $item->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
                             <input type="radio" value="4" @if($item->avg_rate >= 4 and $item->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
@@ -176,7 +159,7 @@
           </div>   
         @endif
         <div class="row  mb-4 mg-top">
-          <h3>Homestay-Resrort mới</h3>
+          <h3 class="pl-3">Homestay-Resrort mới</h3>
           <div class="slider owl-carousel mt-2">
             @forelse ($post_new as $item)
               <div class="card">
@@ -231,9 +214,9 @@
           </div>
         </div>
         <div class="row mb-4 mg-top">
-          <h3>Có thể bạn sẽ thích</h3>
+          <h3 class="pl-3">Có thể bạn sẽ thích</h3>
           <div class="slider owl-carousel mt-2">
-            @forelse ($post_slide as $item)
+            @forelse ($listRandom as $item)
               <div class="card">
                 <a class="link-name" href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
                   <div class="img">
@@ -286,9 +269,9 @@
           </div>
         </div>
         <div class="row mg-top">
-          <h3>Địa điểm nổi bật</h3>
+          <h3 class="pl-3">Địa điểm nổi bật</h3>
           <div class="slider owl-carousel mt-2">
-            @forelse ($post_slide as $item)
+            @forelse ($arrReviewHight as $item)
               <div class="card">
                 <a class="link-name" href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
                   <div class="img">
@@ -337,6 +320,42 @@
                 </div>
               </div>   
             @endforelse
+
+          </div>
+        </div>
+
+        <div class="row mg-top mb-3" >
+          <h3 class="pl-3">Theo vị trí vùng miền</h3>
+        
+          <div class="row mt-2">
+            <a class="col-md-4" href="{{route('post.region',['region'=>'Miền Bắc'])}}">
+              <div class="card border-0 card-region mb-2">
+                <img class="card-img-top" src="{{asset('main/images/mien-bac.jpg')}}" alt="Card image cap">
+                <div class="title-region">
+                  <h4>Miền Bắc</h4>
+                  <span>{{$arrCountPost['bac']}} chỗ ở</span>
+                </div>
+              </div>
+            </a>
+            <a class="col-md-4" href="{{route('post.region',['region'=>'Miền Trung'])}}">
+              <div class="card border-0 card-region mb-2">
+                <img class="card-img-top" src="{{asset('main/images/mien-trung.jpg')}}" alt="Card image cap">
+                 <div class="title-region">
+                  <h4>Miền Trung</h4>
+                  <span>{{$arrCountPost['trung']}} chỗ ở</span>
+                </div>
+              </div>
+            </a>
+            <a class="col-md-4" href="{{route('post.region',['region'=>'Miền Nam'])}}">
+              <div class="card  border-0 card-region mb-2">
+                <img class="card-img-top" src="{{asset('main/images/mien-nam.jpg')}}" alt="Card image cap">
+                 <div class="title-region">
+                  <h4>Miền Nam</h4>
+                  <span>{{$arrCountPost['nam']}} chỗ ở</span>
+
+                </div>
+              </div>
+            </a>
 
           </div>
         </div>

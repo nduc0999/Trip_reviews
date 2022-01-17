@@ -905,7 +905,8 @@
                         $('#content').text('');
                         pond.removeFiles();
                         $('#modal-post-image').modal('hide');
-                        loadPage(1,1);
+                        // loadPage(1,1);
+                        location.reload();
                     }else{
                         console.log(result.mess);
                     }
@@ -1042,6 +1043,12 @@
                     if(result != ''){
                         $('#show-tab-travel').append(result);
                         deleteTravel();
+                         $('.carousel').carousel({
+                            touch: true,
+                            ride: true,
+                            interval: false,
+                            wrap: false,
+                            });
                     }else{
                         $('.read-more-travel').find('span').text('Đã hết');
                     }
@@ -1149,7 +1156,7 @@
                     confirmButtonText: 'Yes'
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        
+                        $('#loading').removeClass('d-none');                 
                         $.ajax({
                             url: "{{route('post.photo.delete')}}",
                             type: "POST",
@@ -1158,17 +1165,20 @@
                                 "id" : id,
                             },
                             success: function(result){
+                                $('#loading').addClass('d-none');
+
                                 console.log(result);
-                                // if(result.status){
-                                //     element.closest('.new-feed').html('');
-                                //     Toast.fire({
-                                //         icon: 'success',
-                                //         title: 'Đã xoá!'
-                                //     })
+                                if(result.status){
+
+                                    element.closest('.new-feed').html('');
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Đã xoá!'
+                                    })
                             
-                                // }else{
-                                //     console.log(result.mess)
-                                // }
+                                }else{
+                                    console.log(result.mess)
+                                }
                             }
                         })
 

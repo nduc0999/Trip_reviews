@@ -240,19 +240,29 @@ class PostController extends Controller
 
     public function loadPost(Request $request){
         $arrId = array();
-        if($request->ajax()){
-            $post = Post::find($request->id);
-            $photos = $post->photo()->paginate($this->photoCount);
-            return response()->json(['photos' => $photos]);
-        }
+        
         if($request->id){
             
             $post = Post::find($request->id);
+
+            if ($request->ajax()) {
+                if($request->type == 'photoUser'){
+                    $photoUser = $post->PhotoUser()->paginate(7, ['*'], 'photoUser');
+                    return response()->json(['status' => 'photo user', 'photoUser' => $photoUser]);
+                }else{
+                    $photos = $post->photo()->paginate($this->photoCount);
+                    return response()->json(['status'=>'photo','photos' => $photos]);
+                }
+            
+
+            }
+
             if($post->status == 1){
                 return redirect()->back();
             }
 
             $photos = $post->photo()->paginate($this->photoCount);
+            $photoUser = $post->PhotoUser()->paginate(7, ['*'], 'photoUser');
             $location = $post->Location;
             $amenity = $post->amenity;
             $roomtype = $post->roomtype;
@@ -278,6 +288,7 @@ class PostController extends Controller
 
             return view('web.post.post-info',[   'post' => $post_all,
                                             'photos' => $photos,
+                                            'photoUser' => $photoUser,
                                             'location' => $location,
                                             'amenity' => $amenity,
                                             'roomtype' => $roomtype,
@@ -689,12 +700,26 @@ class PostController extends Controller
                 }
             }
         }
-       $posts = Post::whereIn('id',$arrId)->get(['id','name','img_avatar','introduce','created_at']);
-       $list = Post::setInfoPost($posts);
-
+        $posts = Post::whereIn('id',$arrId)->paginate($this->countSearch);
+        $list = Post::setInfoPost($posts);
+        $title = 'Đánh giá các địa điểm bạn đã đến thăm';
         $random = Post::inRandomOrder()->limit(6)->get();
         $listRandom = Post::setInfoPost($random);
        
-        return view('web.post.list-post-review',['list' => $list,'listRandom' => $listRandom]);
+        return view('web.post.list-post-review',['list' => $list,'listRandom' => $listRandom,'title' => $title]);
+    }
+
+    public function vỉewPostRegion($region){
+        if($region == "Miền Bắc" || $region == "Miền Trung" || $region == "Miền Nam" ){
+            $arrLocation = Location::where('region', $region)->get('id');
+            $posts = Post::whereIn('id_location', $arrLocation)->paginate($this->countSearch);
+            $list = Post::setInfoPost($posts);
+            $title = 'Các Homestay - Resort ở miền ' . $region;
+            
+        }else{
+            return view('web.error.error-404');
+        }
+        
+        return view('web.post.list-post-review', ['list' => $list,'title' => $title]);
     }
 }

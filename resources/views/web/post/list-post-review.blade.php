@@ -48,7 +48,7 @@
   
     <div class="main-banner header-text">
         <div class="container mt-5 " align="center">
-            <h3>Đánh giá các địa điểm bạn đã đến thăm</h3>
+            <h3>{{$title}}</h3>
         </div>
     </div>
 
@@ -84,47 +84,66 @@
                                     <div style="position: absolute; bottom: 10px; width:80%" >
                                         <ul>
                                             <li>by: Admin</li>
-                                            <li class="text-right"><a href="blog-post-left-sidebar.html">{{$item->count_review}} Đánh giá</a></li>
+                                            <li class="text-right"><a href="{{ route('form.review',['slug' => Str::slug($item->name),'id'=>$item->id]) }}" target="_blank">{{$item->count_review}} Đánh giá</a></li>
                                         </ul>       
                                         <a href="{{ route('form.review',['slug' => Str::slug($item->name),'id'=>$item->id]) }}" target="_blank" class="btn btn-primary mt-2" style="float:right;">Đánh giá</a>
-                                   
+                                        <fieldset class="rating">
+                                            <input type="radio" value="5" @if($item->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                                            <input type="radio" value="4.5" @if($item->avg_rate >= 4.5 and $item->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                                            <input type="radio" value="4" @if($item->avg_rate >= 4 and $item->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                                            <input type="radio" value="3.5" @if($item->avg_rate >= 3.5 and $item->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                                            <input type="radio" value="3" @if($item->avg_rate >= 3 and $item->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                                            <input type="radio" value="2.5" @if($item->avg_rate >= 2.5 and $item->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                                            <input type="radio" value="2" @if($item->avg_rate >= 2 and $item->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                                            <input type="radio" value="1.5" @if($item->avg_rate >= 1.5 and $item->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                                            <input type="radio" value="1" @if($item->avg_rate >= 1 and $item->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                                            <input type="radio" value="0.5" @if($item->avg_rate >= 0.5 and $item->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
+                                        </fieldset>
                                     </div>
                                 </div>
                                 </div>
                             </div>      
                         @empty
-                            @forelse ($listRandom as $item)
-                                <div class="col-md-6">
-                                <div class="media blog-media">
-                               <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
-                                    <img class="d-flex" src="{{$item->img_avatar}}"  alt="Generic placeholder image">
-                                </a>
-                                <div class="circle">
-                                    <h5 class="day">{{ date('d', strtotime($item->created_at)) }}</h5>
-                                    <span class="month">{{ date('M', strtotime($item->created_at)) }}</span>
-                                </div>
-                                <div class="media-body">
-                                  <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}"><h5 class="mt-0">{{$item->name}}</h5></a>
-                                    <span class="">{!! \Illuminate\Support\Str::words(nl2br($item->introduce), 15, $end = '...') !!} </span>
-                                    <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}" style="color: #007bff" class="post-link">[Đọc thêm]</a>
-                                    <div style="position: absolute; bottom: 10px; width:80%" >
-                                        <ul>
-                                            <li>by: Admin</li>
-                                            <li class="text-right"><a href="blog-post-left-sidebar.html">{{$item->count_review}} Đánh giá</a></li>
-                                        </ul>       
-                                        <a href="{{ route('form.review',['slug' => Str::slug($item->name),'id'=>$item->id]) }}" target="_blank" class="btn btn-primary mt-2" style="float:right;">Đánh giá</a>
-
-                                   
+                            @if (isset($listRandom))
+                                @forelse ($listRandom as $item)
+                                    <div class="col-md-6">
+                                    <div class="media blog-media">
+                                <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
+                                        <img class="d-flex" src="{{$item->img_avatar}}"  alt="Generic placeholder image">
+                                    </a>
+                                    <div class="circle">
+                                        <h5 class="day">{{ date('d', strtotime($item->created_at)) }}</h5>
+                                        <span class="month">{{ date('M', strtotime($item->created_at)) }}</span>
                                     </div>
-                                </div>
-                                </div>
-                            </div>  
-                            @empty
-                                <span>Không có dữ liệu</span>
-                            @endforelse 
+                                    <div class="media-body">
+                                    <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}"><h5 class="mt-0">{{$item->name}}</h5></a>
+                                        <span class="">{!! \Illuminate\Support\Str::words(nl2br($item->introduce), 15, $end = '...') !!} </span>
+                                        <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}" style="color: #007bff" class="post-link">[Đọc thêm]</a>
+                                        <div style="position: absolute; bottom: 10px; width:80%" >
+                                            <ul>
+                                                <li>by: Admin</li>
+                                                <li class="text-right"><a href="blog-post-left-sidebar.html">{{$item->count_review}} Đánh giá</a></li>
+                                            </ul>       
+                                            <a href="{{ route('form.review',['slug' => Str::slug($item->name),'id'=>$item->id]) }}" target="_blank" class="btn btn-primary mt-2" style="float:right;">Đánh giá</a>
+
+                                    
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>  
+                                @empty
+                                    <h3>Không có dữ liệu</h3>
+                                @endforelse       
+                            @else
+                                <h3>Không có dữ liệu</h3>
+                            @endif
                         @endforelse
 
-                       
+                        @if (isset($list))
+                            <div class="d-flex justify-content-center mt-4 col-12" >
+                                {!! $list->links('web.pagination') !!}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </section>

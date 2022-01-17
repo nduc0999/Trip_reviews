@@ -36,6 +36,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/Review-{slug}_{id}',[PostController::class,'loadPost'])->name('post.show');
 Route::post('/post/search',[PostController::class,'search'])->name('post.search');
 Route::get('/post/search/result', [PostController::class, 'searchPage'])->name('post.search.result');
+Route::get('/post/region-{region}',[PostController::class,'vỉewPostRegion'])->name('post.region');
 
 Route::middleware('auth')->group(function(){
     Route::get('/UserReviewEdit-{slug}_{id}',[PostController::class,'formReview'])->name('form.review')->middleware('not_verify_email');
@@ -99,6 +100,12 @@ Route::get('/password/reset',[ForgotPasswordController::class, 'showLinkRequestF
 Route::post('/password/emai',[ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/password/reset/{token}',[ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset',[ResetPasswordController::class,'reset'])->name('password.update');
+Route::get('/password/change',[UserController::class,'viewChangePassword'])->name('password.change')->middleware('auth');
+Route::post('/password/change/check', [UserController::class, 'checkPassword'])->name('password.change.check')->middleware('auth');
+Route::get('/password/change/new', [UserController::class, 'viewNewPassword'])->name('password.change.new')->middleware('auth');
+Route::post('/password/change/update', [UserController::class, 'updatePassword'])->name('password.change.update')->middleware('auth');
+Route::get('/password/change/success', [UserController::class, 'viewChangeSuccess'])->name('password.change.success')->middleware('auth');
+
 
 
 //admin
@@ -143,6 +150,8 @@ Route::middleware(['auth_admin','is_admin'])->group(function () {
         Route::post('user/add/admin', [UserController::class, 'addAdmin'])->name('user.add.admin');
         Route::post('user/ban-unban/review', [UserController::class, 'ban_unban_Review'])->name('user.ban.unban.review');
         Route::post('user/profile', [UserController::class, 'profile'])->name('user.profile');
+        Route::post('user/admin/resetpassword', [UserController::class, 'resetPasswordAdmin'])->name('user.admin.resetpassword');
+
 
         Route::get('review/approval', [ReviewController::class, 'listApproval'])->name('approval.review');
         Route::get('review/list', [ReviewController::class, 'listReview'])->name('list.review');

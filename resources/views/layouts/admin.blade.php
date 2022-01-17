@@ -41,7 +41,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="{{ route('admin.home') }}"><img src="{{ asset('main/images/logo3.png') }}" alt="Logo" srcset="" style="height: 70px"></a>
+                            <a href="{{ route('home') }}"><img src="{{ asset('main/images/logo3.png') }}" alt="Logo" srcset="" style="height: 70px"></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
