@@ -700,12 +700,26 @@ class PostController extends Controller
                 }
             }
         }
-       $posts = Post::whereIn('id',$arrId)->get(['id','name','img_avatar','introduce','created_at']);
-       $list = Post::setInfoPost($posts);
-
+        $posts = Post::whereIn('id',$arrId)->paginate($this->countSearch);
+        $list = Post::setInfoPost($posts);
+        $title = 'Đánh giá các địa điểm bạn đã đến thăm';
         $random = Post::inRandomOrder()->limit(6)->get();
         $listRandom = Post::setInfoPost($random);
        
-        return view('web.post.list-post-review',['list' => $list,'listRandom' => $listRandom]);
+        return view('web.post.list-post-review',['list' => $list,'listRandom' => $listRandom,'title' => $title]);
+    }
+
+    public function vỉewPostRegion($region){
+        if($region == "Miền Bắc" || $region == "Miền Trung" || $region == "Miền Nam" ){
+            $arrLocation = Location::where('region', $region)->get('id');
+            $posts = Post::whereIn('id_location', $arrLocation)->paginate($this->countSearch);
+            $list = Post::setInfoPost($posts);
+            $title = 'Các Homestay - Resort ở miền ' . $region;
+            
+        }else{
+            return view('web.error.error-404');
+        }
+        
+        return view('web.post.list-post-review', ['list' => $list,'title' => $title]);
     }
 }

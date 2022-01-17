@@ -72,7 +72,7 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" style="padding-top: 0px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ Auth::user()->fullName() }}
-                    <img src="{{ Auth::user()->img_avatar }}" alt="Avatar" class="avatar">
+                    <img src="{{ Auth::user()->img_avatar == null ? 'https://drive.google.com/uc?id=1k4YLSor3SKwcT6v_3HcX_MCiDYkssn9V&export=media': Auth::user()->img_avatar }}" alt="Avatar" class="avatar">
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     @if (Auth::user()->email_verified_at == null)

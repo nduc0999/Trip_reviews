@@ -250,7 +250,7 @@
                             </div>
                           </div>
                           <div class="col-6 pr-0" data-toggle="modal" data-target="#show-photo-user" style="height: 200px">
-                            <img src="{{ $photoUser[0]->path }}" alt=""  >
+                            <img src="{{ $photoUser != '' ? $photoUser[0]->path : $post->img_avatar }}" alt=""  >
                             <div class="text-photo">
                               <i class="fa fa-hospital-o" aria-hidden="true"></i>
                               <p> Khách du lịch</p>

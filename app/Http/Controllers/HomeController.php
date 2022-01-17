@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Location;
 use App\Models\Post;
 use App\Models\Travel;
 use Exception;
@@ -30,12 +31,29 @@ class HomeController extends Controller
         $post_slide = Post::where('status', 0)->with('review')->get();
         $post_new = Post::where('status',0)->with('review')->orderBy('id','DESC')->take(6)->get();
   
-
         $post_slide_rate = Post::setInfoPost($post_slide);
+        $dataArray = array();
+        $dataArrayComment = array();
+        foreach($post_slide_rate as $post){
+            if($post->avg_rate >0 ){
+                $dataArray[] =$post;
+            }
+        }
+        
+        usort($dataArray,fn($a,$b) => $a->avg_rate < $b->avg_rate);
+        $arrRateHight = array_slice($dataArray, 0, 5);
+
+        usort($dataArray, fn ($a, $b) => $a->count_review < $b->count_review);
+        $arrReviewHight= array_slice($dataArray, 0, 5);
+
         $post_new_rate = Post::setInfoPost($post_new);
 
+     
+        $arrCountPost = Location::getCountPost();
+        
         // return $post_slide_rate;
-
+        $random = Post::inRandomOrder()->limit(6)->get();
+        $listRandom = Post::setInfoPost($random);
         if(isset($_COOKIE['last_id'])){
             $last_post=array();
             $last_id = json_decode($_COOKIE['last_id'],true);
@@ -51,16 +69,23 @@ class HomeController extends Controller
 
           
 
-            return view('web.home', ['post_slide' => $post_slide_rate,
-                                     'last_post' => $last_post_rate, 
-                                     'post_new' => $post_new_rate,
-                      
+            return view('web.home', [   'post_slide' => $arrRateHight,
+                                        'last_post' => $last_post_rate, 
+                                        'post_new' => $post_new_rate,
+                                        'listRandom' => $listRandom,
+                                        'arrReviewHight' => $arrReviewHight,
+                                        'arrCountPost' => $arrCountPost,
                                     ]);
         }
-        return view('web.home',['post_slide' => $post_slide_rate,
+        return view('web.home',['post_slide' => $arrRateHight,
                                 'post_new' => $post_new_rate,
+                                'listRandom' => $listRandom,
+                                'arrReviewHight' => $arrReviewHight,
+                                'arrCountPost' => $arrCountPost
                                 ]);
     }
+
+    
     public function admin(){
         return view('admin.home');
     }

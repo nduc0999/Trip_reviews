@@ -126,6 +126,34 @@
     </div>
 </div>
 
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-new-password">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-new-password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="name-admin"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h2>Mật khẩu mới là: </h2>
+        
+        <p id="show-new-pass">daumoiAB</p>
+        <a href="#" class="btn-copy" >Copy</a>    
+       
+      </div>
+      <div class="modal-footer">
+         <p style="color: green; display:none" id="copy-success"><i class="bi bi-check2"> Đã copy</i></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="formAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -189,6 +217,7 @@
 </script>
 <script src="{{ asset('dashboard/js/custom.js') }}"></script>
 <script src="{{ asset('dashboard/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
+
 
     
 <script>
@@ -373,7 +402,6 @@
                 },
                
                 success: function(result){
-                    console.log(result);
                     if(result.status){
                         name = result.data.first_name +" "+result.data.last_name;
                         $('#name-user').html(name);
@@ -399,21 +427,54 @@
     function resetPassword(){
         $('.btn-reset-pass').click(function(){
             let id = $(this).data('id');
-            $.ajax({
-                url:"{{ route('admin.manager.user.admin.resetpassword') }}",
-                type: "POST",
-                data: {
-                    "_token" : '{{csrf_token()}}',
-                    id,
-                },
-                success: function(result){
-                    console.log(result);
-                }
-            })
+            Swal.fire({
+                title: 'Bạn có chắc thay đổi mật khẩu',
+                text: "",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url:"{{ route('admin.manager.user.admin.resetpassword') }}",
+                            type: "POST",
+                            data: {
+                                "_token" : '{{csrf_token()}}',
+                                id,
+                            },
+                            success: function(result){
+                                if(result.status){
+                                    $('#name-admin').text('admin: '+result.name);
+                                    $('#show-new-pass').text(result.pass);
+                                    $('#modal-new-password').modal('show');
+                                  
+                                }else{
+                                    console.log(result.mess);
+                                }
+                            }
+                        })              
+                    }
+                })
         })
 
     }
 
+    $('.btn-copy').click(function(e){
+        e.preventDefault();
+        let copyText = $('#show-new-pass').text().trim();
+
+        var textField = document.createElement('textarea');
+        textField.innerText = copyText;
+        document.body.appendChild(textField);
+        textField.select();
+        textField.focus(); //SET FOCUS on the TEXTFIELD
+        document.execCommand('copy');
+        textField.remove();
+        $("#copy-success").show().delay(3000).fadeOut();
+    })
+    
     $('#filter').change(function(){
         loadPage(1);
     })

@@ -62,17 +62,76 @@ class UserController extends Controller
         return view('auth.passwords.change-password');
     }
 
+    public function checkPassword(Request $request){
+        request()->validate(
+            [
+                'password' => ['required', 'string', 'min:8'],
+            ],
+            [
+                'password.min' => 'Mật khẩu cần ít nhất 8 ký tự'
+            ]
+        );
+
+        if(Auth::attempt(['email' => Auth::user()->email, 'password' => $request->password])){
+            $confirm = base64_encode('ok');
+            setcookie("confirm_pass", $confirm , time() + 300, "/");
+            return redirect()->route('password.change.new');
+        }else{
+            return redirect()->back()->withErrors(
+                [
+                    'password' => 'Sai mật khẩu!'
+                ]
+            );
+        }
+
+    }
+
+    public function viewNewPassword(){
+        if(isset($_COOKIE['confirm_pass'])){
+            return view('auth.passwords.new-password');
+        }else{
+            return redirect()->back();
+        }
+
+    }
+
+    public function updatePassword(Request $request){
+        request()->validate(
+            [
+                'password' => ['required', 'string', 'min:8'],
+            ],
+            [
+                'password.required' => 'Không để trống mật khẩu',
+                'password.min' => 'Mật khẩu cần ít nhất :min ký tự',
+            ]
+        );
+        if (isset($_COOKIE['confirm_pass'])) {
+            $user = User::find(Auth::id());
+            $user->password = Hash::make($request->password);
+            $user->save();
+            setcookie("confirm_pass", null, -1, "/");
+            return redirect()->route('password.change.success');
+        } else {
+            return redirect()->back();
+        }
+       
+    }
+
+    public function viewChangeSuccess(){
+        return view('auth.passwords.change-password-success');
+    }
+
     public function resetPasswordAdmin(Request $request){
         $comb = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         $shfl = str_shuffle($comb);
         $pwd = substr($shfl, 0, 8);
         
         try {
-            if(is_int($request->id)){
+            if(is_int((int)$request->id)){
                 $user = User::find($request->id);
                 $user->password = Hash::make($pwd);
                 $user->save();
-                return response()->json(['status' => true,'pass' => $pwd]);
+                return response()->json(['status' => true,'pass' => $pwd,'name' => $user->fullname()]);
             }
             
         } catch (Exception $e) {
