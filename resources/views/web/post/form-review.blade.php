@@ -93,11 +93,12 @@
 
                                 <div class="form-group">
                                     <label for="trip_when" class="font-weight-bold" id="trip_when">Bạn đã đi du lịch khi nào?</label>
-                                    <div class="col-3 p-0">
+                                    <div class="col-4 p-0">
                                         <select class="form-control" id="trip_when" name="trip_when" style="border: 1px solid;">
                                             <option value="">Chọn một</option>
-                                            @for ($i = 1; $i <= 12; $i++)
-                                                <option value="{{ now()->year.'-'.$i }}">Tháng {{$i}} {{ now()->year }}</option>
+                                            @for ($i = 0; $i < 12; $i++)
+                                                {{-- <option value="{{ now()->year.'-'.$i }}">Tháng {{$i}} {{ now()->year }}</option> --}}
+                                                <option value="{{ \Carbon\Carbon::today()->subMonths($i)->format('Y-m') }}">Tháng {{ \Carbon\Carbon::today()->subMonths($i)->format('m')}} {{  \Carbon\Carbon::today()->subMonths($i)->format('Y') }}</option>
                                             @endfor
                                         </select>
                                          <span class="text-danger error-text trip_when_err "></span>

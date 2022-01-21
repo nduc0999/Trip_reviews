@@ -1,4 +1,5 @@
-var optionsProfileVisit = {
+
+var optionsPostall = {
 	annotations: {
 		position: 'back'
 	},
@@ -7,7 +8,7 @@ var optionsProfileVisit = {
 	},
 	chart: {
 		type: 'bar',
-		height: 300
+		height: 300,
 	},
 	fill: {
 		opacity:1
@@ -15,17 +16,17 @@ var optionsProfileVisit = {
 	plotOptions: {
 	},
 	series: [{
-		name: 'sales',
-		data: [9,20,30,20,10,20,30,20,10,20,30,20]
+		name: '',
+		data: [],
 	}],
 	colors: '#435ebe',
 	xaxis: {
-		categories: ["Jan","Feb","Mar","Apr","May","Jun","Jul", "Aug","Sep","Oct","Nov","Dec"],
+		categories: [],
 	},
 }
-let optionsVisitorsProfile  = {
-	series: [70, 30],
-	labels: ['Male', 'Female'],
+let piePost  = {
+	series: percentPost,
+	labels: ['Homestay', 'Resort'],
 	colors: ['#435ebe','#55c6e8'],
 	chart: {
 		type: 'donut',
@@ -44,10 +45,116 @@ let optionsVisitorsProfile  = {
 	}
 }
 
-var optionsEurope = {
+var optionsPost = {
+		series: [
+		{
+		name: "Homestay",
+		data: []
+		},
+		{
+		name: "Resort",
+		data: []
+		},
+		
+	],
+		chart: {
+		height: 350,
+		type: 'line',
+		dropShadow: {
+		enabled: true,
+		color: '#000',
+		top: 18,
+		left: 7,
+		blur: 10,
+		opacity: 0.2,
+		
+		},
+		toolbar: {
+		show: true
+		}
+	},
+	colors: ['#77B6EA', '#545454'],
+	dataLabels: {
+		enabled: false,
+	},
+	stroke: {
+		curve: 'smooth'
+	},
+	title: {
+		text: 'Bieu do so luong Homestay-Resort',
+		align: 'left',
+		
+	},
+	grid: {
+		borderColor: '#e7e7e7',
+		row: {
+		colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+		opacity: 0.5
+		},
+	},
+	markers: {
+		size: 1
+	},
+	xaxis: {
+		categories: [],
+		title: {
+		text: 'Thang-nam'
+		}
+	},
+	yaxis: {
+		title: {
+		text: 'So luong'
+		},
+		
+	},
+	legend: {
+		position: 'top',
+		horizontalAlign: 'right',
+		floating: true,
+		offsetY: -25,
+		offsetX: -5,
+		 
+	}
+};
+
+	
+var optionsTotalReview = {
+        series: [{
+            name: "",
+            data: [],
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'So luong Danh gia',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: [],
+        }
+};
+
+var optionsTotalUser = {
 	series: [{
 		name: 'series1',
-		data: [310, 800, 600, 430, 540, 340, 605, 805,430, 540, 340, 605]
+		data: dataUser.data
 	}],
 	chart: {
 		height: 80,
@@ -67,8 +174,8 @@ var optionsEurope = {
 		enabled: false
 	},
 	xaxis: {
-		type: 'datetime',
-		categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z","2018-09-19T07:30:00.000Z","2018-09-19T08:30:00.000Z","2018-09-19T09:30:00.000Z","2018-09-19T10:30:00.000Z","2018-09-19T11:30:00.000Z"],
+		
+		categories: dataUser.categories,
 		axisBorder: {
 			show:false
 		},
@@ -85,32 +192,165 @@ var optionsEurope = {
 			show:false,
 		},
 	},
-	tooltip: {
-		x: {
-			format: 'dd/MM/yy HH:mm'
-		},
-	},
+	
 };
 
-let optionsAmerica = {
-	...optionsEurope,
-	colors: ['#008b75'],
+var optionsPieUser = {
+	series: percentUser,
+	labels: ['Hoạt động', 'Cấm đánh giá'],
+	colors: ['#72f776','#f2735c'],
+	chart: {
+		type: 'donut',
+		width: '100%',
+		height:'350px'
+	},
+	legend: {
+		position: 'bottom'
+	},
+	plotOptions: {
+		pie: {
+			donut: {
+				size: '50%'
+			}
+		}
+	}
+	};
+
+
+
+	var chartPostAll = new ApexCharts(document.querySelector("#chart-profile-visit"), optionsPostall);
+	var chartPostLine = new ApexCharts(document.querySelector("#chart-post-line"), optionsPost);
+    var chartTotalReview = new ApexCharts(document.querySelector("#chart-total-review"), optionsTotalReview);
+	var chartPiePost = new ApexCharts(document.getElementById('chart-pie-post'), piePost)
+	
+	var chartUserTotal = new ApexCharts(document.querySelector("#chart-area-user"), optionsTotalUser);
+	var chartPieUser = new ApexCharts(document.querySelector("#chart-pie-user"), optionsPieUser);
+	chartPieUser.render();
+	chartUserTotal.render();
+	chartPostAll.render();
+	chartPostLine.render();
+	chartTotalReview.render();
+	chartPiePost.render()
+
+$(document).ready(function () {
+	var todayDate = new Date().toISOString().slice(0, 10);
+	var d = new Date(todayDate);
+	d.setMonth(d.getMonth() -6);
+	$('#date-from').val(d.toISOString().slice(0, 10));
+	$('#date-from').attr('max', todayDate);
+
+	$('#date-to').val(todayDate);
+	$('#date-to').attr('max', todayDate);
+	$('#date-to').attr('min', $('#date-from').val());
+	
+	loadChart();
+})
+
+function loadChart() {
+	
+	var data = {
+		column: [],
+		line: {
+			homestay: [],
+			resort: [],
+		},
+		reviewLine:[],
+	};
+	var categories = {
+		column: [],
+		line: [],
+		reviewLine: [],
+	};
+
+	$.ajax({
+		url: config.routes.loadChart,
+		type: "GET",
+		data: {
+			dateFrom: $('#date-from').val(),
+			dateTo: $('#date-to').val(),
+			filter: $('#filter-chart').val(),
+		},
+		success: function (result) {
+			console.log(result);
+			
+			if (result.status) {
+				
+				result.posts.forEach(element => {
+					let obj = {
+						x: element.month + '-' + element.year,
+						y: element.data,
+					}
+					categories.column.push( element.month? element.month + '-' + element.year: element.year);
+					data.column.push(obj);	
+				});
+				chartPostAll.updateSeries([{
+					name: 'Số lượng',
+					data: data.column
+				}]);
+				chartPostAll.updateOptions({
+					xaxis: {
+						categories: categories.column
+					}
+				});
+					
+				result.homestay.forEach(e => {
+					data.line.homestay.push(e.data);
+					categories.line.push(e.categories);
+				});
+	
+				result.resort.forEach(e => {
+					data.line.resort.push(e.data);
+				});
+				
+				chartPostLine.updateSeries([
+					{
+						name: "Homestay",
+						data: data.line.homestay
+					},
+					{
+						name: "Resort",
+						data: data.line.resort
+					},
+				]);
+				chartPostLine.updateOptions({
+					xaxis: {
+						categories: categories.line
+					}
+				});
+				
+				result.totalReview.forEach(e => {
+					data.reviewLine.push(e.data);
+					categories.reviewLine.push(e.month? e.month + '-' + e.year : e.year);
+				});
+				console.log(result.totalReview);
+				chartTotalReview.updateSeries([{
+					name: "Số lượng",
+					data: data.reviewLine,
+				}]);
+				chartTotalReview.updateOptions({
+					xaxis: {
+						categories: categories.reviewLine,
+					}
+				});
+			} else {
+				console.log(result.mess);
+			}
+			
+		}
+	})
 }
-let optionsIndonesia = {
-	...optionsEurope,
-	colors: ['#dc3545'],
-}
 
 
 
-var chartProfileVisit = new ApexCharts(document.querySelector("#chart-profile-visit"), optionsProfileVisit);
-var chartVisitorsProfile = new ApexCharts(document.getElementById('chart-visitors-profile'), optionsVisitorsProfile)
-var chartEurope = new ApexCharts(document.querySelector("#chart-europe"), optionsEurope);
-var chartAmerica = new ApexCharts(document.querySelector("#chart-america"), optionsAmerica);
-var chartIndonesia = new ApexCharts(document.querySelector("#chart-indonesia"), optionsIndonesia);
+$('#date-from').change(function () {
 
-chartIndonesia.render();
-chartAmerica.render();
-chartEurope.render();
-chartProfileVisit.render();
-chartVisitorsProfile.render()
+	$('#date-to').attr('min', $(this).val());
+	loadChart();
+})
+$('#date-to').change(function () {
+	$('#date-from').attr('max', $(this).val());
+	loadChart();
+})
+$('#filter-chart').change(function () {
+	loadChart();
+})
