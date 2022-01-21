@@ -3,7 +3,6 @@
 @section('title','Home admin')
 
 @section('head')
-    
 @endsection
 
 @section('content')
@@ -21,12 +20,12 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon purple">
-                                            <i class="iconly-boldShow"></i>
+                                            <i class="iconly-boldHome"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Profile Views</h6>
-                                        <h6 class="font-extrabold mb-0">112.000</h6>
+                                        <h6 class="text-muted font-semibold">Số lượng Homestay</h6>
+                                        <h6 class="font-extrabold mb-0">{{$count['homestay']}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -38,12 +37,12 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon blue">
-                                            <i class="iconly-boldProfile"></i>
+                                            <i class="iconly-boldHome"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Followers</h6>
-                                        <h6 class="font-extrabold mb-0">183.000</h6>
+                                        <h6 class="text-muted font-semibold">Số lượng Resort</h6>
+                                        <h6 class="font-extrabold mb-0">{{$count['resort']}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -55,12 +54,12 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon green">
-                                            <i class="iconly-boldAdd-User"></i>
+                                            <i class="iconly-boldProfile"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Following</h6>
-                                        <h6 class="font-extrabold mb-0">80.000</h6>
+                                        <h6 class="text-muted font-semibold">Số lượng người dùng</h6>
+                                        <h6 class="font-extrabold mb-0">{{$count['user']}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -72,12 +71,13 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="stats-icon red">
-                                            <i class="iconly-boldBookmark"></i>
+                                            <i class="iconly-boldChat"></i>
+                                    
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <h6 class="text-muted font-semibold">Saved Post</h6>
-                                        <h6 class="font-extrabold mb-0">112</h6>
+                                        <h6 class="text-muted font-semibold">Số lượng đánh giá</h6>
+                                        <h6 class="font-extrabold mb-0">{{$count['review']}}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -87,121 +87,79 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4>Profile Visit</h4>
+                            <div class="card-header ">
+                                <h4>Biểu đồ số lượng Homestay - Resort </h4>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <label for="">Từ ngày: </label>
+                                        <input type="date" name="" id="date-from">
+                                        <label for="">Đến ngày: </label>
+                                        <input type="date" name="" id="date-to">    
+                                       
+                                    </div>
+
+                                    <select name="filter" id="filter-chart">
+                                        {{-- <option value="">Tuần</option> --}}
+                                        <option value="0" selected>Tháng</option>
+                                        <option value="1">Năm</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div id="chart-profile-visit"></div>
+                                <div id="chart-post-line" ></div>
+                                <div id="chart-total-review"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-xl-4">
+                    
+                    <div class="col-12 col-xl-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Profile Visit</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center">
-                                            <svg class="bi text-primary" width="32" height="32" fill="blue"
-                                                style="width:10px">
-                                                <use
-                                                    xlink:href="{{ asset('dashboard/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
-                                            </svg>
-                                            <h5 class="mb-0 ms-3">Europe</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <h5 class="mb-0">862</h5>
-                                    </div>
-                                    <div class="col-12">
-                                        <div id="chart-europe"></div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center">
-                                            <svg class="bi text-success" width="32" height="32" fill="blue"
-                                                style="width:10px">
-                                                <use
-                                                    xlink:href="{{ asset('dashboard/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
-                                            </svg>
-                                            <h5 class="mb-0 ms-3">America</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <h5 class="mb-0">375</h5>
-                                    </div>
-                                    <div class="col-12">
-                                        <div id="chart-america"></div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="d-flex align-items-center">
-                                            <svg class="bi text-danger" width="32" height="32" fill="blue"
-                                                style="width:10px">
-                                                <use
-                                                    xlink:href="{{ asset('dashboard/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
-                                            </svg>
-                                            <h5 class="mb-0 ms-3">Indonesia</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <h5 class="mb-0">1025</h5>
-                                    </div>
-                                    <div class="col-12">
-                                        <div id="chart-indonesia"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Latest Comments</h4>
+                                <h4>Top 3 Homestay-Resort có đánh giá sao cao</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-hover table-lg">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Comment</th>
+                                                <th>Tên</th>
+                                                <th>Địa chỉ</th>
+                                                <th>Rate</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="col-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar avatar-md">
-                                                            <img src="{{ asset('dashboard/images/faces/5.jpg') }}">
+                                            @forelse ($postTop as $item)
+                                                <tr>
+                                                    <td class="col-4">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar avatar-md">
+                                                                <img src="{{ $item->img_avatar }}" style='object-fit: cover; width:42px;height:42px' >
+                                                            </div>
+                                                            <p class="font-bold ms-3 mb-0">{{$item->name}}</p>
                                                         </div>
-                                                        <p class="font-bold ms-3 mb-0">Si Cantik</p>
-                                                    </div>
+                                                    </td>
+                                                    <td class="col-auto">
+                                                        <p class=" mb-0">{{ $item->address.", ".$item->district.', '.$item->streets.', '.$item->location->province }}</p>
+                                                        
+                                                    </td>
+                                                    <td>
+                                                        <p>{{$item->avg_rate}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">link</a>
+                                                    </td>
+                                                </tr>
+                                                
+                                            @empty
+                                                <td colspan="3">
+                                                    <span>Không có dữ liệu</span>
                                                 </td>
-                                                <td class="col-auto">
-                                                    <p class=" mb-0">Congratulations on your graduation!</p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="col-3">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="avatar avatar-md">
-                                                            <img src="{{ asset('dashboard/images/faces/2.jpg') }}">
-                                                        </div>
-                                                        <p class="font-bold ms-3 mb-0">Si Ganteng</p>
-                                                    </div>
-                                                </td>
-                                                <td class="col-auto">
-                                                    <p class=" mb-0">Wow amazing design! Can you make another tutorial for
-                                                        this design?</p>
-                                                </td>
-                                            </tr>
+                                            @endforelse
+                                        
                                         </tbody>
                                     </table>
                                 </div>
@@ -215,61 +173,90 @@
                     <div class="card-body py-4 px-5">
                         <div class="d-flex align-items-center">
                             <div class="avatar avatar-xl">
-                                <img src="{{ asset('dashboard/images/faces/1.jpg') }}" alt="Face 1">
+                                <img src="{{Auth::user()->img_avatar}}" style="object-fit: cover">
                             </div>
                             <div class="ms-3 name">
-                                <h5 class="font-bold">John Duck</h5>
-                                <h6 class="text-muted mb-0">@johnducky</h6>
+                                <h5 class="font-bold">{{Auth::user()->fullName()}}</h5>
+                                <h6 class="text-muted mb-0"><a href="">Đăng xuất</a></h6>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h4>Recent Messages</h4>
+                        <h4>Người dùng có đánh giá tích cực</h4>
                     </div>
                     <div class="card-content pb-4">
-                        <div class="recent-message d-flex px-4 py-3">
-                            <div class="avatar avatar-lg">
-                                <img src="{{ asset('dashboard/images/faces/4.jpg') }}">
+                        @forelse ($users as $item)
+                            <div class="recent-message d-flex px-4 py-3">
+                                <div class="avatar avatar-lg">
+                                    <img src="{{ $item->user->img_avatar }}" style="object-fit: cover">
+                                </div>
+                                <div class="name ms-4">
+                                    <h5 class="mb-1">{{ $item->user->fullName() }}</h5>
+                                    <h6 class="text-muted mb-0">Số đánh giá: {{$item->total}}</h6>
+                                </div>
                             </div>
-                            <div class="name ms-4">
-                                <h5 class="mb-1">Hank Schrader</h5>
-                                <h6 class="text-muted mb-0">@johnducky</h6>
-                            </div>
-                        </div>
-                        <div class="recent-message d-flex px-4 py-3">
-                            <div class="avatar avatar-lg">
-                                <img src="{{ asset('dashboard/images/faces/5.jpg') }}">
-                            </div>
-                            <div class="name ms-4">
-                                <h5 class="mb-1">Dean Winchester</h5>
-                                <h6 class="text-muted mb-0">@imdean</h6>
-                            </div>
-                        </div>
-                        <div class="recent-message d-flex px-4 py-3">
-                            <div class="avatar avatar-lg">
-                                <img src="{{ asset('dashboard/images/faces/1.jpg') }}">
-                            </div>
-                            <div class="name ms-4">
-                                <h5 class="mb-1">John Dodol</h5>
-                                <h6 class="text-muted mb-0">@dodoljohn</h6>
-                            </div>
-                        </div>
-                        <div class="px-4">
-                            <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Start
-                                Conversation</button>
-                        </div>
+                        @empty    
+                            <h6 class="text-muted mb-0 ms-4">Không có dữ liệu</h6>
+                        @endforelse
+                            
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h4>Visitors Profile</h4>
+                        <h4>Tỷ lệ Homestay-Resort</h4>
                     </div>
                     <div class="card-body">
-                        <div id="chart-visitors-profile"></div>
+                        <div id="chart-pie-post"></div>
                     </div>
                 </div>
+               
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Người dùng</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="d-flex align-items-center">
+                                    <svg class="bi text-primary" width="32" height="32" fill="blue"
+                                        style="width:10px">
+                                        <use
+                                            xlink:href="{{ asset('dashboard/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
+                                    </svg>
+                                    <h6 class="mb-0 ms-3">Tổng người dùng</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="mb-0">{{$userActivity +$userBan}}</h5>
+                            </div>
+                            <div class="col-12">
+                                <div id="chart-area-user"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="d-flex align-items-center">
+                                    <svg class="bi text-success" width="32" height="32" fill="blue"
+                                        style="width:10px">
+                                        <use
+                                            xlink:href="{{ asset('dashboard/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill') }}" />
+                                    </svg>
+                                    <h6 class="mb-0 ms-3">Tỷ lệ</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="mb-0"></h5>
+                            </div>
+                            <div class="col-12">
+                                <div id="chart-pie-user"></div>
+                            </div>
+                        </div>
+                     
+                    </div>
+                </div>
+    
             </div>
         </section>
     </div>
@@ -278,5 +265,29 @@
 
 @section('script')
     <script src="{{ asset('dashboard/vendors/apexcharts/apexcharts.js') }}"></script>
-    
+    <script>
+        var config = {
+            routes: {
+                loadChart: "{{route('admin.dashboard.chart')}}",
+            }
+        };
+        var totalPost = parseInt(`{{$count['homestay']}}`) + parseInt(`{{$count['resort']}}`);
+        var percentPost = [];
+        percentPost.push(parseInt(`{{$count['homestay']}}`)/totalPost *100);
+        percentPost.push(parseInt(`{{$count['resort']}}`)/totalPost *100);
+        var dataUser = {
+           data:[],
+           categories:[],
+        };
+        let userTotal = {!! json_encode($userTotal) !!};
+        userTotal.forEach(element => {
+            dataUser.data.push(element.data);
+            dataUser.categories.push(element.categories);
+        });
+        var totalUser = parseInt(`{{$userActivity}}`) + parseInt(`{{$userBan}}`);
+        var percentUser = [];
+        percentUser.push(parseInt(`{{$userActivity}}`)/totalUser *100);
+        percentUser.push(parseInt(`{{$userBan}}`)/totalUser *100);
+    </script>
+    <script src="{{ asset('dashboard/js/pages/dashboard.js') }}" ></script>
 @endsection

@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use App\Models\Post;
+use App\Models\Review;
 use App\Models\Travel;
+use App\Models\User;
+use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -87,7 +91,57 @@ class HomeController extends Controller
 
     
     public function admin(){
-        return view('admin.home');
+
+        try {
+            $users = Review::groupBy('id_user')->selectRaw('count(*) as total, id_user')->orderBy('total', 'DESC')->take(3)->get();
+
+            $postTop = Post::where('status', 0)->get();
+
+            $post_slide_rate = Post::setInfoPost($postTop);
+            $dataArray = array();
+
+            foreach ($post_slide_rate as $post) {
+                if ($post->avg_rate > 0) {
+                    $dataArray[] = $post;
+                }
+            }
+
+            usort($dataArray, fn ($a, $b) => $a->avg_rate < $b->avg_rate);
+            $arrRateHight = array_slice($dataArray, 0, 3);
+
+
+            $end = new Datetime();
+            $start = new Datetime();
+            $day = $start->format('j');
+            $start->modify('first day of -6 month');
+            $start->modify('+' . (min($day, $start->format('t')) - 1) . ' days');
+            $userTotal = Post::reportUserMonth($start->format('Y-m-d'), $end->format('Y-m-d'));
+            $userActivity = User::where('status', 0)->count();
+            $userBan = User::where('status', 1)->count();
+
+            $countHomestay = Post::where('type', 0)->where('status', 0)->count();
+            $countResort = Post::where('type', 1)->where('status', 0)->count();
+            $countUser = User::count();
+            $countReview = Review::count();
+            $count = array();
+            $count['homestay'] = $countHomestay;
+            $count['resort'] = $countResort;
+            $count['user'] = $countUser;
+            $count['review'] = $countReview;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+       
+        
+        return view('admin.home',[
+            'users' => $users,
+            'count' => $count,
+            'postTop' => $arrRateHight,
+            'userTotal' => $userTotal,
+            'userActivity' => $userActivity,
+            'userBan' => $userBan,
+
+        ]);
     }
 
     public function listHomeTravel(Request $request){
@@ -138,4 +192,79 @@ class HomeController extends Controller
 
     }
 
+    public function loadChart(Request $request){
+        
+        $dateForm = new DateTime($request->dateFrom);
+        $dateTo = new DateTime($request->dateTo);
+        if($dateForm < $dateTo){
+            try {
+                switch ($request->filter) {
+                    case 0:
+                        $post2 = Post::where('status',0)->whereBetween('created_at', [$request->dateFrom, $request->dateTo])->selectRaw('year(created_at) year, monthname(created_at) month, count(*) data')
+                                ->groupBy('year', 'month')
+                                ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                                ->get();
+                        $totalReview = Review::where('status', 0)->whereBetween('created_at', [$request->dateFrom, $request->dateTo])->selectRaw('year(created_at) year, monthname(created_at) month, count(*) data')
+                                ->groupBy('year', 'month')
+                                ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                                ->get();
+    
+                        break;
+                    case 1:
+                        $post2 = Post::where('status',0)->whereBetween('created_at', [$request->dateFrom, $request->dateTo])->selectRaw('year(created_at) year, count(*) data')
+                                ->groupBy('year')
+                                ->orderBy('year', 'asc')
+                                ->get();
+                        $totalReview = Review::where('status', 0)->whereBetween('created_at', [$request->dateFrom, $request->dateTo])->selectRaw('year(created_at) year, count(*) data')
+                                ->groupBy('year')
+                                ->orderBy('year', 'asc')
+                                ->get();
+    
+                        break;
+                    
+                    default:
+                        $post2 = Post::where('status', 0)->whereBetween('created_at', [$request->dateFrom, $request->dateTo])->selectRaw('year(created_at) year, monthname(created_at) month, count(*) data')
+                                ->groupBy('year', 'month')
+                                ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                                ->get();
+                        $totalReview = Review::where('status', 0)->whereBetween('created_at', [$request->dateFrom, $request->dateTo])->selectRaw('year(created_at) year, monthname(created_at) month, count(*) data')
+                                ->groupBy('year', 'month')
+                                ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                                ->get();
+                        break;
+                }
+                $post1 = Post::where('status', 0)->where('type', 0)->get()->groupBy(function ($val) {
+                    return Carbon::parse($val->created_at)->format('m');
+                });
+              
+        
+                $homestay = Post::reportPostMonthYear(0, $request->dateFrom, $request->dateTo,$request->filter);
+                $resort = Post::reportPostMonthYear(1, $request->dateFrom, $request->dateTo,$request->filter);
+
+                return response()->json([
+                    'status' => true,
+                    'posts' => $post2,
+                    'homestay' => $homestay,
+                    'resort' => $resort,
+                    'totalReview' => $totalReview,
+
+                ]);
+                     
+            } catch (Exception $e) {
+                return response()->json(['status' => false,'mess' => 'Lỗi xử lý DB']);
+            }
+        }
+        return response()->json(['status' => false, 'mess' => 'Ngày bắt dầu lớn hơn ngày kết thúc']);
+       
+          // $previous_week = strtotime("-0 week +1 day");
+        // $start_week = strtotime("last monday", $previous_week);
+        // $end_week = strtotime("next sunday", $start_week);
+        // $start_week = date("Y-m-d", $start_week);
+        // $end_week = date("Y-m-d", $end_week);
+
+        // $date =  Carbon::now()->month(Carbon::now()->month - 3);
+        // print_r($date);
+        // $startDate = Carbon::now()->startOfQuarter(); // the actual start of quarter method
+        // $endDate = Carbon::now()->endOfQuarter();
+    }
 }

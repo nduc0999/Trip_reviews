@@ -124,6 +124,8 @@ Route::middleware(['auth_admin','is_admin'])->group(function () {
     Route::get('/post/approval',[PostController::class,'listApproval'])->name('approval.post');
     Route::get('/post/approval/{id}/show', [PostController::class, 'showApprovalPost'])->name('approval.post.show');
 
+    Route::get('/dashboard/chart',[HomeController::class,'loadChart'])->name('dashboard.chart');
+
     Route::prefix('manager')->name('manager.')->group(function () {
         Route::get('amenity',[AmenityController::class,'index'])->name('amenity');
         Route::post('amenity/update',[AmenityController::class,'update'])->name('amenity.update');
@@ -162,6 +164,8 @@ Route::middleware(['auth_admin','is_admin'])->group(function () {
         Route::get('post/edit/{id}/show', [PostController::class, 'showEditPost'])->name('post.edit.show');
         Route::post('post/edit/update',[PostController::class,'updatePost'])->name('post.edit.update');
         Route::post('post/drafts/delete',[PostController::class,'deleteDrafts'])->name('post.drafts.delete');
+
+        
 
     });
 });

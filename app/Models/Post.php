@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -276,5 +277,243 @@ class Post extends Model
 
         return true;
         
+    }
+    public static function reportPostMonthYear($type,$from,$to,$filter){
+        $dt = new DateTime($from);
+        $dt2 = new DateTime($to);
+        
+        $data = array();
+        if ($filter == 0) {
+            if($dt->format('Y-m') == $dt2->format('Y-m') ){
+                $moi = Post::where('status', 0)->where('type', $type)->whereBetween('created_at', [$from, $to])->selectRaw('year(created_at) year, month(created_at) month, count(*) data')
+                ->groupBy('year', 'month')
+                ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                ->first();
+                if ($moi != null) {
+                    $obj['categories'] = $moi->month . '-' . $moi->year;
+                    $obj['data'] = $moi->data;
+                    $data[] = $obj;
+                } else {
+                    $obj['categories'] = $dt2->format('m') . '-' . $dt2->format('Y');
+                    $obj['data'] = 0;
+                    $data[] = $obj;
+                }
+            }else{
+                $end = $dt->modify('last day of this month');
+                $moi = Post::where('status', 0)->where('type', $type)->whereBetween('created_at', [$from, $end->format('Y-m-d')])->selectRaw('year(created_at) year, month(created_at) month, count(*) data')
+                    ->groupBy('year', 'month')
+                    ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                    ->first();
+                if ($moi != null) {
+                    $obj['categories'] = $moi->month . '-' . $moi->year;
+                    $obj['data'] = $moi->data;
+                    $data[] = $obj;
+                } else {
+                    $obj['categories'] = $end->format('m') . '-' . $end->format('Y');
+                    $obj['data'] = 0;
+                    $data[] = $obj;
+                }
+    
+                while (true) {
+                    $day = $dt->format('j');
+                    $dt->modify('first day of +1 month');
+                    $dt->modify('+' . (min($day, $dt->format('t')) - 1) . ' days');
+                    if ($end < $dt2) {
+    
+                        $start = $dt->format('Y-m-01');
+                        $end = $dt->modify('last day of this month');
+    
+                        $moi = Post::where('status', 0)->where('type', $type)->whereBetween('created_at', [$start, $end->format('Y-m-d')])->selectRaw('year(created_at) year, month(created_at) month, count(*) data')
+                            ->groupBy('year', 'month')
+                            ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                            ->first();
+                        $obj = array();
+                        if ($moi != null) {
+                            $obj['categories'] = $moi->month . '-' . $moi->year;
+                            $obj['data'] = $moi->data;
+                            $data[] = $obj;
+                        } else {
+                            $obj['categories'] = $end->format('m') . '-' . $end->format('Y');
+                            $obj['data'] = 0;
+                            $data[] = $obj;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                $start2 = $dt2->modify('first day of this month');
+                $moi = Post::where('status', 0)->where('type', $type)->whereBetween('created_at', [$start2->format('Y-m-d'), $to])->selectRaw('year(created_at) year, month(created_at) month, count(*) data')
+                    ->groupBy('year', 'month')
+                    ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                    ->first();
+                if ($moi != null) {
+                    $obj['categories'] = $moi->month . '-' . $moi->year;
+                    $obj['data'] = $moi->data;
+                    $data[] = $obj;
+                } else {
+                    $obj['categories'] = $dt2->format('m') . '-' . $dt2->format('Y');
+                    $obj['data'] = 0;
+                    $data[] = $obj;
+                }
+            }
+        }else{
+            if($dt->format('Y') == $dt2->format('Y')){
+                $moi = Post::where('status', 0)->where('type', $type)->whereBetween('created_at', [$from, $to])->selectRaw('year(created_at) year, count(*) data')
+                    ->groupBy('year')
+                    ->orderBy('year', 'asc')
+                    ->first();
+                if ($moi != null) {
+                    $obj['categories'] =  $moi->year;
+                    $obj['data'] = $moi->data;
+                    $data[] = $obj;
+                } else {
+                    $obj['categories'] = $dt2->format('Y');
+                    $obj['data'] = 0;
+                    $data[] = $obj;
+                }
+            }else{
+                $end = $dt->modify('last day of december');
+                $moi = Post::where('status', 0)->where('type', $type)->whereBetween('created_at', [$from, $end->format('Y-m-d')])->selectRaw('year(created_at) year,count(*) data')
+                ->groupBy('year')
+                    ->orderBy('year', 'asc')
+                    ->first();
+                if ($moi != null) {
+                    $obj['categories'] = $moi->year;
+                    $obj['data'] = $moi->data;
+                    $data[] = $obj;
+                } else {
+                    $obj['categories'] = $dt->format('Y');
+                    $obj['data'] = 0;
+                    $data[] = $obj;
+                }
+
+                while (true) {
+                    $day = $dt->format('j');
+                    $dt->modify('first day of +1 year');
+                    $dt->modify('+' . (min($day, $dt->format('t')) - 1) . ' days');
+                    if ($end < $dt2) {
+
+                        $start = $dt->format('Y-01-01');
+                        $end = $dt->modify('last day of december');
+
+                        $moi = Post::where('status', 0)->where('type', $type)->whereBetween('created_at', [$start, $end->format('Y-m-d')])->selectRaw('year(created_at) year,count(*) data')
+                        ->groupBy('year')
+                            ->orderBy('year', 'asc')
+                            ->first();
+                        $obj = array();
+                        if ($moi != null) {
+                            $obj['categories'] = $moi->year;
+                            $obj['data'] = $moi->data;
+                            $data[] = $obj;
+                        } else {
+                            $obj['categories'] = $end->format('Y');
+                            $obj['data'] = 0;
+                            $data[] = $obj;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                $start2 = $dt2->modify('first day of january');
+                $moi = Post::where('status', 0)->where('type', $type)->whereBetween('created_at', [$start2->format('Y-m-d'), $to])->selectRaw('year(created_at) year, count(*) data')
+                ->groupBy('year')
+                    ->orderBy('year', 'asc')
+                    ->first();
+                if ($moi != null) {
+                    $obj['categories'] = $moi->month . '-' . $moi->year;
+                    $obj['data'] = $moi->data;
+                    $data[] = $obj;
+                } else {
+                    $obj['categories'] = $dt2->format('Y');
+                    $obj['data'] = 0;
+                    $data[] = $obj;
+                }
+            }
+        }
+        return $data;
+    }
+    public static function reportUserMonth($from, $to){
+        $dt = new DateTime($from);
+        $dt2 = new DateTime($to);
+
+        $data = array();
+        
+        if ($dt->format('Y-m') == $dt2->format('Y-m')) {
+            $moi = User::whereBetween('created_at', [$from, $to])->selectRaw('year(created_at) year, month(created_at) month, count(*) data')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')->orderBy('month', 'desc')
+            ->first();
+            if ($moi != null) {
+                $obj['categories'] = $moi->month . '-' . $moi->year;
+                $obj['data'] = $moi->data;
+                $data[] = $obj;
+            } else {
+                $obj['categories'] = $dt2->format('m') . '-' . $dt2->format('Y');
+                $obj['data'] = 0;
+                $data[] = $obj;
+            }
+        } else {
+            $end = $dt->modify('last day of this month');
+            $moi = User::whereBetween('created_at', [$from, $end->format('Y-m-d')])->selectRaw('year(created_at) year, month(created_at) month, count(*) data')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')->orderBy('month', 'desc')
+            ->first();
+            if ($moi != null) {
+                $obj['categories'] = $moi->month . '-' . $moi->year;
+                $obj['data'] = $moi->data;
+                $data[] = $obj;
+            } else {
+                $obj['categories'] = $end->format('m') . '-' . $end->format('Y');
+                $obj['data'] = 0;
+                $data[] = $obj;
+            }
+
+            while (true) {
+                $day = $dt->format('j');
+                $dt->modify('first day of +1 month');
+                $dt->modify('+' . (min($day, $dt->format('t')) - 1) . ' days');
+                if ($end < $dt2) {
+
+                    $start = $dt->format('Y-m-01');
+                    $end = $dt->modify('last day of this month');
+
+                    $moi = User::whereBetween('created_at', [$start, $end->format('Y-m-d')])->selectRaw('year(created_at) year, month(created_at) month, count(*) data')
+                    ->groupBy('year', 'month')
+                    ->orderBy('year', 'asc')->orderBy('month', 'desc')
+                    ->first();
+                    $obj = array();
+                    if ($moi != null) {
+                        $obj['categories'] = $moi->month . '-' . $moi->year;
+                        $obj['data'] = $moi->data;
+                        $data[] = $obj;
+                    } else {
+                        $obj['categories'] = $end->format('m') . '-' . $end->format('Y');
+                        $obj['data'] = 0;
+                        $data[] = $obj;
+                    }
+                } else {
+                    break;
+                }
+            }
+            $start2 = $dt2->modify('first day of this month');
+            $moi = User::whereBetween('created_at', [$start2->format('Y-m-d'), $to])->selectRaw('year(created_at) year, month(created_at) month, count(*) data')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')->orderBy('month', 'desc')
+            ->first();
+            if ($moi != null) {
+                $obj['categories'] = $moi->month . '-' . $moi->year;
+                $obj['data'] = $moi->data;
+                $data[] = $obj;
+            } else {
+                $obj['categories'] = $dt2->format('m') . '-' . $dt2->format('Y');
+                $obj['data'] = 0;
+                $data[] = $obj;
+            }
+        }
+    
+   
+
+        return $data;
+    
     }
 }

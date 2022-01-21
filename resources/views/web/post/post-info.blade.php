@@ -266,8 +266,8 @@
 
                       <ul class="post-info">
                         <li><a href="#">Admin</a></li>
-                        <li><a href="#">May 12, 2020</a></li>
-                        <li><a href="#">10 Comments</a></li>
+                        <li><a href="#">{{date('M d, Y', strtotime($post->created_at))}}</a></li>
+                        <li><a href="#">{{$post->count_review}} đánh giá</a></li>
                       </ul>
                       <p>{{ $post->introduce }}</p>
                       <div class="post-options">
