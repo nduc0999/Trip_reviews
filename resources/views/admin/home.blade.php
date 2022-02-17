@@ -173,7 +173,7 @@
                     <div class="card-body py-4 px-5">
                         <div class="d-flex align-items-center">
                             <div class="avatar avatar-xl">
-                                <img src="{{Auth::user()->img_avatar}}" style="object-fit: cover">
+                                <img src="{{ Auth::user()->img_avatar == null ? 'https://drive.google.com/uc?id=1k4YLSor3SKwcT6v_3HcX_MCiDYkssn9V&export=media': Auth::user()->img_avatar }}" style="object-fit: cover">
                             </div>
                             <div class="ms-3 name">
                                 <h5 class="font-bold">{{Auth::user()->fullName()}}</h5>

@@ -256,7 +256,8 @@
                                        
                                              <img id="pic1" alt="" class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}">
                                         </div>
-                                        <span class="text-danger error-text img_avatar_err"></span>div>
+                                        <span class="text-danger error-text img_avatar_err"></span>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label for="wall">Ảnh nền</label>
@@ -294,8 +295,8 @@
                                 </div>
 
                                 <div class="col-12 d-flex justify-content-end">
-                                    <button  class="btn btn-primary me-1 mb-1" id='btn-post'>Post</button>
-                                    <button  class="btn btn-light-secondary me-1 mb-1" id="btn-drafts">Drats</button>
+                                    <button  class="btn btn-primary me-1 mb-1" id='btn-post'>Đăng bài</button>
+                                    <button  class="btn btn-light-secondary me-1 mb-1" id="btn-drafts">Lưu nháp</button>
                                 </div>
                             </form>
                         </div>
@@ -513,6 +514,7 @@
                 
                 },
                 error: function(e){
+                    // console.log(e);
                     $('#load').addClass('d-none');
                     removeErrorMsg(err);
                     err = e.responseJSON.errors; 

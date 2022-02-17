@@ -16,7 +16,7 @@
             <div class="col-lg-12">
               <div class="text-content">
                 <h4>Đánh giá Homestay - Resort</h4>
-                <h2>Single blog post</h2>
+                {{-- <h2>Single blog post</h2> --}}
          
                 <div class="container">
                     <div class="search-box">

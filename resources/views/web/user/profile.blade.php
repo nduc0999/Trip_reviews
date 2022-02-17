@@ -135,7 +135,7 @@
                                 <ul class="nav nav-tabs nav-justified" style="background-color: transparent">
                                 <li class="nav-item"><a class="nav-link active"  href="#tab-feed-activity" data-toggle="tab"></i>Bản tin hoạt động</a></li>
                                 <li class="nav-item"><a class="nav-link"  href="#travel" data-toggle="tab"></i>Chuyến đi</a></li>
-                                <li class="nav-item"><a class="nav-link"  href="#user-activities" data-toggle="tab"></i>Ảnh</a></li>
+                                {{-- <li class="nav-item"><a class="nav-link"  href="#user-activities" data-toggle="tab"></i>Ảnh</a></li> --}}
                                 {{-- <li class="nav-item"><a class="nav-link"  href="#mymessage" data-toggle="tab"><i class="fa fa-envelope"></i> Message</a></li> --}}
                                 </ul>
                                 <!-- End nav tab -->

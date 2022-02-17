@@ -175,7 +175,9 @@ class PostController extends Controller
         $post->email = $request->email != null ? $request->email : null;
         $post->id_user = Auth::user()->id;
         $post->owner= 0;
-        $post->type= $request->type;
+        $post->type= (int)$request->type;
+     
+
         
         $post->upAvatarWall($request->file('img_avatar'),$request->file('img_wall'));
 
@@ -300,6 +302,10 @@ class PostController extends Controller
     }
 
     public function formReview(Request $request){
+
+        if(Auth::user()->status==1){
+            return view('web.post.ban-review');
+        }
 
         $post = Post::find($request->id);
         $location = $post->location;
