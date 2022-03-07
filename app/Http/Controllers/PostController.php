@@ -175,7 +175,9 @@ class PostController extends Controller
         $post->email = $request->email != null ? $request->email : null;
         $post->id_user = Auth::user()->id;
         $post->owner= 0;
-        $post->type= $request->type;
+        $post->type= (int)$request->type;
+     
+
         
         $post->upAvatarWall($request->file('img_avatar'),$request->file('img_wall'));
 
@@ -269,6 +271,9 @@ class PostController extends Controller
             $reviews = $post->getReview();
             $post_all = $post->getSinglePost();
 
+            $random = Post::inRandomOrder()->where('id_location',$post->id_location)->limit(3)->get();
+            $listRandom = Post::setInfoPost($random);
+
             // return $post_all;
             
             if (isset($_COOKIE['last_id'])) {
@@ -293,13 +298,17 @@ class PostController extends Controller
                                             'amenity' => $amenity,
                                             'roomtype' => $roomtype,
                                             'reviews' => $reviews,
-
+                                            'listRandom' => $listRandom,
                                         ]);
         }
         return "Page not found";
     }
 
     public function formReview(Request $request){
+
+        if(Auth::user()->status==1){
+            return view('web.post.ban-review');
+        }
 
         $post = Post::find($request->id);
         $location = $post->location;

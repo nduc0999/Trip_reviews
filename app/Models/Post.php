@@ -85,7 +85,7 @@ class Post extends Model
        $arr = array();
         $reviews = Review::where('id_post',$this->id)->where('status',0)
             ->with(array('user' => function ($query) {$query->select('id', 'first_name','last_name','img_avatar');},
-                        'likereview' => function ($query) {$query->select('id_user');} ))->orderBy('id','DESC')->paginate(1, ['*'], 'review');
+                        'likereview' => function ($query) {$query->select('id_user');} ))->orderBy('id','DESC')->paginate(3, ['*'], 'review');
         foreach($reviews as $review){
                 foreach($review->likereview as $like){
                     if($like->id_user == Auth::id()){

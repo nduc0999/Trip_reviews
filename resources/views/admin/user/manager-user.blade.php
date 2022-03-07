@@ -127,11 +127,6 @@
 </div>
 
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-new-password">
-  Launch demo modal
-</button>
-
 <!-- Modal -->
 <div class="modal fade" id="modal-new-password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -415,6 +410,9 @@
                         $('#formProfile').modal('show');
                         if(result.data.role == 1){
                             $('.box-action').html(`<button class="btn-reset-pass msg-btn" data-id='${result.data.id}'>Reset mật khẩu</button>`);
+                        }else{
+                            $('.box-action').html('');
+
                         }
                         resetPassword();
                     }

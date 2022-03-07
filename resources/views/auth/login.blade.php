@@ -62,10 +62,10 @@
                         <input type="checkbox" checked="checked"/>
                         <div class="control__indicator"></div>
                         </label> --}}
-                        <span class="ml-auto"><a href="{{ route('password.request') }}" class="forgot-pass" style="text-decoration: underline !important">Forgot Password</a></span> 
+                        <span class="ml-auto"><a href="{{ route('password.request') }}" class="forgot-pass" style="text-decoration: underline !important">Quên mật khẩu</a></span> 
                     </div>
 
-                    <input type="submit" value="Log In" class="btn text-white btn-block btn-primary">
+                    <input type="submit" value="Đăng nhập" class="btn text-white btn-block btn-primary">
 
                     <span class="d-block text-left my-4 text-muted"> or sign in with</span>
                     

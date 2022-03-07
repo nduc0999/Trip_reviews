@@ -108,7 +108,7 @@
 
                                 <input type="submit" value="Tham gia" class="btn text-white btn-block btn-primary">
 
-                                <span class="d-block text-left my-4 text-muted"> or sign in with</span>
+                                {{-- <span class="d-block text-left my-4 text-muted"> or sign in with</span>
                                 
                                 <div class="social-login">
                                     <a href="#" class="facebook">
@@ -120,7 +120,7 @@
                                     <a href="#" class="google">
                                     <span class="icon-google mr-3"></span> 
                                     </a>
-                                </div>
+                                </div> --}}
                             </form>
                         </div>
                     </div>

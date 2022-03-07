@@ -10,7 +10,7 @@
             <div class="right-content col-12 d-flex justify-content-between">
                 <div class="d-flex">
                     <a href="{{route('profile.user',['name' => Str::slug($item->user->fullName()),'id'=>$item->user->id])}}">
-                        <img src="{{$item->user->img_avatar}}" alt="" class="avatar">
+                        <img src="{{$item->user->img_avatar == null ?  'https://drive.google.com/uc?id=1k4YLSor3SKwcT6v_3HcX_MCiDYkssn9V&export=media': $item->user->img_avatar}}" alt="" class="avatar">
                     </a>
                     <h4 class="pl-2">
                         <a class="text-dark" href="{{route('profile.user',['name' => Str::slug($item->user->fullName()),'id'=>$item->user->id])}}">

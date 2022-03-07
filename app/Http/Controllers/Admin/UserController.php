@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public $countRecord = 1;
+    public $countRecord = 5;
 
     public function index(Request $request)
     {
