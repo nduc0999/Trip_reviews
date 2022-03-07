@@ -511,7 +511,6 @@
                     })
                     location.reload();
             
-                
                 },
                 error: function(e){
                     // console.log(e);

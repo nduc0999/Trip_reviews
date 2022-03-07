@@ -271,6 +271,9 @@ class PostController extends Controller
             $reviews = $post->getReview();
             $post_all = $post->getSinglePost();
 
+            $random = Post::inRandomOrder()->where('id_location',$post->id_location)->limit(3)->get();
+            $listRandom = Post::setInfoPost($random);
+
             // return $post_all;
             
             if (isset($_COOKIE['last_id'])) {
@@ -295,7 +298,7 @@ class PostController extends Controller
                                             'amenity' => $amenity,
                                             'roomtype' => $roomtype,
                                             'reviews' => $reviews,
-
+                                            'listRandom' => $listRandom,
                                         ]);
         }
         return "Page not found";

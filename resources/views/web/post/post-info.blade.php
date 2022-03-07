@@ -349,6 +349,42 @@
          
         </div>
       </div>
+      <div class="col-12 mg-top d-flex justify-content-center">
+        <span><strong>Các Homestay-Resort tương tự</strong></span>
+      </div>
+       <div class="col-12 mb-3 d-flex justify-content-center" >
+        
+        
+          <div class="row mt-2" style="width:900px">
+            @forelse ($listRandom as $item)
+                 <a class="col-md-4" href="{{ route('post.show',['slug' => Str::slug($item->name),'id' => $item->id]) }}">
+                  <div class="card border-0 card-region mb-2">
+                    <img class="card-img-top" src="{{$item->img_avatar}}" alt="Card image cap">
+                    <div class="title-region">
+                      <h4>{{$item->name}}</h4>
+                       <fieldset class="rating">
+                        <input type="radio" value="5" @if($item->avg_rate == 5.0 )checked @endif/><label class = "full" title="Awesome - 5 stars"></label>
+                        <input type="radio" value="4.5" @if($item->avg_rate >= 4.5 and $item->avg_rate < 5  )checked @endif /><label class="half" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" value="4" @if($item->avg_rate >= 4 and $item->avg_rate < 4.5 )checked @endif /><label class = "full" title="Pretty good - 4 stars"></label>
+                        <input type="radio" value="3.5" @if($item->avg_rate >= 3.5 and $item->avg_rate < 4  )checked @endif /><label class="half" title="Meh - 3.5 stars"></label>
+                        <input type="radio" value="3" @if($item->avg_rate >= 3 and $item->avg_rate < 3.5 )checked @endif /><label class = "full" title="Meh - 3 stars"></label>
+                        <input type="radio" value="2.5" @if($item->avg_rate >= 2.5 and $item->avg_rate < 3 )checked @endif /><label class="half" title="Kinda bad - 2.5 stars"></label>
+                        <input type="radio" value="2" @if($item->avg_rate >= 2 and $item->avg_rate < 2.5 )checked @endif /><label class = "full" title="Kinda bad - 2 stars"></label>
+                        <input type="radio" value="1.5" @if($item->avg_rate >= 1.5 and $item->avg_rate < 2 )checked @endif /><label class="half" title="Meh - 1.5 stars"></label>
+                        <input type="radio" value="1" @if($item->avg_rate >= 1 and $item->avg_rate < 1.5 )checked @endif /><label class = "full" title="Sucks big time - 1 star"></label>
+                        <input type="radio" value="0.5" @if($item->avg_rate >= 0.5 and $item->avg_rate < 1 )checked @endif /><label class="half" title="Sucks big time - 0.5 stars"></label>
+                      </fieldset>
+                    </div>
+                  </div>
+                </a>
+            @empty
+                <span>Không có dữ liệu</span>
+            @endforelse
+                
+
+          </div>
+        </div>
+
     </section>
 
 {{-- Modal --}}

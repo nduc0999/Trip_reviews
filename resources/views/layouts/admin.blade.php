@@ -62,14 +62,14 @@
                            <li class="sidebar-item  @if (url()->current() == route('admin.approval.post') or Request::is('admin/post/approval/*/show') )  active @endif ">
                             <a href="{{route('admin.approval.post') }}" class='sidebar-link'>
                                 <i class="bi bi-check-circle"></i>
-                                <span>Approval Post</span>
+                                <span>Duyệt bài đăng</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item  {{ url()->current() == route('admin.post') ? 'active':''}} ">
                             <a href="{{ route('admin.post') }}" class='sidebar-link'>
                                 <i class="bi bi-pen-fill"></i>
-                                <span>Post</span>
+                                <span>Đăng bài</span>
                             </a>
                         </li>
 
@@ -77,7 +77,7 @@
                         <li class="sidebar-item @if (url()->current() == route('admin.manager.approval.review') or url()->current() == route('admin.manager.list.review') )  active @endif  has-sub">
                             <a href="#" class='sidebar-link'>
                                <i class="bi bi-chat-square-text-fill"></i>
-                                <span>Manager Review</span>
+                                <span>Quản lý Đánh giá</span>
                             </a>
                             <ul class="submenu @if (url()->current() == route('admin.manager.approval.review') or url()->current() == route('admin.manager.list.review') )  active @endif">
                                 <li class="submenu-item {{ url()->current() == route('admin.manager.approval.review') ? 'active':''}}">
@@ -92,42 +92,42 @@
                         <li class="sidebar-item  @if (url()->current() == route('admin.manager.post.list') or Request::is('admin/manager/post/edit/*/show') )  active @endif  ">
                             <a href="{{route('admin.manager.post.list')}}" class='sidebar-link'>
                                 <i class="bi bi-folder-fill"></i>
-                                <span>Manager Post</span>
+                                <span>Quản lý bài đăng</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item {{ url()->current() == route('admin.manager.amenity') ? 'active':''}}">
                             <a href="{{ route('admin.manager.amenity') }}" class='sidebar-link'>
                                 <i class="bi bi-speaker-fill"></i>
-                                <span>Manager Amenities</span>
+                                <span>Quản lý tiện ích</span>
                             </a>
                         </li>
 
                          <li class="sidebar-item {{ url()->current() == route('admin.manager.roomtype') ? 'active':''}} ">
                             <a href="{{ route('admin.manager.roomtype') }}" class='sidebar-link'>
                                <i class="bi bi-shop"></i>
-                                <span>Manager Roomtype</span>
+                                <span>Quản lý loại phòng</span>
                             </a>
                         </li>
 
                          <li class="sidebar-item {{ url()->current() == route('admin.manager.location') ? 'active':''}}">
                             <a href="{{ route('admin.manager.location') }}" class='sidebar-link'>
                                 <i class="bi bi-geo-alt-fill"></i>
-                                <span>Manager Location</span>
+                                <span>Quản lý vị trí</span>
                             </a>
                         </li>
 
                          <li class="sidebar-item {{ url()->current() == route('admin.manager.question') ? 'active':''}}">
                             <a href="{{ route('admin.manager.question') }}" class='sidebar-link'>
                                 <i class="bi bi-question-circle-fill"></i>
-                                <span>Manager Question</span>
+                                <span>Quản lý câu hỏi</span>
                             </a>
                         </li>
 
                          <li class="sidebar-item {{ url()->current() == route('admin.manager.user') ? 'active':''}}">
                             <a href="{{ route('admin.manager.user') }}" class='sidebar-link'>
                                 <i class="bi bi-person-circle"></i>
-                                <span>Manager User</span>
+                                <span>Quản lý người dùng</span>
                             </a>
                         </li>
 

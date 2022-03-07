@@ -17,3 +17,6 @@ To start project
 
 (composer require nao-pon/flysystem-google-drive:~1.1) --cài package của google drive
 (composer require google/apiclient) 
+
+* Cần sửa hàm down() trong file 2022_02_17_175813_change_data_type_min_guest_max_guest_in_posts_table.php 
+    khi muốn migrate:rollback: Đổi tinyInteger => smallInteger 
