@@ -43,7 +43,7 @@
                                 <div class="card-body d-flex justify-content-between">
                                     
                                     <select name="count" id="count">
-                                        <option value="1" selected>5</option>
+                                        <option value="5" selected>5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
                                     </select>
