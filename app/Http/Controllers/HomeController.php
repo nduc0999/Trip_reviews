@@ -56,7 +56,7 @@ class HomeController extends Controller
         $arrCountPost = Location::getCountPost();
         
         // return $post_slide_rate;
-        $random = Post::inRandomOrder()->limit(6)->get();
+        $random = Post::inRandomOrder()->where('status',0)->limit(6)->get();
         $listRandom = Post::setInfoPost($random);
         if(isset($_COOKIE['last_id'])){
             $last_post=array();
