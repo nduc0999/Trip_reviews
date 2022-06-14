@@ -9,11 +9,30 @@
 
 ## About Laravel
 
-To start project
+### Steps
 
-- compser install
+- Pull this repo to folder *htdocs* of Xampp.
+- Go to the application folder on your cmd or terminal.
+- Run:
+```bash
+composer install 
+```
+- Copy *.env.example* file to *.env* on the root folder.
+- Reconfigure your *.env* file.
+- Run:
+```bash
+php artisan key:generate
+php artisan migrate
+php artisan storage:link
+```
 
-- php artisan migrate
+Link Youtube Demo
+
+```bash
+https://youtu.be/oP1tDp9xoFY
+
+https://youtu.be/Aodj__skbdE
+```
 
 (composer require nao-pon/flysystem-google-drive:~1.1) --cài package của google drive
 (composer require google/apiclient) 
